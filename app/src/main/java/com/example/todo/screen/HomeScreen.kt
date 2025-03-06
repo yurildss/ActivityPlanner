@@ -1,0 +1,319 @@
+package com.example.todo.screen
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+@Composable
+fun HomeScreen(modifier: Modifier = Modifier){
+    Box(modifier = modifier
+        .fillMaxSize()
+        .background(Color(0xFF1D1D2A))
+    ){
+        Column {
+            UserHomeScreen()
+            SettingsPart()
+            BottomMenu()
+        }
+    }
+}
+
+@Composable
+private fun BottomMenu() {
+    NavigationBar(
+        containerColor = Color.Unspecified
+    ) {
+        NavigationBarItem(
+            selected = true,
+            onClick = { /* Navegar */ },
+            icon = {
+                Icon(
+                    Icons.Default.Home,
+                    contentDescription = "Home",
+                    tint = Color.White
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(indicatorColor = Color(0xFFB4EF2C)),
+            label = { }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { /* Navegar */ },
+            icon = {
+                Icon(
+                    Icons.Default.Settings,
+                    contentDescription = "Setting",
+                    tint = Color.White
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(indicatorColor = Color(0xFFB4EF2C)),
+            label = { }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { /* Navegar */ },
+            icon = {
+                Icon(
+                    Icons.Default.Person,
+                    contentDescription = "Profile",
+                    tint = Color.White
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(indicatorColor = Color(0xFFB4EF2C)),
+            label = { }
+        )
+    }
+}
+
+@Composable
+fun UserHomeScreen(){
+    Column(Modifier
+        .fillMaxWidth()
+        .padding(10.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                Modifier
+                    .size(54.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xA320E1FF))
+                    .padding(16.dp)
+            ){
+                Icon(Icons.Default.AccountCircle, null)
+            }
+            Column(Modifier.padding(start = 16.dp)) {
+                Text("Hello",
+                    color = Color.White,
+                    fontFamily = FontFamily.Monospace,)
+                Text("Yuri!", color = Color.White,
+                    fontSize = 25.sp,
+                    fontFamily = FontFamily.Monospace,)
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Row(
+                Modifier
+                    .size(54.dp)
+                    .clip(CircleShape)
+                    .background(Color(0x166EA68E))
+                    .padding(16.dp)
+            ){
+                Icon(Icons.Default.Search,
+                    null,
+                    tint = Color.White
+                )
+            }
+            Row(
+                Modifier
+                    .size(54.dp)
+                    .clip(CircleShape)
+                    .background(Color(0x166EA68E))
+                    .padding(16.dp)
+            ){
+                Icon(Icons.Default.Notifications,
+                    null,
+                    tint = Color.White
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text("Activity", color = Color.White,
+            fontSize = 60.sp,
+            fontFamily = FontFamily.SansSerif,
+            modifier = Modifier.padding(top = 10.dp, start = 10.dp))
+        Text("Planner",
+            color = Color.White,
+            fontFamily = FontFamily.SansSerif,
+            modifier = Modifier.padding(start = 10.dp),
+            fontSize = 60.sp)
+
+        Row(verticalAlignment = Alignment.CenterVertically){
+            Row(
+                Modifier
+                    .size(30.dp)
+                    .clip(CircleShape)
+                    .background(
+                        Color(0x166EA68E)
+                    )
+                    .padding(5.dp)
+            ){
+                Icon(
+                    Icons.Default.Info,
+                    null,
+                    tint = Color.White,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+            }
+            Text("You have 8 pending tasks today",
+                color = Color.White,
+                modifier = Modifier.padding(start = 5.dp))
+        }
+    }
+}
+
+@Composable
+fun SettingsPart(){
+    Row(Modifier
+        .fillMaxWidth()
+        .padding(10.dp),
+        horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            Modifier
+                .size(54.dp)
+                .clip(CircleShape)
+                .background(Color(0x166EA68E))
+                .padding(16.dp)
+        ){
+            Icon(Icons.Default.Menu,
+                null,
+                tint = Color.White
+            )
+        }
+        Row(
+            Modifier
+                .size(150.dp, 54.dp)
+                .clip(CircleShape)
+                .background(Color(0xFFB4EF2C))
+                .padding(16.dp)
+        ){
+            Icon(Icons.Default.DateRange,
+                null,
+                tint = Color.White
+            )
+        }
+        Row(
+            Modifier
+                .size(150.dp, 54.dp)
+                .clip(CircleShape)
+                .background(Color(0x166EA68E))
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Icon(Icons.Default.Add,
+                null,
+                tint = Color.White
+            )
+            Text("Add Task", modifier = Modifier.padding(start = 10.dp), color = Color.White)
+        }
+    }
+}
+
+@Composable
+fun TaskCard(){
+    Box(
+        modifier = Modifier
+        .width(250.dp) // 50% da largura da tela
+        .height(350.dp)
+        .clip(RoundedCornerShape(16.dp))
+        .background(Color(0xFFB4EF2C))
+        .padding(15.dp) // 25% da altura da tela)
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Row(
+                Modifier
+                    .size(54.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFF242636))
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Icon(Icons.Default.DateRange,
+                    null,
+                    tint = Color(0xFFB4EF2C)
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Text("Task Name",
+                fontSize = 60.sp,
+                color = Color(0xFF242636)
+            )
+
+            Text("12 Hours Needed",
+                modifier = Modifier.padding(top = 10.dp, bottom = 5.dp),
+                color = Color((0xFF242636)))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                LinearProgressIndicator(
+                    progress = { 24f / 100f },
+                    modifier = Modifier.fillMaxWidth(0.75f),
+                    color = Color(0xFF242636),
+                    trackColor = Color(0xFF90C323),
+                )
+                Text("24%",
+                    modifier = Modifier.padding(start = 10.dp),
+                    color = Color(0xFF242636))
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun TaskCardPreview(){
+    TaskCard()
+}
+
+@Composable
+@Preview
+fun SettingsPartPreview(){
+    SettingsPart()
+}
+
+@Composable
+@Preview
+fun HomeScreenPreview(){
+    HomeScreen()
+}
+
+@Composable
+@Preview
+fun UserHomeScreenPreview(){
+    UserHomeScreen()
+}
