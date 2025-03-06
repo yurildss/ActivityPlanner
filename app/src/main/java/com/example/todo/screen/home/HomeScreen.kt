@@ -1,4 +1,4 @@
-package com.example.todo.screen
+package com.example.todo.screen.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,12 +47,14 @@ fun HomeScreen(modifier: Modifier = Modifier){
     Box(contentAlignment = Alignment.BottomEnd,
         modifier = modifier
         .fillMaxSize()
-        .background(Color(0xFF1D1D2A))
+        .background(Color(0xFF1D1D2A)
+        )
     ){
         Column {
             UserHomeScreen()
             SettingsPart()
-            LazyColumn {
+            LazyColumn(Modifier.padding(10.dp),verticalArrangement = Arrangement.spacedBy(8.dp)) {
+
               item {
                   TaskCard()
               }
@@ -253,8 +255,8 @@ fun SettingsPart(){
 fun TaskCard(){
     Box(
         modifier = Modifier
-        .width(250.dp) // 50% da largura da tela
-        .height(350.dp)
+        .fillMaxWidth(0.5f) // 50% da largura da tela
+        .fillMaxHeight(0.20f)
         .clip(RoundedCornerShape(16.dp))
         .background(Color(0xFFB4EF2C))
         .padding(15.dp) // 25% da altura da tela)
@@ -275,7 +277,7 @@ fun TaskCard(){
             }
             Spacer(modifier = Modifier.weight(1f))
             Text("Task Name",
-                fontSize = 60.sp,
+                fontSize = 50.sp,
                 color = Color(0xFF242636)
             )
 
