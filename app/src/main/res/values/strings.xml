@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Todo</string>
+    <string name="generic_error">Something wrong happened. Please try again.</string>
+    <string name="email_error">Please insert a valid email.</string>
+    <string name="empty_password_error">Password cannot be empty.</string>
+    <string name="password_match_error">Passwords do not match.</string>
+
 </resources>
