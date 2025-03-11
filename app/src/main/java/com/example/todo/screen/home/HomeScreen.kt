@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -41,9 +42,18 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.todo.model.Task
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier){
+fun HomeScreen(
+    viewModel: HomeScreenViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier
+){
+    val tasks = viewModel.tasks.collectAsStateWithLifecycle(emptyList())
+    val uiState = viewModel.uiState.value
+
     Box(contentAlignment = Alignment.BottomEnd,
         modifier = modifier
         .fillMaxSize()
@@ -51,15 +61,11 @@ fun HomeScreen(modifier: Modifier = Modifier){
         )
     ){
         Column {
-            UserHomeScreen()
+            UserHomeScreen(uiState)
             SettingsPart()
             LazyColumn(Modifier.padding(10.dp),verticalArrangement = Arrangement.spacedBy(8.dp)) {
-
-              item {
-                  TaskCard()
-              }
-                item {
-                    TaskCard()
+                items(items = tasks.value, key = { it.id }) { taskItem ->
+                    TaskCard(taskItem)
                 }
             }
         }
@@ -115,7 +121,7 @@ private fun BottomMenu() {
 }
 
 @Composable
-fun UserHomeScreen(){
+fun UserHomeScreen(uiState: HomeScreenUiState){
     Column(Modifier
         .fillMaxWidth()
         .padding(10.dp)) {
@@ -197,7 +203,7 @@ fun UserHomeScreen(){
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
             }
-            Text("You have 8 pending tasks today",
+            Text("You have ${uiState.pendingTask} pending tasks today",
                 color = Color.White,
                 modifier = Modifier.padding(start = 5.dp))
         }
@@ -252,7 +258,7 @@ fun SettingsPart(){
 }
 
 @Composable
-fun TaskCard(){
+fun TaskCard(task: Task){
     Box(
         modifier = Modifier
         .fillMaxWidth(0.5f) // 50% da largura da tela
@@ -276,12 +282,12 @@ fun TaskCard(){
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            Text("Task Name",
+            Text(task.title,
                 fontSize = 50.sp,
                 color = Color(0xFF242636)
             )
 
-            Text("12 Hours Needed",
+            Text(task.timeToComplete.toString(),
                 modifier = Modifier.padding(top = 10.dp, bottom = 5.dp),
                 color = Color((0xFF242636)))
 
@@ -303,7 +309,7 @@ fun TaskCard(){
 @Composable
 @Preview
 fun TaskCardPreview(){
-    TaskCard()
+    TaskCard(Task())
 }
 
 @Composable
@@ -321,5 +327,7 @@ fun HomeScreenPreview(){
 @Composable
 @Preview
 fun UserHomeScreenPreview(){
-    UserHomeScreen()
+    UserHomeScreen(
+        uiState = TODO()
+    )
 }

@@ -40,19 +40,28 @@ fun SignUpScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally) {
             OutlinedTextField(
+                value = uiState.name,
+                onValueChange = viewModel::onNameChange,
+                label = { Text("Name") },
+                singleLine = true
+            )
+            OutlinedTextField(
                 value = uiState.email,
                 onValueChange = viewModel::onEmailChange,
-                label = { Text("Email") }
+                label = { Text("Email") },
+                singleLine = true
             )
             OutlinedTextField(
                 value = uiState.password,
                 onValueChange =  viewModel::onPasswordChange  ,
-                label = { Text("Password") }
+                label = { Text("Password") },
+                singleLine = true
             )
             OutlinedTextField(
                 value = uiState.repeatPassword,
                 onValueChange = viewModel::onRepeatPasswordChange,
-                label = { Text("Repeat password") }
+                label = { Text("Repeat password") },
+                singleLine = true
             )
             Button(
                 onClick = { viewModel.onSignUpClick(navigateToSingIn) },
