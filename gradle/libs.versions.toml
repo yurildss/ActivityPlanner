@@ -1,5 +1,6 @@
 [versions]
 agp = "8.8.0"
+googleFirebaseAuthKtx = "22.1.1"
 hiltAndroid = "2.51.1"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
@@ -11,9 +12,11 @@ activityCompose = "1.10.1"
 composeBom = "2024.04.01"
 firebaseAuthKtx = "23.2.0"
 lifecycleRuntimeComposeAndroid = "2.8.7"
+playServicesAuth = "21.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+firebase-auth-ktx-v2211 = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "googleFirebaseAuthKtx" }
 firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
@@ -32,6 +35,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

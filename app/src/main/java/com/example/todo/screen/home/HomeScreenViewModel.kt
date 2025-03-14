@@ -1,5 +1,6 @@
 package com.example.todo.screen.home
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.todo.model.User
@@ -11,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -22,18 +24,18 @@ class HomeScreenViewModel @Inject constructor(
 
     init {
         launchCatching {
-            userName()
             uiState.value = uiState.value.copy(
                 pendingTask = storageService.getIncompleteTasksCount()
             )
         }
     }
 
-    // Armazena o usuário atual em um StateFlow
-        val currentUser: StateFlow<User?> = accountService.currentUser
-        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    private val currentUser: StateFlow<User?> = accountService.currentUser
+        .onEach { user -> user.let { userName(it.name) } } // ✅
+        .stateIn(viewModelScope, SharingStarted.Eagerly, User())
 
-        var uiState = mutableStateOf(HomeScreenUiState())
+
+    var uiState = mutableStateOf(HomeScreenUiState())
             private set
 
         val tasks = storageService.tasks
@@ -43,9 +45,9 @@ class HomeScreenViewModel @Inject constructor(
             uiState.value = uiState.value.copy(searchText = text)
         }
 
-         fun userName(){
+         private fun userName(userName: String){
             uiState.value = uiState.value.copy(
-                name = currentUser.value?.name ?: ""
+                name = userName
             )
         }
 

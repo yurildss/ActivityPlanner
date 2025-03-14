@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun LoginScreen(
     modifier: Modifier = Modifier,
     navigateToHome: () -> Unit,
+    signUp: () -> Unit,
     viewModel: LoginScreenViewModel = hiltViewModel()
 ){
 
@@ -53,10 +54,9 @@ fun LoginScreen(
                 colors = ButtonDefaults.buttonColors(Color(0xFFB2F02C))
             ){
                 Text("Login", color = Color.Black, fontSize = 20.sp)
-
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = signUp,
                 modifier = Modifier.padding(5.dp).size(350.dp, 50.dp),
                 colors = ButtonDefaults.buttonColors(Color(0xFFB2F02C))
             ){

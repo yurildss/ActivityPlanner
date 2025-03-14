@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.firebase.firestore.ktx)
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation ("androidx.navigation:navigation-compose:2.8.9")
+    implementation (libs.play.services.auth)
     implementation(libs.hilt.android)
     implementation(libs.androidx.lifecycle.runtime.compose.android)
     kapt(libs.hilt.android.compiler)

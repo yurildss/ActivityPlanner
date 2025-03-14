@@ -21,14 +21,14 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
     ){
         composable(Screens.OPEN_SCREEN.name){
             OpenScreen(onGetStarted = {
-                navController.navigate(Screens.LOGIN_SCREEN.name)
+                navController.navigate(Screens.SIGN_IN_SCREEN.name)
             })
         }
-        composable(Screens.LOGIN_SCREEN.name){
-            LoginScreen(
+        composable(Screens.SIGN_IN_SCREEN.name){
+            LoginScreen(signUp = {navController.navigate(Screens.SIGN_UP_SCREEN.name)},
                 navigateToHome = {
                     navController.navigate(Screens.HOME_SCREEN.name){
-                        popUpTo(Screens.LOGIN_SCREEN.name){
+                        popUpTo(Screens.SIGN_UP_SCREEN.name){
                             inclusive = true
                         }
                     }
@@ -39,13 +39,12 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
         composable(Screens.SIGN_UP_SCREEN.name){
             SignUpScreen(
                 navigateToSingIn = {
-                    navController.navigate(Screens.LOGIN_SCREEN.name)
+                    navController.navigate(Screens.SIGN_IN_SCREEN.name)
                 }
             )
         }
         composable(Screens.HOME_SCREEN.name){
             HomeScreen()
-
         }
 
     }

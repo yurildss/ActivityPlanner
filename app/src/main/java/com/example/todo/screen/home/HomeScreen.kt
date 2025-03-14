@@ -56,16 +56,27 @@ fun HomeScreen(
 
     Box(contentAlignment = Alignment.BottomEnd,
         modifier = modifier
-        .fillMaxSize()
-        .background(Color(0xFF1D1D2A)
-        )
+            .fillMaxSize()
+            .background(
+                Color(0xFF1D1D2A)
+            )
     ){
         Column {
             UserHomeScreen(uiState)
             SettingsPart()
-            LazyColumn(Modifier.padding(10.dp),verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(items = tasks.value, key = { it.id }) { taskItem ->
-                    TaskCard(taskItem)
+            LazyColumn(
+                Modifier.padding(10.dp).fillMaxSize(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+
+                if (tasks.value.isEmpty()) {
+                    item{
+                        Text(text = "No tasks today yet", color = Color.White, fontSize = 55.sp)
+                    }
+                }
+                else{
+                    items(items = tasks.value, key = { it.id }) { taskItem ->
+                        TaskCard(taskItem)
+                    }
                 }
             }
         }
@@ -143,9 +154,11 @@ fun UserHomeScreen(uiState: HomeScreenUiState){
                 Text("Hello",
                     color = Color.White,
                     fontFamily = FontFamily.Monospace,)
-                Text("Yuri!", color = Color.White,
+                Text(
+                    "${uiState.name}!", color = Color.White,
                     fontSize = 25.sp,
-                    fontFamily = FontFamily.Monospace,)
+                    fontFamily = FontFamily.Monospace,
+                )
             }
             Spacer(modifier = Modifier.weight(1f))
             Row(
@@ -261,11 +274,11 @@ fun SettingsPart(){
 fun TaskCard(task: Task){
     Box(
         modifier = Modifier
-        .fillMaxWidth(0.5f) // 50% da largura da tela
+            .fillMaxWidth(0.5f) // 50% da largura da tela
         .fillMaxHeight(0.20f)
-        .clip(RoundedCornerShape(16.dp))
-        .background(Color(0xFFB4EF2C))
-        .padding(15.dp) // 25% da altura da tela)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFFB4EF2C))
+            .padding(15.dp) // 25% da altura da tela)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
