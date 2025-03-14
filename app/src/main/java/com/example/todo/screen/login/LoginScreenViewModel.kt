@@ -13,8 +13,7 @@ import com.example.todo.R.string as AppText
 @HiltViewModel
 class LoginScreenViewModel @Inject constructor(
     private val accountService: AccountService,
-    logService: LogService
-    ): ToDoAppViewModel(logService) {
+    ): ToDoAppViewModel() {
 
     var uiState = mutableStateOf(LoginUiState())
         private set

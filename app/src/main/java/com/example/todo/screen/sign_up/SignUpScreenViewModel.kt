@@ -13,8 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpScreenViewModel @Inject constructor(
     private val accountService: AccountService,
-    logService: LogService
-): ToDoAppViewModel(logService) {
+): ToDoAppViewModel() {
 
     var uiState = mutableStateOf(SignUpUiState())
         private set

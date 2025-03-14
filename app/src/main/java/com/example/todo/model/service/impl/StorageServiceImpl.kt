@@ -6,8 +6,10 @@ import com.example.todo.model.service.StorageService
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.dataObjects
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
@@ -16,6 +18,7 @@ class StorageServiceImpl @Inject constructor(
     private val auth: AccountService
 ): StorageService {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override val tasks: Flow<List<Task>>
         get() =
             auth.currentUser.flatMapLatest { user ->
@@ -31,7 +34,8 @@ class StorageServiceImpl @Inject constructor(
     }
 
     override suspend fun save(task: Task): String {
-        TODO("Not yet implemented")
+        val updatedTask = task.copy(userId = auth.currentUserId)
+        return firestore.collection(TASK_COLLECTION).add(updatedTask).await().id
     }
 
     override suspend fun update(task: Task) {

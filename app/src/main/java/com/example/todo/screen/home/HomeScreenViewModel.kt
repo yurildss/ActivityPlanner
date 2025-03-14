@@ -16,10 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    logService: LogService,
     private val storageService: StorageService,
     accountService: AccountService,
-) : ToDoAppViewModel(logService) {
+) : ToDoAppViewModel() {
 
     init {
         launchCatching {

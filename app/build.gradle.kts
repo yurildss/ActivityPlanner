@@ -52,7 +52,8 @@ dependencies {
 
     // Declare the dependency for the Firestore library
     implementation(libs.firebase.firestore.ktx)
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation ("androidx.navigation:navigation-compose:2.8.9")
     implementation(libs.hilt.android)
     implementation(libs.androidx.lifecycle.runtime.compose.android)
     kapt(libs.hilt.android.compiler)
@@ -75,10 +76,11 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.google.firebase:firebase-analytics")
 
-    testImplementation("io.mockk:mockk:1.12.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
+    testImplementation ("junit:junit:4.13.2")
+    testImplementation ("org.mockito:mockito-core:3.11.2")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
+
     implementation(kotlin("test"))
 
 

@@ -20,19 +20,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun OpenScreen(modifier: Modifier = Modifier){
+fun OpenScreen(modifier: Modifier = Modifier,
+               onGetStarted: ()->Unit){
     Box(modifier = modifier.fillMaxSize().background(Color(0xFF6EA68E))
     ){
         Column(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 15.dp),
             horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Take control of your schedule",
+            Text(text = "Take control",
+                color = Color.White,
+                fontFamily = FontFamily.Monospace,
+                fontSize = 50.sp,
+                modifier = Modifier.padding(10.dp)
+            )
+            Text(text = "of your",
+                color = Color.White,
+                fontFamily = FontFamily.Monospace,
+                fontSize = 50.sp,
+                modifier = Modifier.padding(10.dp)
+            )
+            Text(text = "schedule",
                 color = Color.White,
                 fontFamily = FontFamily.Monospace,
                 fontSize = 50.sp,
                 modifier = Modifier.padding(10.dp)
             )
             Button(
-                onClick = { /*TODO*/ },
+                onClick = onGetStarted,
                 modifier = Modifier.padding(10.dp,20.dp).size(350.dp, 50.dp),
                 colors = ButtonDefaults.buttonColors(Color(0xFFD5FFA4))
             ){
@@ -46,5 +59,5 @@ fun OpenScreen(modifier: Modifier = Modifier){
 @Composable
 @Preview
 fun OpenScreenPreview(){
-    OpenScreen()
+    OpenScreen(onGetStarted = {})
 }
