@@ -27,7 +27,6 @@ data class Gols(
 )
 
 data class Tags(
-    val createdAt: Date = Date(),
     val title: String = "",
     val icon: String = "",
 )

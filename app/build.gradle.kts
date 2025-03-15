@@ -76,7 +76,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.google.firebase:firebase-analytics")
-
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
     testImplementation ("junit:junit:4.13.2")
     testImplementation ("org.mockito:mockito-core:3.11.2")
     testImplementation ("org.mockito.kotlin:mockito-kotlin:3.2.0")

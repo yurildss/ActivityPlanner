@@ -24,21 +24,29 @@ class HomeScreenViewModel @Inject constructor(
 
     init {
         launchCatching {
+            accountService.currentUser
+                .onEach { user -> user.let { userName(it.name) } } // ✅
+                .stateIn(viewModelScope, SharingStarted.Eagerly, User())
+
             uiState.value = uiState.value.copy(
                 pendingTask = storageService.getIncompleteTasksCount()
             )
         }
     }
 
-    private val currentUser: StateFlow<User?> = accountService.currentUser
-        .onEach { user -> user.let { userName(it.name) } } // ✅
-        .stateIn(viewModelScope, SharingStarted.Eagerly, User())
+    //Talvez retirar essa variavel
+//    private val currentUser: StateFlow<User?> = accountService.currentUser
+//        .onEach { user -> user.let { userName(it.name) } } // ✅
+//        .stateIn(viewModelScope, SharingStarted.Eagerly, User())
 
 
     var uiState = mutableStateOf(HomeScreenUiState())
             private set
 
+        //Modificar para receber as Tasks do dia que está no calendario, e esse dia
+        // pode ser modificado com a interação do usuario com o calendario
         val tasks = storageService.tasks
+
         private val searchText get()  = uiState.value.searchText
 
         fun onSearchTextChange(text: String){
