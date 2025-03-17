@@ -23,10 +23,10 @@ data class Gols(
     val title: String = "",
     val description: String = "",
     val isCompleted: Boolean = false,
+    val deadLine: Date = Date(),
     val timeToComplete: Long = 0L,
 )
 
 data class Tags(
-    val title: String = "",
     val icon: String = "",
 )
