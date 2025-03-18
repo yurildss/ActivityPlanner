@@ -1,5 +1,6 @@
 package com.example.todo.screen.task
 
+import android.graphics.drawable.Icon
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -50,9 +52,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -65,9 +69,13 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 fun CreateTaskScreen(
     modifier: Modifier = Modifier,
-    onDatePickerChange: (Boolean) -> Unit, // Passar controle do DatePicker,
+    onDatePickerChange: (Boolean) -> Unit,
     onDateSelected: (String) -> Unit,
+    viewModel: CreateTaskScreenViewModel = hiltViewModel()
     ){
+
+    val taskuiState by viewModel.CreateTaskUistate
+    val golsUiState by viewModel.CreateGolsUistate
 
     Box(modifier = modifier
         .fillMaxSize()
@@ -78,19 +86,30 @@ fun CreateTaskScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedTextField(
-                "",
-                onValueChange = {},
+                value = taskuiState.title,
+                onValueChange = viewModel::onTitleTaskChange,
                 label = {Text("Title", color = Color.White)},
                 singleLine = true
             )
             OutlinedTextField(
-                "",
-                onValueChange = {},
+                value = taskuiState.description,
+                onValueChange = viewModel::onDescriptionTaskChange,
                 label = {Text("Description", color = Color.White)},
             )
-            DatePick(onDatePickerChange, onDateSelected)
-            DropDownMenuSample()
-            IconPickerDropdown()
+            DatePick(viewModel::setOpenDatePicker, viewModel::updateTaskDeadLine)
+            DropDownMenuSample(
+                viewModel.options,
+                expanded = viewModel.expanded.value,
+                onExpandedChange = viewModel::onExpandedChange
+            )
+            IconPickerDropdown(
+                icons = viewModel.icons,
+                expanded = viewModel.expandedIcon.value,
+                onExpandedChange = viewModel::onExpandedIconChange,
+                selectedIcon = viewModel.selectedIcon.value,
+                onSelectedIconChange = viewModel::onSelectedIconChange
+            )
+            AddGoalsCard()
         }
     }
 }
@@ -163,15 +182,18 @@ private fun ColumnScope.DatePick(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownMenuSample() {
-    val options = listOf("-"," Priority 1", "Priority 2", "Priority 3")
-    var expanded by remember { mutableStateOf(false) }
+fun DropDownMenuSample(
+    options: List<String>,
+    expanded: Boolean,
+    onExpandedChange: (Boolean)-> Unit
+) {
+
     var selectedOption by remember { mutableStateOf(options[0]) }
 
     ExposedDropdownMenuBox(
         modifier = Modifier.fillMaxWidth(0.75f).padding(top = 5.dp),
         expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
+        onExpandedChange = {onExpandedChange(!expanded)}
     ) {
         OutlinedTextField(
             value = selectedOption,
@@ -193,14 +215,14 @@ fun DropDownMenuSample() {
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { onExpandedChange(false)}
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
                         selectedOption = option
-                        expanded = false
+                        onExpandedChange(false)
                     }
                 )
             }
@@ -210,24 +232,18 @@ fun DropDownMenuSample() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IconPickerDropdown() {
-    val icons = listOf(
-        Icons.Default.Add to "",
-        Icons.Default.Home to "Home",
-        Icons.Default.Star to "Star",
-        Icons.Default.Person to "Person",
-        Icons.Default.Settings to "Settings",
-        Icons.Default.Email to "Email",
-        Icons.Default.Info to "Info",
-    )
-
-    var expanded by remember { mutableStateOf(false) }
-    var selectedIcon by remember { mutableStateOf(icons[0]) }
+fun IconPickerDropdown(
+    icons: List<Pair<ImageVector, String>>,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    selectedIcon: Pair<ImageVector, String>,
+    onSelectedIconChange: (Pair<ImageVector, String>) -> Unit,
+) {
 
     ExposedDropdownMenuBox(
         modifier = Modifier.fillMaxWidth(0.75f).padding(top = 5.dp),
         expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
+        onExpandedChange = { onExpandedChange(!expanded) }
     ) {
         OutlinedTextField(
             value = selectedIcon.second, // Nome do ícone
@@ -251,7 +267,7 @@ fun IconPickerDropdown() {
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { onExpandedChange(false) }
         ) {
             icons.forEach { icon ->
                 DropdownMenuItem(
@@ -263,8 +279,8 @@ fun IconPickerDropdown() {
                         }
                     },
                     onClick = {
-                        selectedIcon = icon
-                        expanded = false
+                        onSelectedIconChange(icon)
+                        onExpandedChange(false)
                     }
                 )
             }
@@ -273,9 +289,9 @@ fun IconPickerDropdown() {
 }
 
 @Composable
-fun AddGoalsCard(){
+fun AddGoalsCard(golsScreenState: CreateGolsScreenState){
     Box(modifier = Modifier
-        .fillMaxWidth()
+        .fillMaxWidth().padding(10.dp)
     ){
         Column(Modifier.fillMaxWidth() ,horizontalAlignment = Alignment.CenterHorizontally) {
             Button(onClick = { /*TODO*/ }) {
@@ -283,7 +299,7 @@ fun AddGoalsCard(){
             }
 
             LazyColumn {
-
+                items(golsScreenState, key = golsScreenState.)
             }
         }
     }
@@ -349,7 +365,6 @@ fun GoalsEntryPreview(){
 @Preview
 fun CreateTaskScreenPreview(){
     CreateTaskScreen(
-
         onDatePickerChange = {},
         onDateSelected = {}
     )

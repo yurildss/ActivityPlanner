@@ -1,0 +1,134 @@
+package com.example.todo.screen.task
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.todo.model.Gols
+import com.example.todo.screen.ToDoAppViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+
+@HiltViewModel
+class CreateTaskScreenViewModel : ToDoAppViewModel() {
+
+
+    val options = listOf("-"," Priority 1", "Priority 2", "Priority 3")
+    val icons = listOf(
+        Icons.Default.Add to "",
+        Icons.Default.Home to "Home",
+        Icons.Default.Star to "Star",
+        Icons.Default.Person to "Person",
+        Icons.Default.Settings to "Settings",
+        Icons.Default.Email to "Email",
+        Icons.Default.Info to "Info",
+    )
+
+    var expandedIcon = mutableStateOf(false)
+        private set
+    var expanded = mutableStateOf(false)
+        private set
+
+    var CreateTaskUistate = mutableStateOf(CreateTaskScreenState())
+        private set
+
+    var CreateGolsUistate = mutableStateOf(CreateGolsScreenState())
+        private set
+
+    var selectedIcon =   mutableStateOf(icons[0])
+        private set
+
+    fun onExpandedChange(newValue: Boolean){
+        expanded.value = newValue
+    }
+
+    fun onSelectedIconChange(newValue: Pair<ImageVector, String>){
+        selectedIcon.value = newValue
+    }
+
+    fun onExpandedIconChange(newValue: Boolean){
+        expandedIcon.value = newValue
+    }
+
+    fun onTitleTaskChange(newValue: String){
+        CreateTaskUistate.value =
+            CreateTaskUistate.value.copy(title = newValue)
+
+    }
+
+    fun setOpenDatePicker(newValue: Boolean){
+        CreateTaskUistate.value =
+            CreateTaskUistate.value.copy(openDatePicker = newValue)
+    }
+
+    fun updateTaskDeadLine(newValue: String){
+        CreateTaskUistate.value =
+            CreateTaskUistate.value.copy(deadLine = newValue)
+    }
+
+    fun onTitleGolsChange(newValue: String){
+        CreateGolsUistate.value =
+            CreateGolsUistate.value.copy(title = newValue)
+    }
+
+    fun onDescriptionTaskChange(newValue: String){
+        CreateTaskUistate.value =
+            CreateTaskUistate.value.copy(description = newValue)
+    }
+
+    fun onDescriptionGolsChange(newValue: String){
+        CreateGolsUistate.value =
+            CreateGolsUistate.value.copy(description = newValue)
+    }
+
+    fun onDeadLineTaskChange(newValue: String){
+        CreateTaskUistate.value =
+            CreateTaskUistate.value.copy(deadLine = newValue)
+    }
+
+    fun onDeadLineGolsChange(newValue: String){
+        CreateGolsUistate.value =
+            CreateGolsUistate.value.copy(deadLine = newValue)
+    }
+
+    fun onPriorityTaskChange(newValue: String){
+        CreateTaskUistate.value =
+            CreateTaskUistate.value.copy(priority = newValue)
+    }
+    
+    fun onAddGolsClick(){
+        CreateTaskUistate.value =
+            CreateTaskUistate.value.copy(gols = CreateTaskUistate.value.gols +
+                    Gols()
+            )
+    }
+
+
+}
+
+data class CreateTaskScreenState(
+    val openDatePicker: Boolean = false,
+    val title: String = "",
+    val description: String = "",
+    val deadLine: String = "",
+    val priority: String = "",
+    val gols: List<Gols> = emptyList(),
+    val tags: List<String> = emptyList(),
+    val timeToComplete: Long = 0L,
+)
+
+data class CreateGolsScreenState(
+    val title: String = "",
+    val description: String = "",
+    val deadLine: String = "",
+    val timeToComplete: Long = 0L,
+    )
+
