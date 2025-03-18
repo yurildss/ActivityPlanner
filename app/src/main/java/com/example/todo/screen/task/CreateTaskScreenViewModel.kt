@@ -17,7 +17,7 @@ import com.example.todo.model.Gols
 import com.example.todo.screen.ToDoAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 
-@HiltViewModel
+
 class CreateTaskScreenViewModel : ToDoAppViewModel() {
 
 
@@ -40,10 +40,13 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
     var CreateTaskUistate = mutableStateOf(CreateTaskScreenState())
         private set
 
-    var CreateGolsUistate = mutableStateOf(CreateGolsScreenState())
+    var CreateGolsUistate = mutableStateOf(CreateGoalsScreenState())
         private set
 
     var selectedIcon =   mutableStateOf(icons[0])
+        private set
+
+    var selectedPriorityOption = mutableStateOf(options[0])
         private set
 
     fun onExpandedChange(newValue: Boolean){
@@ -61,12 +64,20 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
     fun onTitleTaskChange(newValue: String){
         CreateTaskUistate.value =
             CreateTaskUistate.value.copy(title = newValue)
-
     }
 
     fun setOpenDatePicker(newValue: Boolean){
         CreateTaskUistate.value =
             CreateTaskUistate.value.copy(openDatePicker = newValue)
+    }
+
+    fun setOpenGolsDatePicker(newValue: Boolean){
+        CreateGolsUistate.value =
+            CreateGolsUistate.value.copy(openGoalsDatePicker = newValue)
+    }
+
+    fun updateGolsDeadLine(newValue: String){
+
     }
 
     fun updateTaskDeadLine(newValue: String){
@@ -111,7 +122,6 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
             )
     }
 
-
 }
 
 data class CreateTaskScreenState(
@@ -125,7 +135,8 @@ data class CreateTaskScreenState(
     val timeToComplete: Long = 0L,
 )
 
-data class CreateGolsScreenState(
+data class CreateGoalsScreenState(
+    val openGoalsDatePicker: Boolean = false,
     val title: String = "",
     val description: String = "",
     val deadLine: String = "",

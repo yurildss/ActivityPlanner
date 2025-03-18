@@ -96,11 +96,13 @@ fun CreateTaskScreen(
                 onValueChange = viewModel::onDescriptionTaskChange,
                 label = {Text("Description", color = Color.White)},
             )
-            DatePick(viewModel::setOpenDatePicker, viewModel::updateTaskDeadLine)
+            DatePick(taskuiState.deadLine ,viewModel::setOpenDatePicker, viewModel::updateTaskDeadLine)
             DropDownMenuSample(
-                viewModel.options,
+                options = viewModel.options,
                 expanded = viewModel.expanded.value,
-                onExpandedChange = viewModel::onExpandedChange
+                onExpandedChange = viewModel::onExpandedChange,
+                selectedOption = viewModel.selectedPriorityOption.value,
+                onPriorityTaskChange = viewModel::onPriorityTaskChange
             )
             IconPickerDropdown(
                 icons = viewModel.icons,
@@ -109,14 +111,20 @@ fun CreateTaskScreen(
                 selectedIcon = viewModel.selectedIcon.value,
                 onSelectedIconChange = viewModel::onSelectedIconChange
             )
-            AddGoalsCard()
+            AddGoalsCard(
+                onAddGolsClick = viewModel::onAddGolsClick,
+                golsScreenState = golsUiState,
+                taskScreenState = taskuiState,
+                onDatePickerChange = viewModel::setOpenGolsDatePicker,
+                onDateSelected = viewModel::updateGolsDeadLine
+            )
         }
     }
 }
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun ColumnScope.DatePick(
+private fun ColumnScope.DatePick(date: String,
     onDatePickerChange: (Boolean) -> Unit,
     onDateSelected: (String) -> Unit
 ) {
@@ -124,7 +132,7 @@ private fun ColumnScope.DatePick(
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.Transparent
         ),
-        value = "",
+        value = date,
         onValueChange = {},
         label = {
             Text(
@@ -184,11 +192,11 @@ private fun ColumnScope.DatePick(
 @Composable
 fun DropDownMenuSample(
     options: List<String>,
+    selectedOption: String,
     expanded: Boolean,
+    onPriorityTaskChange: (String) -> Unit,
     onExpandedChange: (Boolean)-> Unit
 ) {
-
-    var selectedOption by remember { mutableStateOf(options[0]) }
 
     ExposedDropdownMenuBox(
         modifier = Modifier.fillMaxWidth(0.75f).padding(top = 5.dp),
@@ -221,7 +229,7 @@ fun DropDownMenuSample(
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
-                        selectedOption = option
+                        onPriorityTaskChange(option)
                         onExpandedChange(false)
                     }
                 )
@@ -289,25 +297,45 @@ fun IconPickerDropdown(
 }
 
 @Composable
-fun AddGoalsCard(golsScreenState: CreateGolsScreenState){
+fun AddGoalsCard(onAddGolsClick: () -> Unit,
+                 golsScreenState: CreateGoalsScreenState,
+                 taskScreenState: CreateTaskScreenState,
+                 onDatePickerChange: (Boolean) -> Unit,
+                 onDateSelected: (String) -> Unit
+                 ){
     Box(modifier = Modifier
         .fillMaxWidth().padding(10.dp)
     ){
-        Column(Modifier.fillMaxWidth() ,horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = { /*TODO*/ }) {
+        Column(
+            Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(onClick = onAddGolsClick) {
                 Text("Add Goals")
             }
 
             LazyColumn {
-                items(golsScreenState, key = golsScreenState.)
+                items(
+                    items = taskScreenState.gols,
+                    key = {taskScreenState.gols.indexOf(it)}
+                ){
+                    GoalsEntry(
+                        createGoalsScreenState = golsScreenState,
+                        onDatePickerChange = onDatePickerChange,
+                        onDateSelected = onDateSelected
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun GoalsEntry(onDatePickerChange: (Boolean) -> Unit,
-               onDateSelected: (String) -> Unit){
+fun GoalsEntry(
+    createGoalsScreenState: CreateGoalsScreenState,
+    onDatePickerChange: (Boolean) -> Unit,
+    onDateSelected: (String) -> Unit
+){
     Box(modifier = Modifier
         .fillMaxWidth()
         .clip(RoundedCornerShape(16.dp))
@@ -317,20 +345,23 @@ fun GoalsEntry(onDatePickerChange: (Boolean) -> Unit,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center)
         {
-            OutlinedTextField("",
+            OutlinedTextField(
+                createGoalsScreenState.title,
                 onValueChange = {},
                 label = {Text("Title",
                     color = Color.White)},
                 singleLine = true
             )
 
-            OutlinedTextField("",
+            OutlinedTextField(
+                createGoalsScreenState.description,
                 onValueChange = {},
                 label = {Text("Description",
                     color = Color.White)}
             )
-            DatePick(onDatePickerChange, onDateSelected)
-            OutlinedTextField("",
+            DatePick( createGoalsScreenState.deadLine,onDatePickerChange, onDateSelected)
+            OutlinedTextField(
+                createGoalsScreenState.timeToComplete.toString(),
                 onValueChange = {},
                 label = {Text("Time to complete",
                     color = Color.White)},
@@ -349,7 +380,13 @@ fun GoalsEntry(onDatePickerChange: (Boolean) -> Unit,
 @Composable
 @Preview
 fun AddGoalsCardPreview(){
-    AddGoalsCard()
+    AddGoalsCard(
+        onAddGolsClick = TODO(),
+        golsScreenState = TODO(),
+        taskScreenState = TODO(),
+        onDatePickerChange = TODO(),
+        onDateSelected = TODO()
+    )
 }
 
 @Composable
@@ -357,7 +394,8 @@ fun AddGoalsCardPreview(){
 fun GoalsEntryPreview(){
     GoalsEntry(
         onDatePickerChange = {},
-        onDateSelected = {}
+        onDateSelected = {},
+        createGoalsScreenState = CreateGoalsScreenState()
     )
 }
 
