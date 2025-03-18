@@ -27,6 +27,8 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.NavigationBar
@@ -48,8 +50,9 @@ import com.example.todo.model.Task
 
 @Composable
 fun HomeScreen(
+    modifier: Modifier = Modifier,
+    onAddTaskClick: () -> Unit,
     viewModel: HomeScreenViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
 ){
     val tasks = viewModel.tasks.collectAsStateWithLifecycle(emptyList())
     val uiState = viewModel.uiState.value
@@ -63,9 +66,11 @@ fun HomeScreen(
     ){
         Column {
             UserHomeScreen(uiState)
-            SettingsPart()
+            SettingsPart(onAddTaskClick)
             LazyColumn(
-                Modifier.padding(10.dp).fillMaxSize(1f),
+                Modifier
+                    .padding(10.dp)
+                    .fillMaxSize(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
                 if (tasks.value.isEmpty()) {
@@ -224,7 +229,7 @@ fun UserHomeScreen(uiState: HomeScreenUiState){
 }
 
 @Composable
-fun SettingsPart(){
+fun SettingsPart(onAddTaskClick: () -> Unit ){
     Row(Modifier
         .fillMaxWidth()
         .padding(10.dp),
@@ -258,14 +263,21 @@ fun SettingsPart(){
                 .size(150.dp, 54.dp)
                 .clip(CircleShape)
                 .background(Color(0x166EA68E))
-                .padding(16.dp),
+                .padding(5.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
-            Icon(Icons.Default.Add,
-                null,
-                tint = Color.White
-            )
-            Text("Add Task", modifier = Modifier.padding(start = 10.dp), color = Color.White)
+            Button(modifier = Modifier.fillMaxWidth(),
+                onClick = onAddTaskClick,
+                colors = ButtonDefaults.buttonColors(Color.Transparent)
+            ) {
+                Icon(Icons.Default.Add,
+                    null,
+                    tint = Color.White
+                )
+                Text("Add Task",
+                    modifier = Modifier.padding(start = 10.dp),
+                    color = Color.White)
+            }
         }
     }
 }
@@ -328,13 +340,15 @@ fun TaskCardPreview(){
 @Composable
 @Preview
 fun SettingsPartPreview(){
-    SettingsPart()
+    SettingsPart({})
 }
 
 @Composable
 @Preview
 fun HomeScreenPreview(){
-    HomeScreen()
+    HomeScreen(
+        onAddTaskClick = {  },
+    )
 }
 
 @Composable

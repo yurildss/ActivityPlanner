@@ -69,8 +69,6 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 fun CreateTaskScreen(
     modifier: Modifier = Modifier,
-    onDatePickerChange: (Boolean) -> Unit,
-    onDateSelected: (String) -> Unit,
     viewModel: CreateTaskScreenViewModel = hiltViewModel()
     ){
 
@@ -402,8 +400,5 @@ fun GoalsEntryPreview(){
 @Composable
 @Preview
 fun CreateTaskScreenPreview(){
-    CreateTaskScreen(
-        onDatePickerChange = {},
-        onDateSelected = {}
-    )
+    CreateTaskScreen()
 }

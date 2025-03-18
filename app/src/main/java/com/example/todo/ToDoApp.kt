@@ -11,6 +11,7 @@ import com.example.todo.screen.OpenScreen
 import com.example.todo.screen.home.HomeScreen
 import com.example.todo.screen.login.LoginScreen
 import com.example.todo.screen.sign_up.SignUpScreen
+import com.example.todo.screen.task.CreateTaskScreen
 
 @Composable
 fun ToDoApp(navController: NavHostController = rememberNavController()){
@@ -44,8 +45,13 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
             )
         }
         composable(Screens.HOME_SCREEN.name){
-            HomeScreen()
+            HomeScreen(onAddTaskClick = {
+                navController.navigate(Screens.ADD_TASK_SCREEN.name)
+            })
         }
 
+        composable(Screens.ADD_TASK_SCREEN.name){
+            CreateTaskScreen()
+        }
     }
 }
