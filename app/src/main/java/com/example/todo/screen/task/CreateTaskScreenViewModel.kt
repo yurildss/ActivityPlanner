@@ -8,14 +8,10 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.todo.model.Gols
 import com.example.todo.screen.ToDoAppViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 
 class CreateTaskScreenViewModel : ToDoAppViewModel() {
@@ -34,7 +30,8 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
 
     var expandedIcon = mutableStateOf(false)
         private set
-    var expanded = mutableStateOf(false)
+
+    var expandedPriority = mutableStateOf(false)
         private set
 
     var CreateTaskUistate = mutableStateOf(CreateTaskScreenState())
@@ -49,8 +46,8 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
     var selectedPriorityOption = mutableStateOf(options[0])
         private set
 
-    fun onExpandedChange(newValue: Boolean){
-        expanded.value = newValue
+    fun onExpandedPriorityChange(newValue: Boolean){
+        expandedPriority.value = newValue
     }
 
     fun onSelectedIconChange(newValue: Pair<ImageVector, String>){
@@ -132,7 +129,7 @@ data class CreateTaskScreenState(
     val priority: String = "",
     val gols: List<Gols> = emptyList(),
     val tags: List<String> = emptyList(),
-    val timeToComplete: Long = 0L,
+    val timeToComplete: Long = 0L
 )
 
 data class CreateGoalsScreenState(
@@ -140,6 +137,6 @@ data class CreateGoalsScreenState(
     val title: String = "",
     val description: String = "",
     val deadLine: String = "",
-    val timeToComplete: Long = 0L,
-    )
+    val timeToComplete: Long = 0L
+)
 

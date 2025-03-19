@@ -1,6 +1,5 @@
 package com.example.todo.screen.task
 
-import android.graphics.drawable.Icon
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,15 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
@@ -45,9 +37,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,7 +45,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.Instant
@@ -70,35 +59,43 @@ import kotlinx.datetime.toLocalDateTime
 fun CreateTaskScreen(
     modifier: Modifier = Modifier,
     viewModel: CreateTaskScreenViewModel = hiltViewModel()
-    ){
+) {
 
     val taskuiState by viewModel.CreateTaskUistate
     val golsUiState by viewModel.CreateGolsUistate
 
-    Box(modifier = modifier
-        .fillMaxSize()
-        .background(Color(0xFF6EA68E))
-    ){
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(0xFF6EA68E))
+    ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedTextField(
                 value = taskuiState.title,
                 onValueChange = viewModel::onTitleTaskChange,
-                label = {Text("Title", color = Color.White)},
+                label = { Text("Title", color = Color.White) },
                 singleLine = true
             )
             OutlinedTextField(
                 value = taskuiState.description,
                 onValueChange = viewModel::onDescriptionTaskChange,
-                label = {Text("Description", color = Color.White)},
+                label = { Text("Description", color = Color.White) },
             )
-            DatePick(taskuiState.deadLine ,viewModel::setOpenDatePicker, viewModel::updateTaskDeadLine)
+            DatePick(
+                taskuiState.openDatePicker,
+                taskuiState.deadLine,
+                viewModel::setOpenDatePicker,
+                viewModel::updateTaskDeadLine
+            )
             DropDownMenuSample(
                 options = viewModel.options,
-                expanded = viewModel.expanded.value,
-                onExpandedChange = viewModel::onExpandedChange,
+                expanded = viewModel.expandedPriority.value,
+                onExpandedChange = viewModel::onExpandedPriorityChange,
                 selectedOption = viewModel.selectedPriorityOption.value,
                 onPriorityTaskChange = viewModel::onPriorityTaskChange
             )
@@ -122,7 +119,9 @@ fun CreateTaskScreen(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun ColumnScope.DatePick(date: String,
+private fun ColumnScope.DatePick(
+    openDatePicker: Boolean,
+    date: String,
     onDatePickerChange: (Boolean) -> Unit,
     onDateSelected: (String) -> Unit
 ) {
@@ -156,7 +155,7 @@ private fun ColumnScope.DatePick(date: String,
     )
     val dateState = rememberDatePickerState()
 
-    AnimatedVisibility(visible = false) {
+    AnimatedVisibility(visible = openDatePicker) {
         DatePickerDialog(
             onDismissRequest = {
                 onDatePickerChange(false)
@@ -193,13 +192,15 @@ fun DropDownMenuSample(
     selectedOption: String,
     expanded: Boolean,
     onPriorityTaskChange: (String) -> Unit,
-    onExpandedChange: (Boolean)-> Unit
+    onExpandedChange: (Boolean) -> Unit
 ) {
 
     ExposedDropdownMenuBox(
-        modifier = Modifier.fillMaxWidth(0.75f).padding(top = 5.dp),
+        modifier = Modifier
+            .fillMaxWidth(0.75f)
+            .padding(top = 5.dp),
         expanded = expanded,
-        onExpandedChange = {onExpandedChange(!expanded)}
+        onExpandedChange = { onExpandedChange(!expanded) }
     ) {
         OutlinedTextField(
             value = selectedOption,
@@ -209,19 +210,22 @@ fun DropDownMenuSample(
                 .menuAnchor()
                 .fillMaxWidth(),
             label = {
-                Text("Select the priority",
-                color = Color.White
-            )
-                    },
+                Text(
+                    "Select the priority",
+                    color = Color.White
+                )
+            },
             trailingIcon = {
-                Icon(Icons.Default.ArrowDropDown,
-                    contentDescription = "Abrir menu")
+                Icon(
+                    Icons.Default.ArrowDropDown,
+                    contentDescription = "Abrir menu"
+                )
             }
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { onExpandedChange(false)}
+            onDismissRequest = { onExpandedChange(false) }
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
@@ -247,7 +251,9 @@ fun IconPickerDropdown(
 ) {
 
     ExposedDropdownMenuBox(
-        modifier = Modifier.fillMaxWidth(0.75f).padding(top = 5.dp),
+        modifier = Modifier
+            .fillMaxWidth(0.75f)
+            .padding(top = 5.dp),
         expanded = expanded,
         onExpandedChange = { onExpandedChange(!expanded) }
     ) {
@@ -295,15 +301,18 @@ fun IconPickerDropdown(
 }
 
 @Composable
-fun AddGoalsCard(onAddGolsClick: () -> Unit,
-                 golsScreenState: CreateGoalsScreenState,
-                 taskScreenState: CreateTaskScreenState,
-                 onDatePickerChange: (Boolean) -> Unit,
-                 onDateSelected: (String) -> Unit
-                 ){
-    Box(modifier = Modifier
-        .fillMaxWidth().padding(10.dp)
-    ){
+fun AddGoalsCard(
+    onAddGolsClick: () -> Unit,
+    golsScreenState: CreateGoalsScreenState,
+    taskScreenState: CreateTaskScreenState,
+    onDatePickerChange: (Boolean) -> Unit,
+    onDateSelected: (String) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+    ) {
         Column(
             Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -312,11 +321,11 @@ fun AddGoalsCard(onAddGolsClick: () -> Unit,
                 Text("Add Goals")
             }
 
-            LazyColumn {
+            LazyColumn(contentPadding = PaddingValues(10.dp)) {
                 items(
                     items = taskScreenState.gols,
-                    key = {taskScreenState.gols.indexOf(it)}
-                ){
+                    key = { taskScreenState.gols.indexOf(it) }
+                ) {
                     GoalsEntry(
                         createGoalsScreenState = golsScreenState,
                         onDatePickerChange = onDatePickerChange,
@@ -330,44 +339,72 @@ fun AddGoalsCard(onAddGolsClick: () -> Unit,
 
 @Composable
 fun GoalsEntry(
+    onTitleTaskChange: (String) -> Unit,
+    onDescriptionTaskChange: (String) -> Unit,
+    onTimeToCompleteChange: (String) -> Unit,
     createGoalsScreenState: CreateGoalsScreenState,
     onDatePickerChange: (Boolean) -> Unit,
     onDateSelected: (String) -> Unit
-){
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .clip(RoundedCornerShape(16.dp))
-        .background(Color(0xFF498374)).padding(10.dp)
-    ){
-        Column(Modifier.fillMaxWidth() ,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFF498374))
+            .padding(10.dp)
+    ) {
+        Column(
+            Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center)
+            verticalArrangement = Arrangement.Center
+        )
         {
             OutlinedTextField(
                 createGoalsScreenState.title,
-                onValueChange = {},
-                label = {Text("Title",
-                    color = Color.White)},
+                onValueChange = onTitleTaskChange,
+                label = {
+                    Text(
+                        "Title",
+                        color = Color.White
+                    )
+                },
                 singleLine = true
             )
 
             OutlinedTextField(
                 createGoalsScreenState.description,
-                onValueChange = {},
-                label = {Text("Description",
-                    color = Color.White)}
+                onValueChange = onDescriptionTaskChange,
+                label = {
+                    Text(
+                        "Description",
+                        color = Color.White
+                    )
+                }
             )
-            DatePick( createGoalsScreenState.deadLine,onDatePickerChange, onDateSelected)
+            DatePick(
+                createGoalsScreenState.openGoalsDatePicker,
+                createGoalsScreenState.deadLine, onDatePickerChange,
+                onDateSelected
+            )
             OutlinedTextField(
                 createGoalsScreenState.timeToComplete.toString(),
-                onValueChange = {},
-                label = {Text("Time to complete",
-                    color = Color.White)},
+                onValueChange = onTimeToCompleteChange,
+                label = {
+                    Text(
+                        "Time to complete",
+                        color = Color.White
+                    )
+                },
                 singleLine = true
             )
 
-            Row(modifier = Modifier.fillMaxWidth(0.75f).padding(10.dp), verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(0.75f)
+                    .padding(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Button(onClick = { /*TODO*/ }) { Text("Add") }
                 Button(onClick = { /*TODO*/ }) { Text("Remove") }
             }
@@ -377,7 +414,7 @@ fun GoalsEntry(
 
 @Composable
 @Preview
-fun AddGoalsCardPreview(){
+fun AddGoalsCardPreview() {
     AddGoalsCard(
         onAddGolsClick = TODO(),
         golsScreenState = TODO(),
@@ -389,7 +426,7 @@ fun AddGoalsCardPreview(){
 
 @Composable
 @Preview
-fun GoalsEntryPreview(){
+fun GoalsEntryPreview() {
     GoalsEntry(
         onDatePickerChange = {},
         onDateSelected = {},
@@ -399,6 +436,6 @@ fun GoalsEntryPreview(){
 
 @Composable
 @Preview
-fun CreateTaskScreenPreview(){
+fun CreateTaskScreenPreview() {
     CreateTaskScreen()
 }
