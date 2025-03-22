@@ -74,7 +74,8 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
     }
 
     fun updateGolsDeadLine(newValue: String){
-
+        CreateGolsUistate.value =
+            CreateGolsUistate.value.copy(deadLine = newValue)
     }
 
     fun updateTaskDeadLine(newValue: String){
@@ -119,6 +120,11 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
             )
     }
 
+    fun onTimeToCompleteGoalsChange(newValue: String){
+        CreateGolsUistate.value =
+            CreateGolsUistate.value.copy(timeToComplete = newValue.toLong())
+    }
+
 }
 
 data class CreateTaskScreenState(
@@ -129,7 +135,7 @@ data class CreateTaskScreenState(
     val priority: String = "",
     val gols: List<Gols> = emptyList(),
     val tags: List<String> = emptyList(),
-    val timeToComplete: Long = 0L
+    val timeToComplete: Long = 0
 )
 
 data class CreateGoalsScreenState(
@@ -137,6 +143,6 @@ data class CreateGoalsScreenState(
     val title: String = "",
     val description: String = "",
     val deadLine: String = "",
-    val timeToComplete: Long = 0L
+    val timeToComplete: Long = 0
 )
 

@@ -111,7 +111,10 @@ fun CreateTaskScreen(
                 golsScreenState = golsUiState,
                 taskScreenState = taskuiState,
                 onDatePickerChange = viewModel::setOpenGolsDatePicker,
-                onDateSelected = viewModel::updateGolsDeadLine
+                onDateSelected = viewModel::updateGolsDeadLine,
+                onDescriptionGoalsChange = viewModel::onDescriptionGolsChange,
+                onTimeToCompleteChange = viewModel::onTimeToCompleteGoalsChange,
+                onTitleGoalsChange = viewModel::onTitleGolsChange
             )
         }
     }
@@ -306,6 +309,10 @@ fun AddGoalsCard(
     golsScreenState: CreateGoalsScreenState,
     taskScreenState: CreateTaskScreenState,
     onDatePickerChange: (Boolean) -> Unit,
+    onDescriptionGoalsChange: (String) -> Unit,
+    onTimeToCompleteChange: (String) -> Unit,
+    onTitleGoalsChange: (String) -> Unit,
+
     onDateSelected: (String) -> Unit
 ) {
     Box(
@@ -329,7 +336,10 @@ fun AddGoalsCard(
                     GoalsEntry(
                         createGoalsScreenState = golsScreenState,
                         onDatePickerChange = onDatePickerChange,
-                        onDateSelected = onDateSelected
+                        onDateSelected = onDateSelected,
+                        onGoalsTaskChange = onTitleGoalsChange,
+                        onDescriptionGoalsChange = onDescriptionGoalsChange,
+                        onTimeToCompleteChange = onTimeToCompleteChange
                     )
                 }
             }
@@ -339,8 +349,8 @@ fun AddGoalsCard(
 
 @Composable
 fun GoalsEntry(
-    onTitleTaskChange: (String) -> Unit,
-    onDescriptionTaskChange: (String) -> Unit,
+    onGoalsTaskChange: (String) -> Unit,
+    onDescriptionGoalsChange: (String) -> Unit,
     onTimeToCompleteChange: (String) -> Unit,
     createGoalsScreenState: CreateGoalsScreenState,
     onDatePickerChange: (Boolean) -> Unit,
@@ -361,7 +371,7 @@ fun GoalsEntry(
         {
             OutlinedTextField(
                 createGoalsScreenState.title,
-                onValueChange = onTitleTaskChange,
+                onValueChange = onGoalsTaskChange,
                 label = {
                     Text(
                         "Title",
@@ -373,7 +383,7 @@ fun GoalsEntry(
 
             OutlinedTextField(
                 createGoalsScreenState.description,
-                onValueChange = onDescriptionTaskChange,
+                onValueChange = onDescriptionGoalsChange,
                 label = {
                     Text(
                         "Description",
@@ -420,7 +430,10 @@ fun AddGoalsCardPreview() {
         golsScreenState = TODO(),
         taskScreenState = TODO(),
         onDatePickerChange = TODO(),
-        onDateSelected = TODO()
+        onDateSelected = TODO(),
+        onDescriptionGoalsChange = TODO(),
+        onTimeToCompleteChange = TODO(),
+        onTitleGoalsChange = TODO()
     )
 }
 
@@ -430,7 +443,10 @@ fun GoalsEntryPreview() {
     GoalsEntry(
         onDatePickerChange = {},
         onDateSelected = {},
-        createGoalsScreenState = CreateGoalsScreenState()
+        createGoalsScreenState = CreateGoalsScreenState(),
+        onGoalsTaskChange = {  },
+        onDescriptionGoalsChange = {  },
+        onTimeToCompleteChange = { }
     )
 }
 
