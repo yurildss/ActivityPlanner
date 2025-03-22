@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -27,6 +27,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -43,8 +44,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.Instant
@@ -78,13 +83,15 @@ fun CreateTaskScreen(
             OutlinedTextField(
                 value = taskuiState.title,
                 onValueChange = viewModel::onTitleTaskChange,
-                label = { Text("Title", color = Color.White) },
+                label = { Text("Title",
+                    fontFamily = FontFamily.Monospace, color = Color.White) },
                 singleLine = true
             )
             OutlinedTextField(
                 value = taskuiState.description,
                 onValueChange = viewModel::onDescriptionTaskChange,
-                label = { Text("Description", color = Color.White) },
+                label = { Text("Description",
+                    fontFamily = FontFamily.Monospace, color = Color.White) },
             )
             DatePick(
                 taskuiState.openDatePicker,
@@ -114,7 +121,8 @@ fun CreateTaskScreen(
                 onDateSelected = viewModel::updateGolsDeadLine,
                 onDescriptionGoalsChange = viewModel::onDescriptionGolsChange,
                 onTimeToCompleteChange = viewModel::onTimeToCompleteGoalsChange,
-                onTitleGoalsChange = viewModel::onTitleGolsChange
+                onTitleGoalsChange = viewModel::onTitleGolsChange,
+                onCreateGols = viewModel::onCreateGoals
             )
         }
     }
@@ -137,7 +145,8 @@ private fun ColumnScope.DatePick(
         label = {
             Text(
                 text = "DeadLine",
-                color = Color.White
+                color = Color.White,
+                fontFamily = FontFamily.Monospace
             )
         },
         interactionSource = remember {
@@ -179,7 +188,7 @@ private fun ColumnScope.DatePick(
                         }
 
                     }) {
-                    Text("Selecionar")
+                    Text("Select")
                 }
             }) {
             DatePicker(state = dateState)
@@ -215,6 +224,7 @@ fun DropDownMenuSample(
             label = {
                 Text(
                     "Select the priority",
+                    fontFamily = FontFamily.Monospace,
                     color = Color.White
                 )
             },
@@ -267,7 +277,7 @@ fun IconPickerDropdown(
             modifier = Modifier
                 .menuAnchor()
                 .fillMaxWidth(),
-            label = { Text("Select a icon", color = Color.White) },
+            label = { Text("Select a icon", color = Color.White, fontFamily = FontFamily.Monospace) },
             trailingIcon = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -312,7 +322,7 @@ fun AddGoalsCard(
     onDescriptionGoalsChange: (String) -> Unit,
     onTimeToCompleteChange: (String) -> Unit,
     onTitleGoalsChange: (String) -> Unit,
-
+    onCreateGols: (Int) -> Unit,
     onDateSelected: (String) -> Unit
 ) {
     Box(
@@ -329,32 +339,34 @@ fun AddGoalsCard(
             }
 
             LazyColumn(contentPadding = PaddingValues(10.dp)) {
-                items(
-                    items = taskScreenState.gols,
-                    key = { taskScreenState.gols.indexOf(it) }
-                ) {
+                itemsIndexed(taskScreenState.gols) { index, goal ->
                     GoalsEntry(
+                        index = index,  // Passamos o índice correto para GoalsEntry
                         createGoalsScreenState = golsScreenState,
                         onDatePickerChange = onDatePickerChange,
                         onDateSelected = onDateSelected,
                         onGoalsTaskChange = onTitleGoalsChange,
                         onDescriptionGoalsChange = onDescriptionGoalsChange,
-                        onTimeToCompleteChange = onTimeToCompleteChange
+                        onTimeToCompleteChange = onTimeToCompleteChange,
+                        onCreateGols = onCreateGols
                     )
                 }
             }
+
         }
     }
 }
 
 @Composable
 fun GoalsEntry(
+    index: Int,
     onGoalsTaskChange: (String) -> Unit,
     onDescriptionGoalsChange: (String) -> Unit,
     onTimeToCompleteChange: (String) -> Unit,
     createGoalsScreenState: CreateGoalsScreenState,
     onDatePickerChange: (Boolean) -> Unit,
-    onDateSelected: (String) -> Unit
+    onDateSelected: (String) -> Unit,
+    onCreateGols: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -375,6 +387,7 @@ fun GoalsEntry(
                 label = {
                     Text(
                         "Title",
+                        fontFamily = FontFamily.Monospace,
                         color = Color.White
                     )
                 },
@@ -387,6 +400,7 @@ fun GoalsEntry(
                 label = {
                     Text(
                         "Description",
+                        fontFamily = FontFamily.Monospace,
                         color = Color.White
                     )
                 }
@@ -402,6 +416,7 @@ fun GoalsEntry(
                 label = {
                     Text(
                         "Time to complete",
+                        fontFamily = FontFamily.Monospace,
                         color = Color.White
                     )
                 },
@@ -415,11 +430,67 @@ fun GoalsEntry(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = { /*TODO*/ }) { Text("Add") }
+                Button(onClick = { onCreateGols(index) } ) { Text("Add") }
                 Button(onClick = { /*TODO*/ }) { Text("Remove") }
             }
         }
     }
+}
+
+@Composable
+fun GoalsShow(){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFF498374))
+            .padding(10.dp)
+    ) {
+        Column(Modifier.fillMaxWidth(),) {
+            Text("Title",
+                fontFamily = FontFamily.Monospace,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp,
+                modifier = Modifier.padding(10.dp)
+            )
+            HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
+            Text("description",
+                fontFamily = FontFamily.Monospace,
+                maxLines = 2,
+                fontSize = 18.sp,
+                color = Color.White,
+                modifier = Modifier.padding(10.dp)
+            )
+            HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
+            Text("02/01/2026",
+                fontFamily = FontFamily.Monospace,
+                fontStyle = FontStyle.Italic,
+                color = Color.White,
+                modifier = Modifier.padding(10.dp)
+            )
+            HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
+            Text("10h",
+                fontFamily = FontFamily.Monospace,
+                color = Color.White,
+                modifier = Modifier.padding(10.dp)
+            )
+
+            Button(
+                modifier = Modifier.align(Alignment.End),
+                onClick = {  },
+                colors = ButtonDefaults.buttonColors(Color.Red)
+            ) {
+                Text("Delete")
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun GoalsShowPreview() {
+    GoalsShow()
 }
 
 @Composable
@@ -433,7 +504,8 @@ fun AddGoalsCardPreview() {
         onDateSelected = TODO(),
         onDescriptionGoalsChange = TODO(),
         onTimeToCompleteChange = TODO(),
-        onTitleGoalsChange = TODO()
+        onTitleGoalsChange = TODO(),
+        onCreateGols = TODO()
     )
 }
 
@@ -444,9 +516,11 @@ fun GoalsEntryPreview() {
         onDatePickerChange = {},
         onDateSelected = {},
         createGoalsScreenState = CreateGoalsScreenState(),
-        onGoalsTaskChange = {  },
-        onDescriptionGoalsChange = {  },
-        onTimeToCompleteChange = { }
+        onGoalsTaskChange = { },
+        onDescriptionGoalsChange = { },
+        onTimeToCompleteChange = { },
+        onCreateGols = { index: Int -> },
+        index = TODO()
     )
 }
 
@@ -455,3 +529,4 @@ fun GoalsEntryPreview() {
 fun CreateTaskScreenPreview() {
     CreateTaskScreen()
 }
+

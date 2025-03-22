@@ -98,33 +98,27 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
             CreateGolsUistate.value.copy(description = newValue)
     }
 
-    fun onDeadLineTaskChange(newValue: String){
-        CreateTaskUistate.value =
-            CreateTaskUistate.value.copy(deadLine = newValue)
-    }
-
-    fun onDeadLineGolsChange(newValue: String){
-        CreateGolsUistate.value =
-            CreateGolsUistate.value.copy(deadLine = newValue)
-    }
-
     fun onPriorityTaskChange(newValue: String){
         CreateTaskUistate.value =
             CreateTaskUistate.value.copy(priority = newValue)
     }
     
     fun onAddGolsClick(){
-        CreateTaskUistate.value =
-            CreateTaskUistate.value.copy(gols = CreateTaskUistate.value.gols +
-                    Gols()
-            )
+        CreateTaskUistate.value.gols.add(Gols())
     }
 
     fun onTimeToCompleteGoalsChange(newValue: String){
         CreateGolsUistate.value =
-            CreateGolsUistate.value.copy(timeToComplete = newValue.toLong())
+            CreateGolsUistate.value.copy(timeToComplete = newValue)
     }
 
+    fun onCreateGoals(idGoals: Int){
+        CreateTaskUistate.value.gols[idGoals] = Gols(
+            title = CreateGolsUistate.value.title,
+            description = CreateGolsUistate.value.description,
+            timeToComplete = CreateGolsUistate.value.timeToComplete.toLong()
+        )
+    }
 }
 
 data class CreateTaskScreenState(
@@ -133,9 +127,9 @@ data class CreateTaskScreenState(
     val description: String = "",
     val deadLine: String = "",
     val priority: String = "",
-    val gols: List<Gols> = emptyList(),
-    val tags: List<String> = emptyList(),
-    val timeToComplete: Long = 0
+    val gols: MutableList<Gols> = mutableListOf(),
+    val tags: MutableList<String> = mutableListOf(),
+    val timeToComplete: Long  = 0
 )
 
 data class CreateGoalsScreenState(
@@ -143,6 +137,6 @@ data class CreateGoalsScreenState(
     val title: String = "",
     val description: String = "",
     val deadLine: String = "",
-    val timeToComplete: Long = 0
+    val timeToComplete: String = ""
 )
 

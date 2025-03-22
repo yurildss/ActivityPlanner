@@ -75,7 +75,9 @@ fun HomeScreen(
 
                 if (tasks.value.isEmpty()) {
                     item{
-                        Text(text = "No tasks today yet", color = Color.White, fontSize = 55.sp)
+                        Text(text = "No tasks today yet",
+                            color = Color.White,
+                            fontSize = 45.sp)
                     }
                 }
                 else{
