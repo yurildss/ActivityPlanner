@@ -1,5 +1,6 @@
 package com.example.todo.screen.task
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Email
@@ -102,9 +103,16 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
         CreateTaskUistate.value =
             CreateTaskUistate.value.copy(priority = newValue)
     }
-    
-    fun onAddGolsClick(){
-        CreateTaskUistate.value.gols.add(Gols())
+
+    fun onAddGolsClick() {
+        Log.d("onAddGolsClick", CreateTaskUistate.value.gols.size.toString())
+
+        // Criando uma nova lista para forçar a recomposição
+        CreateTaskUistate.value = CreateTaskUistate.value.copy(
+            gols = CreateTaskUistate.value.gols.toMutableList().apply {
+                add(Gols()) // Adicionando um novo item
+            }
+        )
     }
 
     fun onTimeToCompleteGoalsChange(newValue: String){
@@ -113,6 +121,7 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
     }
 
     fun onCreateGoals(idGoals: Int){
+        Log.d("onCreateGoals", idGoals.toString())
         CreateTaskUistate.value.gols[idGoals] = Gols(
             title = CreateGolsUistate.value.title,
             description = CreateGolsUistate.value.description,

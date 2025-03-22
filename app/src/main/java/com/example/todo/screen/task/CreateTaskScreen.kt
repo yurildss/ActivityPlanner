@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -337,11 +338,10 @@ fun AddGoalsCard(
             Button(onClick = onAddGolsClick) {
                 Text("Add Goals")
             }
-
             LazyColumn(contentPadding = PaddingValues(10.dp)) {
                 itemsIndexed(taskScreenState.gols) { index, goal ->
                     GoalsEntry(
-                        index = index,  // Passamos o índice correto para GoalsEntry
+                        index = index,  // Agora passamos o índice correto
                         createGoalsScreenState = golsScreenState,
                         onDatePickerChange = onDatePickerChange,
                         onDateSelected = onDateSelected,
