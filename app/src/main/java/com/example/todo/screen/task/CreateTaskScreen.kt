@@ -123,7 +123,8 @@ fun CreateTaskScreen(
                 onDescriptionGoalsChange = viewModel::onDescriptionGolsChange,
                 onTimeToCompleteChange = viewModel::onTimeToCompleteGoalsChange,
                 onTitleGoalsChange = viewModel::onTitleGolsChange,
-                onCreateGols = viewModel::onCreateGoals
+                onCreateGols = viewModel::onCreateGoals,
+                onGoalsIsSaveChange = viewModel::onGoalsIsSaveChange
             )
         }
     }
@@ -324,7 +325,8 @@ fun AddGoalsCard(
     onTimeToCompleteChange: (String) -> Unit,
     onTitleGoalsChange: (String) -> Unit,
     onCreateGols: (Int) -> Unit,
-    onDateSelected: (String) -> Unit
+    onDateSelected: (String) -> Unit,
+    onGoalsIsSaveChange : () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -340,16 +342,21 @@ fun AddGoalsCard(
             }
             LazyColumn(contentPadding = PaddingValues(10.dp)) {
                 itemsIndexed(taskScreenState.gols) { index, goal ->
-                    GoalsEntry(
-                        index = index,  // Agora passamos o índice correto
-                        createGoalsScreenState = golsScreenState,
-                        onDatePickerChange = onDatePickerChange,
-                        onDateSelected = onDateSelected,
-                        onGoalsTaskChange = onTitleGoalsChange,
-                        onDescriptionGoalsChange = onDescriptionGoalsChange,
-                        onTimeToCompleteChange = onTimeToCompleteChange,
-                        onCreateGols = onCreateGols
-                    )
+                    if (!golsScreenState.isSave) {
+                        GoalsEntry(
+                            index = index,  // Agora passamos o índice correto
+                            createGoalsScreenState = golsScreenState,
+                            onDatePickerChange = onDatePickerChange,
+                            onDateSelected = onDateSelected,
+                            onGoalsTaskChange = onTitleGoalsChange,
+                            onDescriptionGoalsChange = onDescriptionGoalsChange,
+                            onTimeToCompleteChange = onTimeToCompleteChange,
+                            onCreateGols = onCreateGols,
+                            onGoalsIsSaveChange = onGoalsIsSaveChange
+                        )
+                    }else{
+                        GoalsShow(golsScreenState)
+                    }
                 }
             }
 
@@ -366,7 +373,8 @@ fun GoalsEntry(
     createGoalsScreenState: CreateGoalsScreenState,
     onDatePickerChange: (Boolean) -> Unit,
     onDateSelected: (String) -> Unit,
-    onCreateGols: (Int) -> Unit
+    onCreateGols: (Int) -> Unit,
+    onGoalsIsSaveChange: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -430,7 +438,11 @@ fun GoalsEntry(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = { onCreateGols(index) } ) { Text("Add") }
+                Button(onClick = {
+
+                    onCreateGols(index)
+                    onGoalsIsSaveChange()
+                } ) { Text("Add") }
                 Button(onClick = { /*TODO*/ }) { Text("Remove") }
             }
         }
@@ -438,7 +450,7 @@ fun GoalsEntry(
 }
 
 @Composable
-fun GoalsShow(){
+fun GoalsShow(goals: CreateGoalsScreenState){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -447,7 +459,7 @@ fun GoalsShow(){
             .padding(10.dp)
     ) {
         Column(Modifier.fillMaxWidth(),) {
-            Text("Title",
+            Text("Title: ${goals.title}",
                 fontFamily = FontFamily.Monospace,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
@@ -455,7 +467,7 @@ fun GoalsShow(){
                 modifier = Modifier.padding(10.dp)
             )
             HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
-            Text("description",
+            Text("description: ${goals.description}",
                 fontFamily = FontFamily.Monospace,
                 maxLines = 2,
                 fontSize = 18.sp,
@@ -463,14 +475,16 @@ fun GoalsShow(){
                 modifier = Modifier.padding(10.dp)
             )
             HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
-            Text("02/01/2026",
+            Text(
+                goals.deadLine,
                 fontFamily = FontFamily.Monospace,
                 fontStyle = FontStyle.Italic,
                 color = Color.White,
                 modifier = Modifier.padding(10.dp)
             )
             HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
-            Text("10h",
+            Text(
+                goals.timeToComplete,
                 fontFamily = FontFamily.Monospace,
                 color = Color.White,
                 modifier = Modifier.padding(10.dp)
@@ -490,7 +504,9 @@ fun GoalsShow(){
 @Composable
 @Preview
 fun GoalsShowPreview() {
-    GoalsShow()
+    GoalsShow(
+        goals = CreateGoalsScreenState()
+    )
 }
 
 @Composable
@@ -505,7 +521,8 @@ fun AddGoalsCardPreview() {
         onDescriptionGoalsChange = TODO(),
         onTimeToCompleteChange = TODO(),
         onTitleGoalsChange = TODO(),
-        onCreateGols = TODO()
+        onCreateGols = TODO(),
+        onGoalsIsSaveChange = TODO()
     )
 }
 
@@ -520,7 +537,8 @@ fun GoalsEntryPreview() {
         onDescriptionGoalsChange = { },
         onTimeToCompleteChange = { },
         onCreateGols = { index: Int -> },
-        index = TODO()
+        index = TODO(),
+        onGoalsIsSaveChange = TODO()
     )
 }
 

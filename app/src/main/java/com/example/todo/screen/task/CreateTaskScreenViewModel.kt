@@ -108,8 +108,6 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
      * Botao para criar um novo Goals no cadastro de uma nova Task
      */
     fun onAddGolsClick() {
-        Log.d("onAddGolsClick", CreateTaskUistate.value.gols.size.toString())
-
         // Criando uma nova lista para forçar a recomposição
         CreateTaskUistate.value = CreateTaskUistate.value.copy(
             gols = CreateTaskUistate.value.gols.toMutableList().apply {
@@ -127,7 +125,6 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
      * botao para criar uma novo Goals
      */
     fun onCreateGoals(idGoals: Int){
-        Log.d("onCreateGoals", idGoals.toString())
 
         if(isEntryGolsScreenValid()){
             CreateTaskUistate.value.gols[idGoals] = Gols(
@@ -136,6 +133,11 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
                 timeToComplete = CreateGolsUistate.value.timeToComplete.toLong()
             )
         }
+    }
+
+    fun onGoalsIsSaveChange(){
+        CreateGolsUistate.value =
+            CreateGolsUistate.value.copy(isSave = !CreateGolsUistate.value.isSave)
     }
 
     fun isEntryTaskScreenValid(): Boolean {
@@ -168,6 +170,7 @@ data class CreateGoalsScreenState(
     val title: String = "",
     val description: String = "",
     val deadLine: String = "",
-    val timeToComplete: String = ""
+    val timeToComplete: String = "",
+    val isSave: Boolean = false
 )
 
