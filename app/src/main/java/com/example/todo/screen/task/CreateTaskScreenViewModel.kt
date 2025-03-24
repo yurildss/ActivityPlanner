@@ -132,12 +132,15 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
                 description = CreateGolsUistate.value.description,
                 timeToComplete = CreateGolsUistate.value.timeToComplete.toLong()
             )
+            Log.d("TAG", "onCreateGoals: ${CreateTaskUistate.value.gols}")
         }
     }
 
     fun onGoalsIsSaveChange(){
         CreateGolsUistate.value =
             CreateGolsUistate.value.copy(isSave = !CreateGolsUistate.value.isSave)
+
+        CreateGolsUistate.value = CreateGoalsScreenState()
     }
 
     fun isEntryTaskScreenValid(): Boolean {
@@ -147,7 +150,7 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
                 CreateTaskUistate.value.priority.isNotBlank()
     }
 
-    fun isEntryGolsScreenValid(): Boolean {
+    private fun isEntryGolsScreenValid(): Boolean {
         return CreateGolsUistate.value.title.isNotBlank() &&
                 CreateGolsUistate.value.description.isNotBlank() &&
                 CreateGolsUistate.value.deadLine.isNotBlank()

@@ -342,6 +342,7 @@ fun AddGoalsCard(
             }
             LazyColumn(contentPadding = PaddingValues(10.dp)) {
                 itemsIndexed(taskScreenState.gols) { index, goal ->
+                    TODO("Corrigir isso daqui pois nao vai aparecer do jeito que tá")
                     if (!golsScreenState.isSave) {
                         GoalsEntry(
                             index = index,  // Agora passamos o índice correto
@@ -439,7 +440,6 @@ fun GoalsEntry(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(onClick = {
-
                     onCreateGols(index)
                     onGoalsIsSaveChange()
                 } ) { Text("Add") }
