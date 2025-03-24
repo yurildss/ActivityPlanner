@@ -104,6 +104,9 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
             CreateTaskUistate.value.copy(priority = newValue)
     }
 
+    /**
+     * Botao para criar um novo Goals no cadastro de uma nova Task
+     */
     fun onAddGolsClick() {
         Log.d("onAddGolsClick", CreateTaskUistate.value.gols.size.toString())
 
@@ -120,13 +123,32 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
             CreateGolsUistate.value.copy(timeToComplete = newValue)
     }
 
+    /**
+     * botao para criar uma novo Goals
+     */
     fun onCreateGoals(idGoals: Int){
         Log.d("onCreateGoals", idGoals.toString())
-        CreateTaskUistate.value.gols[idGoals] = Gols(
-            title = CreateGolsUistate.value.title,
-            description = CreateGolsUistate.value.description,
-            timeToComplete = CreateGolsUistate.value.timeToComplete.toLong()
-        )
+
+        if(isEntryGolsScreenValid()){
+            CreateTaskUistate.value.gols[idGoals] = Gols(
+                title = CreateGolsUistate.value.title,
+                description = CreateGolsUistate.value.description,
+                timeToComplete = CreateGolsUistate.value.timeToComplete.toLong()
+            )
+        }
+    }
+
+    fun isEntryTaskScreenValid(): Boolean {
+        return CreateTaskUistate.value.title.isNotBlank() &&
+                CreateTaskUistate.value.description.isNotBlank() &&
+                CreateTaskUistate.value.deadLine.isNotBlank() &&
+                CreateTaskUistate.value.priority.isNotBlank()
+    }
+
+    fun isEntryGolsScreenValid(): Boolean {
+        return CreateGolsUistate.value.title.isNotBlank() &&
+                CreateGolsUistate.value.description.isNotBlank() &&
+                CreateGolsUistate.value.deadLine.isNotBlank()
     }
 }
 
