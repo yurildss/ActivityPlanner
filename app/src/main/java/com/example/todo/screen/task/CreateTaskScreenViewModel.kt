@@ -11,8 +11,11 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.example.todo.model.Gols
+import com.example.todo.model.Goals
 import com.example.todo.screen.ToDoAppViewModel
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 
 
 class CreateTaskScreenViewModel : ToDoAppViewModel() {
@@ -111,7 +114,7 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
         // Criando uma nova lista para forçar a recomposição
         CreateTaskUistate.value = CreateTaskUistate.value.copy(
             gols = CreateTaskUistate.value.gols.toMutableList().apply {
-                add(Gols()) // Adicionando um novo item
+                add(Goals()) // Adicionando um novo item
             }
         )
     }
@@ -125,13 +128,18 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
      * botao para criar uma novo Goals
      */
     fun onCreateGoals(idGoals: Int){
-        TODO("Aqui eu preciso criar as funções que irao pegar a string e passar para timeStamp" +
-                "e que vao pegar o timeStamp e passar para string")
         if(isEntryGolsScreenValid()){
-            CreateTaskUistate.value.gols[idGoals] = Gols(
+
+            // Converte a data no formato dd/MM/yyyy para LocalDate do kotlinx.datetime
+            val parsedDate = CreateGolsUistate.value.deadLine.split("/").let { parts ->
+                LocalDate(parts[2].toInt(), parts[1].toInt(), parts[0].toInt())
+            }
+
+            CreateTaskUistate.value.gols[idGoals] = Goals(
                 title = CreateGolsUistate.value.title,
                 description = CreateGolsUistate.value.description,
                 timeToComplete = CreateGolsUistate.value.timeToComplete.toLong(),
+                deadLine = parsedDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds(),
                 isSave = true
             )
             Log.d("TAG", "onCreateGoals: ${CreateTaskUistate.value.gols}")
@@ -163,7 +171,7 @@ data class CreateTaskScreenState(
     val description: String = "",
     val deadLine: String = "",
     val priority: String = "",
-    val gols: MutableList<Gols> = mutableListOf(),
+    val gols: MutableList<Goals> = mutableListOf(),
     val tags: MutableList<String> = mutableListOf(),
     val timeToComplete: Long  = 0
 )

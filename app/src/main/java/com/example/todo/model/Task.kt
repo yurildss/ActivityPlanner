@@ -10,20 +10,20 @@ data class Task(
     val title: String = "",
     val description: String = "",
     val isCompleted: Boolean = false,
-    val deadLine: Date = Date(),
+    val deadLine: Long = 0L,
     val priority: Int = 0,
     val tags: List<Tags> = emptyList(),
-    val gols: List<Gols> = emptyList(),
+    val gols: List<Goals> = emptyList(),
     val userId: String = "",
     val timeToComplete: Long = 0L,
 )
 
-data class Gols(
+data class Goals(
     val createdAt: Date = Date(),
     val title: String = "",
     val description: String = "",
     val isCompleted: Boolean = false,
-    val deadLine: Date = Date(),
+    val deadLine: Long = 0L ,
     val timeToComplete: Long = 0L,
     val isSave: Boolean = false,
 )

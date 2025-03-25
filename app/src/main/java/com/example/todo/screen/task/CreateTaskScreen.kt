@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -52,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.todo.model.Goals
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -355,7 +355,7 @@ fun AddGoalsCard(
                             onGoalsIsSaveChange = onGoalsIsSaveChange
                         )
                     }else{
-                        GoalsShow(golsScreenState)
+                        GoalsShow(goal)
                     }
                 }
             }
@@ -449,7 +449,7 @@ fun GoalsEntry(
 }
 
 @Composable
-fun GoalsShow(goals: CreateGoalsScreenState){
+fun GoalsShow(goals: Goals){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -475,7 +475,7 @@ fun GoalsShow(goals: CreateGoalsScreenState){
             )
             HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
             Text(
-                goals.deadLine,
+                "${goals.deadLine}",
                 fontFamily = FontFamily.Monospace,
                 fontStyle = FontStyle.Italic,
                 color = Color.White,
@@ -483,7 +483,7 @@ fun GoalsShow(goals: CreateGoalsScreenState){
             )
             HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
             Text(
-                goals.timeToComplete,
+                "${goals.timeToComplete}",
                 fontFamily = FontFamily.Monospace,
                 color = Color.White,
                 modifier = Modifier.padding(10.dp)
@@ -504,7 +504,7 @@ fun GoalsShow(goals: CreateGoalsScreenState){
 @Preview
 fun GoalsShowPreview() {
     GoalsShow(
-        goals = CreateGoalsScreenState()
+        goals = Goals()
     )
 }
 
