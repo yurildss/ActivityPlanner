@@ -12,13 +12,19 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.todo.model.Goals
+import com.example.todo.model.Task
+import com.example.todo.model.service.StorageService
 import com.example.todo.screen.ToDoAppViewModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
+import javax.inject.Inject
 
 
-class CreateTaskScreenViewModel : ToDoAppViewModel() {
+class CreateTaskScreenViewModel
+@Inject constructor(
+    private val storageService: StorageService
+) : ToDoAppViewModel() {
 
 
     val options = listOf("-"," Priority 1", "Priority 2", "Priority 3")
@@ -174,6 +180,29 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
             }
         )
     }
+
+    fun onSaveTaskClick(){
+        launchCatching {
+            storageService.save(CreateTaskUistate.value.ToTask())
+        }
+    }
+}
+
+fun CreateTaskScreenState.ToTask(): Task {
+
+    val parsedDate = deadLine.split("/").let { parts ->
+        LocalDate(parts[2].toInt(), parts[1].toInt(), parts[0].toInt())
+    }
+
+    return Task(
+        title = title,
+        description = description,
+        deadLine = parsedDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds(),
+        priority = priority.toInt(),
+        gols = gols,
+        tags = tags,
+        timeToComplete = timeToComplete
+    )
 }
 
 data class CreateTaskScreenState(

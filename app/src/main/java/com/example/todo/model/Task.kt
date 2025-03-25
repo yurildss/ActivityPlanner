@@ -18,8 +18,8 @@ data class Task(
     val isCompleted: Boolean = false,
     val deadLine: Long = 0L,
     val priority: Int = 0,
-    val tags: List<Tags> = emptyList(),
-    val gols: List<Goals> = emptyList(),
+    val tags: MutableList<String> = mutableListOf(),
+    val gols: MutableList<Goals> = mutableListOf(),
     val userId: String = "",
     val timeToComplete: Long = 0L,
 )
