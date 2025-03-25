@@ -125,7 +125,8 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
      * botao para criar uma novo Goals
      */
     fun onCreateGoals(idGoals: Int){
-
+        TODO("Aqui eu preciso criar as funções que irao pegar a string e passar para timeStamp" +
+                "e que vao pegar o timeStamp e passar para string")
         if(isEntryGolsScreenValid()){
             CreateTaskUistate.value.gols[idGoals] = Gols(
                 title = CreateGolsUistate.value.title,
@@ -135,6 +136,7 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
             )
             Log.d("TAG", "onCreateGoals: ${CreateTaskUistate.value.gols}")
         }
+
     }
 
     fun onGoalsIsSaveChange(){
