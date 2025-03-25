@@ -15,12 +15,13 @@ import com.example.todo.model.Goals
 import com.example.todo.model.Task
 import com.example.todo.model.service.StorageService
 import com.example.todo.screen.ToDoAppViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import javax.inject.Inject
 
-
+@HiltViewModel
 class CreateTaskScreenViewModel
 @Inject constructor(
     private val storageService: StorageService
@@ -62,6 +63,18 @@ class CreateTaskScreenViewModel
 
     fun onSelectedIconChange(newValue: Pair<ImageVector, String>){
         selectedIcon.value = newValue
+        CreateTaskUistate.value = CreateTaskUistate.value.copy(
+            tags = CreateTaskUistate.value.tags.toMutableList().apply {
+                if (CreateTaskUistate.value.tags.contains(newValue.second)){
+
+                }else if(CreateTaskUistate.value.tags.isEmpty()){
+                    add(newValue.second)
+                }
+                else if(isNotEmpty()){
+                    set(0, newValue.second)
+                }
+            }
+        )
     }
 
     fun onExpandedIconChange(newValue: Boolean){
@@ -117,7 +130,6 @@ class CreateTaskScreenViewModel
      * Botao para criar um novo Goals no cadastro de uma nova Task
      */
     fun onAddGolsClick() {
-
         CreateTaskUistate.value = CreateTaskUistate.value.copy(
             gols = CreateTaskUistate.value.gols.toMutableList().apply {
                 add(Goals())
@@ -135,7 +147,6 @@ class CreateTaskScreenViewModel
      */
     fun onCreateGoals(idGoals: Int){
         if(isEntryGolsScreenValid()){
-
             /**
              * Converte a data no formato dd/MM/yyyy para LocalDate do kotlinx.datetime
              */
@@ -181,8 +192,16 @@ class CreateTaskScreenViewModel
         )
     }
 
+    private fun isEntryTaskValid(): Boolean {
+        return CreateTaskUistate.value.title.isNotBlank() &&
+                CreateTaskUistate.value.description.isNotBlank() &&
+                CreateTaskUistate.value.deadLine.isNotBlank() &&
+                CreateTaskUistate.value.priority.isNotBlank()
+    }
+
     fun onSaveTaskClick(){
         launchCatching {
+
             storageService.save(CreateTaskUistate.value.ToTask())
         }
     }
@@ -194,6 +213,12 @@ fun CreateTaskScreenState.ToTask(): Task {
         LocalDate(parts[2].toInt(), parts[1].toInt(), parts[0].toInt())
     }
 
+    var total = 0
+
+    gols.forEach {
+        total += it.timeToComplete.toInt()
+    }
+
     return Task(
         title = title,
         description = description,
@@ -201,7 +226,7 @@ fun CreateTaskScreenState.ToTask(): Task {
         priority = priority.toInt(),
         gols = gols,
         tags = tags,
-        timeToComplete = timeToComplete
+        timeToComplete = total.toLong()
     )
 }
 

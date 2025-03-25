@@ -515,8 +515,8 @@ fun GoalsShow(
 fun GoalsShowPreview() {
     GoalsShow(
         goals = Goals(),
-        index = TODO(),
-        onDeleteGoalsClick = TODO()
+        index = 1,
+        onDeleteGoalsClick = {}
     )
 }
 
@@ -524,17 +524,17 @@ fun GoalsShowPreview() {
 @Preview
 fun AddGoalsCardPreview() {
     AddGoalsCard(
-        onAddGolsClick = TODO(),
-        golsScreenState = TODO(),
-        taskScreenState = TODO(),
-        onDatePickerChange = TODO(),
-        onDateSelected = TODO(),
-        onDescriptionGoalsChange = TODO(),
-        onTimeToCompleteChange = TODO(),
-        onTitleGoalsChange = TODO(),
-        onCreateGols = TODO(),
-        onGoalsIsSaveChange = TODO(),
-        onDeleteGoalsClick = TODO()
+        onAddGolsClick = {  },
+        golsScreenState = CreateGoalsScreenState(),
+        taskScreenState = CreateTaskScreenState(),
+        onDatePickerChange = {},
+        onDateSelected = {},
+        onDescriptionGoalsChange = {},
+        onTimeToCompleteChange = {},
+        onTitleGoalsChange = {},
+        onCreateGols = {},
+        onGoalsIsSaveChange = {},
+        onDeleteGoalsClick = { }
     )
 }
 
@@ -549,8 +549,8 @@ fun GoalsEntryPreview() {
         onDescriptionGoalsChange = { },
         onTimeToCompleteChange = { },
         onCreateGols = { index: Int -> },
-        index = TODO(),
-        onGoalsIsSaveChange = TODO()
+        index = 1,
+        onGoalsIsSaveChange = {}
     )
 }
 
