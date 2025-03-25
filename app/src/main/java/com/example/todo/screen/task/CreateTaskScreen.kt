@@ -124,7 +124,8 @@ fun CreateTaskScreen(
                 onTimeToCompleteChange = viewModel::onTimeToCompleteGoalsChange,
                 onTitleGoalsChange = viewModel::onTitleGolsChange,
                 onCreateGols = viewModel::onCreateGoals,
-                onGoalsIsSaveChange = viewModel::onGoalsIsSaveChange
+                onGoalsIsSaveChange = viewModel::onGoalsIsSaveChange,
+                onDeleteGoalsClick = viewModel::onDeleteGoalsClick
             )
         }
     }
@@ -326,7 +327,8 @@ fun AddGoalsCard(
     onTitleGoalsChange: (String) -> Unit,
     onCreateGols: (Int) -> Unit,
     onDateSelected: (String) -> Unit,
-    onGoalsIsSaveChange : () -> Unit
+    onGoalsIsSaveChange : () -> Unit,
+    onDeleteGoalsClick: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -355,7 +357,11 @@ fun AddGoalsCard(
                             onGoalsIsSaveChange = onGoalsIsSaveChange
                         )
                     }else{
-                        GoalsShow(goal)
+                        GoalsShow(
+                            index,
+                            goal,
+                            onDeleteGoalsClick
+                        )
                     }
                 }
             }
@@ -449,7 +455,11 @@ fun GoalsEntry(
 }
 
 @Composable
-fun GoalsShow(goals: Goals){
+fun GoalsShow(
+    index: Int,
+    goals: Goals,
+    onDeleteGoalsClick: (Int) -> Unit
+){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -475,7 +485,7 @@ fun GoalsShow(goals: Goals){
             )
             HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
             Text(
-                "${goals.deadLine}",
+                "${goals.dateInBrazilianFormat}",
                 fontFamily = FontFamily.Monospace,
                 fontStyle = FontStyle.Italic,
                 color = Color.White,
@@ -491,7 +501,7 @@ fun GoalsShow(goals: Goals){
 
             Button(
                 modifier = Modifier.align(Alignment.End),
-                onClick = {  },
+                onClick = { onDeleteGoalsClick(index) },
                 colors = ButtonDefaults.buttonColors(Color.Red)
             ) {
                 Text("Delete")
@@ -504,7 +514,9 @@ fun GoalsShow(goals: Goals){
 @Preview
 fun GoalsShowPreview() {
     GoalsShow(
-        goals = Goals()
+        goals = Goals(),
+        index = TODO(),
+        onDeleteGoalsClick = TODO()
     )
 }
 
@@ -521,7 +533,8 @@ fun AddGoalsCardPreview() {
         onTimeToCompleteChange = TODO(),
         onTitleGoalsChange = TODO(),
         onCreateGols = TODO(),
-        onGoalsIsSaveChange = TODO()
+        onGoalsIsSaveChange = TODO(),
+        onDeleteGoalsClick = TODO()
     )
 }
 

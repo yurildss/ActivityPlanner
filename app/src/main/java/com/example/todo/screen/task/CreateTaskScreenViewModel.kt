@@ -111,10 +111,10 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
      * Botao para criar um novo Goals no cadastro de uma nova Task
      */
     fun onAddGolsClick() {
-        // Criando uma nova lista para forçar a recomposição
+
         CreateTaskUistate.value = CreateTaskUistate.value.copy(
             gols = CreateTaskUistate.value.gols.toMutableList().apply {
-                add(Goals()) // Adicionando um novo item
+                add(Goals())
             }
         )
     }
@@ -130,7 +130,9 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
     fun onCreateGoals(idGoals: Int){
         if(isEntryGolsScreenValid()){
 
-            // Converte a data no formato dd/MM/yyyy para LocalDate do kotlinx.datetime
+            /**
+             * Converte a data no formato dd/MM/yyyy para LocalDate do kotlinx.datetime
+             */
             val parsedDate = CreateGolsUistate.value.deadLine.split("/").let { parts ->
                 LocalDate(parts[2].toInt(), parts[1].toInt(), parts[0].toInt())
             }
@@ -148,6 +150,7 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
     }
 
     fun onGoalsIsSaveChange(){
+
         CreateGolsUistate.value = CreateGoalsScreenState()
     }
 
@@ -162,6 +165,14 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
         return CreateGolsUistate.value.title.isNotBlank() &&
                 CreateGolsUistate.value.description.isNotBlank() &&
                 CreateGolsUistate.value.deadLine.isNotBlank()
+    }
+
+    fun onDeleteGoalsClick(idGoals: Int){
+        CreateTaskUistate.value = CreateTaskUistate.value.copy(
+            gols = CreateTaskUistate.value.gols.toMutableList().apply {
+                removeAt(idGoals)
+            }
+        )
     }
 }
 
