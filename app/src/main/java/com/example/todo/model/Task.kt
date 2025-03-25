@@ -25,6 +25,7 @@ data class Gols(
     val isCompleted: Boolean = false,
     val deadLine: Date = Date(),
     val timeToComplete: Long = 0L,
+    val isSave: Boolean = false,
 )
 
 data class Tags(

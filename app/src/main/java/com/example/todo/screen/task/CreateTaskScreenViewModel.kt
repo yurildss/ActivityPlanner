@@ -130,16 +130,14 @@ class CreateTaskScreenViewModel : ToDoAppViewModel() {
             CreateTaskUistate.value.gols[idGoals] = Gols(
                 title = CreateGolsUistate.value.title,
                 description = CreateGolsUistate.value.description,
-                timeToComplete = CreateGolsUistate.value.timeToComplete.toLong()
+                timeToComplete = CreateGolsUistate.value.timeToComplete.toLong(),
+                isSave = true
             )
             Log.d("TAG", "onCreateGoals: ${CreateTaskUistate.value.gols}")
         }
     }
 
     fun onGoalsIsSaveChange(){
-        CreateGolsUistate.value =
-            CreateGolsUistate.value.copy(isSave = !CreateGolsUistate.value.isSave)
-
         CreateGolsUistate.value = CreateGoalsScreenState()
     }
 
@@ -174,6 +172,5 @@ data class CreateGoalsScreenState(
     val description: String = "",
     val deadLine: String = "",
     val timeToComplete: String = "",
-    val isSave: Boolean = false
 )
 
