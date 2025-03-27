@@ -75,6 +75,8 @@ class CreateTaskScreenViewModel
                 }
             }
         )
+
+        Log.d("TAG", "onSelectedIconChange: ${CreateTaskUistate.value.tags}")
     }
 
     fun onExpandedIconChange(newValue: Boolean){
@@ -124,6 +126,10 @@ class CreateTaskScreenViewModel
     fun onPriorityTaskChange(newValue: String){
         CreateTaskUistate.value =
             CreateTaskUistate.value.copy(priority = newValue)
+
+        selectedPriorityOption.value = newValue
+
+        Log.d("TAG", "onPriorityTaskChange: $newValue")
     }
 
     /**
@@ -140,6 +146,14 @@ class CreateTaskScreenViewModel
     fun onTimeToCompleteGoalsChange(newValue: String){
         CreateGolsUistate.value =
             CreateGolsUistate.value.copy(timeToComplete = newValue)
+    }
+
+    fun onRemoveGoalsClick(idGoals: Int){
+        CreateTaskUistate.value = CreateTaskUistate.value.copy(
+            gols = CreateTaskUistate.value.gols.toMutableList().apply {
+                removeAt(idGoals)
+            }
+        )
     }
 
     /**
@@ -171,13 +185,6 @@ class CreateTaskScreenViewModel
         CreateGolsUistate.value = CreateGoalsScreenState()
     }
 
-    fun isEntryTaskScreenValid(): Boolean {
-        return CreateTaskUistate.value.title.isNotBlank() &&
-                CreateTaskUistate.value.description.isNotBlank() &&
-                CreateTaskUistate.value.deadLine.isNotBlank() &&
-                CreateTaskUistate.value.priority.isNotBlank()
-    }
-
     private fun isEntryGolsScreenValid(): Boolean {
         return CreateGolsUistate.value.title.isNotBlank() &&
                 CreateGolsUistate.value.description.isNotBlank() &&
@@ -199,22 +206,25 @@ class CreateTaskScreenViewModel
                 CreateTaskUistate.value.priority.isNotBlank()
     }
 
-    fun onSaveTaskClick(){
-        launchCatching {
+    fun onSaveTaskClick(onSaveClick: () -> Unit){
 
-            storageService.save(CreateTaskUistate.value.ToTask())
+        launchCatching {
+            if(isEntryTaskValid()){
+                storageService.save(CreateTaskUistate.value.toTask())
+                onSaveClick()
+            }
         }
+
     }
 }
 
-fun CreateTaskScreenState.ToTask(): Task {
+fun CreateTaskScreenState.toTask(): Task {
 
     val parsedDate = deadLine.split("/").let { parts ->
         LocalDate(parts[2].toInt(), parts[1].toInt(), parts[0].toInt())
     }
 
     var total = 0
-
     gols.forEach {
         total += it.timeToComplete.toInt()
     }

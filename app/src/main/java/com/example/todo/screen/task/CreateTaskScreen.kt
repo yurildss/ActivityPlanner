@@ -64,7 +64,8 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 fun CreateTaskScreen(
     modifier: Modifier = Modifier,
-    viewModel: CreateTaskScreenViewModel = hiltViewModel()
+    viewModel: CreateTaskScreenViewModel = hiltViewModel(),
+    onSaveClick: () -> Unit
 ) {
 
     val taskuiState by viewModel.CreateTaskUistate
@@ -125,8 +126,13 @@ fun CreateTaskScreen(
                 onTitleGoalsChange = viewModel::onTitleGolsChange,
                 onCreateGols = viewModel::onCreateGoals,
                 onGoalsIsSaveChange = viewModel::onGoalsIsSaveChange,
-                onDeleteGoalsClick = viewModel::onDeleteGoalsClick
+                onDeleteGoalsClick = viewModel::onDeleteGoalsClick,
+                onRemoveGoalsClick = viewModel::onRemoveGoalsClick
             )
+            Button(onClick = { viewModel.onSaveTaskClick(onSaveClick) },
+                modifier = Modifier.fillMaxWidth(0.75f)) {
+                Text("Save")
+            }
         }
     }
 }
@@ -328,7 +334,8 @@ fun AddGoalsCard(
     onCreateGols: (Int) -> Unit,
     onDateSelected: (String) -> Unit,
     onGoalsIsSaveChange : () -> Unit,
-    onDeleteGoalsClick: (Int) -> Unit
+    onDeleteGoalsClick: (Int) -> Unit,
+    onRemoveGoalsClick: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -354,7 +361,8 @@ fun AddGoalsCard(
                             onDescriptionGoalsChange = onDescriptionGoalsChange,
                             onTimeToCompleteChange = onTimeToCompleteChange,
                             onCreateGols = onCreateGols,
-                            onGoalsIsSaveChange = onGoalsIsSaveChange
+                            onGoalsIsSaveChange = onGoalsIsSaveChange,
+                            onRemoveGoalsClick = onRemoveGoalsClick
                         )
                     }else{
                         GoalsShow(
@@ -380,7 +388,8 @@ fun GoalsEntry(
     onDatePickerChange: (Boolean) -> Unit,
     onDateSelected: (String) -> Unit,
     onCreateGols: (Int) -> Unit,
-    onGoalsIsSaveChange: () -> Unit
+    onGoalsIsSaveChange: () -> Unit,
+    onRemoveGoalsClick: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -425,7 +434,7 @@ fun GoalsEntry(
                 onDateSelected
             )
             OutlinedTextField(
-                createGoalsScreenState.timeToComplete.toString(),
+                createGoalsScreenState.timeToComplete,
                 onValueChange = onTimeToCompleteChange,
                 label = {
                     Text(
@@ -448,7 +457,7 @@ fun GoalsEntry(
                     onCreateGols(index)
                     onGoalsIsSaveChange()
                 } ) { Text("Add") }
-                Button(onClick = { /*TODO*/ }) { Text("Remove") }
+                Button(onClick = { onRemoveGoalsClick(index) }) { Text("Remove") }
             }
         }
     }
@@ -524,7 +533,7 @@ fun GoalsShowPreview() {
 @Preview
 fun AddGoalsCardPreview() {
     AddGoalsCard(
-        onAddGolsClick = {  },
+        onAddGolsClick = { },
         golsScreenState = CreateGoalsScreenState(),
         taskScreenState = CreateTaskScreenState(),
         onDatePickerChange = {},
@@ -534,7 +543,8 @@ fun AddGoalsCardPreview() {
         onTitleGoalsChange = {},
         onCreateGols = {},
         onGoalsIsSaveChange = {},
-        onDeleteGoalsClick = { }
+        onDeleteGoalsClick = { },
+        onRemoveGoalsClick = TODO()
     )
 }
 
@@ -550,13 +560,18 @@ fun GoalsEntryPreview() {
         onTimeToCompleteChange = { },
         onCreateGols = { index: Int -> },
         index = 1,
-        onGoalsIsSaveChange = {}
+        onGoalsIsSaveChange = {},
+        onRemoveGoalsClick = TODO()
     )
 }
 
 @Composable
 @Preview
 fun CreateTaskScreenPreview() {
-    CreateTaskScreen()
+    CreateTaskScreen(
+        modifier = TODO(),
+        viewModel = TODO(),
+        onSaveClick = TODO()
+    )
 }
 

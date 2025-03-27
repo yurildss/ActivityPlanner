@@ -51,7 +51,11 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
         }
 
         composable(Screens.ADD_TASK_SCREEN.name){
-            CreateTaskScreen()
+            CreateTaskScreen(
+                onSaveClick = {
+                    navController.navigate(Screens.HOME_SCREEN.name)
+                }
+            )
         }
     }
 }
