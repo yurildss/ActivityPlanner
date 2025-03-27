@@ -3,6 +3,7 @@ package com.example.todo.screen.home
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.example.todo.model.Task
 import com.example.todo.model.User
 import com.example.todo.model.service.AccountService
 import com.example.todo.model.service.LogService
@@ -87,4 +88,5 @@ data class HomeScreenUiState(
     val pendingTask: Int = 0,
     val openDatePicker: Boolean = false,
     val actualDay: String = "",
+    val tasksOfTheDay: MutableList<Task> = mutableListOf()
 )

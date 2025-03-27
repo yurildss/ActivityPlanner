@@ -279,12 +279,6 @@ fun SettingsPart(onAddTaskClick: () -> Unit ){
                 null,
                 tint = Color.White
             )
-            DatePick(
-                openDatePicker = TODO(),
-                date = TODO(),
-                onDatePickerChange = TODO(),
-                onDateSelected = TODO()
-            )
         }
         Row(
             Modifier

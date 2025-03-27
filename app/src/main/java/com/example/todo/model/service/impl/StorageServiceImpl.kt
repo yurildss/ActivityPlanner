@@ -1,5 +1,6 @@
 package com.example.todo.model.service.impl
 
+import android.util.Log
 import com.example.todo.model.Task
 import com.example.todo.model.service.AccountService
 import com.example.todo.model.service.StorageService
@@ -35,6 +36,7 @@ class StorageServiceImpl @Inject constructor(
 
     override suspend fun save(task: Task): String {
         val updatedTask = task.copy(userId = auth.currentUserId)
+        Log.d("TAG", "save: ${auth.currentUserId}")
         return firestore.collection(TASK_COLLECTION).add(updatedTask).await().id
     }
 
@@ -62,6 +64,14 @@ class StorageServiceImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    override suspend fun getTaskByDay(day: String): Flow<List<Task>> {
+        return firestore
+            .collection(TASK_COLLECTION)
+            .whereEqualTo(DEADLINE_FIELD, day)
+            .orderBy(CREATED_AT_FIELD, Query.Direction.DESCENDING)
+            .dataObjects()
+    }
+
     companion object {
         private const val USER_ID_FIELD = "userId"
         private const val COMPLETED_FIELD = "completed"
@@ -71,6 +81,7 @@ class StorageServiceImpl @Inject constructor(
         private const val TASK_COLLECTION = "tasks"
         private const val SAVE_TASK_TRACE = "saveTask"
         private const val UPDATE_TASK_TRACE = "updateTask"
+        private const val DEADLINE_FIELD = "deadLine"
     }
 
 }

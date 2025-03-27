@@ -14,4 +14,5 @@ interface StorageService {
     suspend fun getImportantCompletedTasksCount(): Int
     suspend fun getMediumHighTasksToCompleteCount(): Int
     suspend fun getIncompleteTasksCount(): Int
+    suspend fun getTaskByDay(day: String): Flow<List<Task>>
 }

@@ -200,6 +200,7 @@ class CreateTaskScreenViewModel
     }
 
     private fun isEntryTaskValid(): Boolean {
+
         return CreateTaskUistate.value.title.isNotBlank() &&
                 CreateTaskUistate.value.description.isNotBlank() &&
                 CreateTaskUistate.value.deadLine.isNotBlank() &&
@@ -207,12 +208,13 @@ class CreateTaskScreenViewModel
     }
 
     fun onSaveTaskClick(onSaveClick: () -> Unit){
-
         launchCatching {
             if(isEntryTaskValid()){
+                Log.d("TAG", "onSaveTaskClick: ${CreateTaskUistate.value.toTask()}")
                 storageService.save(CreateTaskUistate.value.toTask())
                 onSaveClick()
             }
+
         }
 
     }
@@ -229,11 +231,18 @@ fun CreateTaskScreenState.toTask(): Task {
         total += it.timeToComplete.toInt()
     }
 
+    val priorityInt = when(priority){
+        "- Priority 1" -> 1
+        "Priority 2" -> 2
+        "Priority 3" -> 3
+        else -> 0
+    }
+
     return Task(
         title = title,
         description = description,
         deadLine = parsedDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds(),
-        priority = priority.toInt(),
+        priority = priorityInt,
         gols = gols,
         tags = tags,
         timeToComplete = total.toLong()

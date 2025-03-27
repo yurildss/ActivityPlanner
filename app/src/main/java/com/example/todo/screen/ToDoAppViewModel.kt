@@ -1,5 +1,6 @@
 package com.example.todo.screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todo.common.SnackbarManager
@@ -16,6 +17,7 @@ open class ToDoAppViewModel() : ViewModel() {
             CoroutineExceptionHandler { _, throwable ->
                 if (snackbar) {
                     SnackbarManager.showMessage(throwable.toSnackbarMessage())
+                    Log.d("TAG", "launchCatching: $throwable")
                 }
             },
             block = block
