@@ -1,9 +1,13 @@
 package com.example.todo.screen.home
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -29,13 +33,22 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +60,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.todo.model.Task
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.byUnicodePattern
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun HomeScreen(
@@ -259,6 +279,12 @@ fun SettingsPart(onAddTaskClick: () -> Unit ){
                 null,
                 tint = Color.White
             )
+            DatePick(
+                openDatePicker = TODO(),
+                date = TODO(),
+                onDatePickerChange = TODO(),
+                onDateSelected = TODO()
+            )
         }
         Row(
             Modifier
@@ -330,6 +356,75 @@ fun TaskCard(task: Task){
                     color = Color(0xFF242636))
             }
         }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun DatePick(
+    openDatePicker: Boolean,
+    date: String,
+    onDatePickerChange: (Boolean) -> Unit,
+    onDateSelected: (String) -> Unit
+) {
+    TextField(
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.Transparent
+        ),
+        value = date,
+        onValueChange = {},
+        label = {
+            Text(
+                text = "DeadLine",
+                color = Color.White,
+                fontFamily = FontFamily.Monospace
+            )
+        },
+        interactionSource = remember {
+            MutableInteractionSource()
+        }.also { interections ->
+            LaunchedEffect(interections) {
+
+                interections.interactions.collectLatest {
+
+                    if (it is PressInteraction.Release) {
+                        onDatePickerChange(true)
+                    }
+
+                }
+            }
+        },
+        readOnly = true
+    )
+    val dateState = rememberDatePickerState()
+
+    AnimatedVisibility(visible = openDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = {
+                onDatePickerChange(false)
+            },
+            confirmButton = {
+                Button(
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
+                    onClick = {
+
+                        dateState.selectedDateMillis?.let { millis ->
+                            val selectedDate = Instant.fromEpochMilliseconds(millis)
+                                .toLocalDateTime(TimeZone.UTC).date.format(LocalDate.Format {
+                                    byUnicodePattern("dd/MM/yyyy")
+                                })
+
+                            onDateSelected(selectedDate)
+                            onDatePickerChange(false)
+                        }
+
+                    }) {
+                    Text("Select")
+                }
+            }) {
+            DatePicker(state = dateState)
+        }
+
     }
 }
 

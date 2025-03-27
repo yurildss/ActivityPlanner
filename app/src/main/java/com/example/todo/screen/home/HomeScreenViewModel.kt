@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.datetime.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +22,8 @@ class HomeScreenViewModel @Inject constructor(
     private val storageService: StorageService,
     accountService: AccountService,
 ) : ToDoAppViewModel() {
+
+    //Preciso fazer com que o init carrega também todas as tarefas do dia que está no calendario
 
     init {
         launchCatching {
@@ -31,13 +34,9 @@ class HomeScreenViewModel @Inject constructor(
             uiState.value = uiState.value.copy(
                 pendingTask = storageService.getIncompleteTasksCount()
             )
+
         }
     }
-
-    //Talvez retirar essa variavel
-//    private val currentUser: StateFlow<User?> = accountService.currentUser
-//        .onEach { user -> user.let { userName(it.name) } } // ✅
-//        .stateIn(viewModelScope, SharingStarted.Eagerly, User())
 
 
     var uiState = mutableStateOf(HomeScreenUiState())
@@ -59,10 +58,33 @@ class HomeScreenViewModel @Inject constructor(
             )
         }
 
+        fun setOpenDatePicker(newValue: Boolean){
+            uiState.value =
+                uiState.value.copy(openDatePicker = newValue)
+
+
+        }
+
+        fun updateTaskDeadLine(newValue: String){
+            /**
+             * Converte a data no formato dd/MM/yyyy para LocalDate do kotlinx.datetime
+             * */
+            val parsedDate = uiState.value.actualDay.split("/").let { parts ->
+                LocalDate(parts[2].toInt(), parts[1].toInt(), parts[0].toInt())
+            }
+
+            uiState.value =
+                uiState.value.copy(actualDay = newValue)
+
+
+        }
+
 }
 
 data class HomeScreenUiState(
     val name: String = "",
     val searchText: String = "",
     val pendingTask: Int = 0,
+    val openDatePicker: Boolean = false,
+    val actualDay: String = "",
 )
