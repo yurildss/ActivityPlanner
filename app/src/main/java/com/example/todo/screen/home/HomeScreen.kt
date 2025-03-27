@@ -86,7 +86,13 @@ fun HomeScreen(
     ){
         Column {
             UserHomeScreen(uiState)
-            SettingsPart(onAddTaskClick)
+            SettingsPart(
+                openDatePicker = uiState.openDatePicker,
+                date = uiState.actualDay,
+                onDatePickerChange = viewModel::setOpenDatePicker,
+                onDateSelected = viewModel::updateTaskDeadLine,
+                onAddTaskClick = onAddTaskClick
+            )
             LazyColumn(
                 Modifier
                     .padding(10.dp)
@@ -251,7 +257,13 @@ fun UserHomeScreen(uiState: HomeScreenUiState){
 }
 
 @Composable
-fun SettingsPart(onAddTaskClick: () -> Unit ){
+fun SettingsPart(
+    openDatePicker: Boolean,
+    date: String,
+    onDatePickerChange: (Boolean) -> Unit,
+    onDateSelected: (String) -> Unit,
+    onAddTaskClick: () -> Unit
+){
     Row(Modifier
         .fillMaxWidth()
         .padding(10.dp),
@@ -278,6 +290,12 @@ fun SettingsPart(onAddTaskClick: () -> Unit ){
             Icon(Icons.Default.DateRange,
                 null,
                 tint = Color.White
+            )
+            DatePick(
+                openDatePicker = openDatePicker,
+                date = date,
+                onDatePickerChange = onDatePickerChange,
+                onDateSelected = onDateSelected
             )
         }
         Row(
@@ -431,7 +449,13 @@ fun TaskCardPreview(){
 @Composable
 @Preview
 fun SettingsPartPreview(){
-    SettingsPart({})
+    SettingsPart(
+        false,
+        date = TODO(),
+        onDatePickerChange = TODO(),
+        onDateSelected = TODO(),
+        onAddTaskClick = TODO()
+    )
 }
 
 @Composable

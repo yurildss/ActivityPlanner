@@ -6,16 +6,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.todo.model.Task
 import com.example.todo.model.User
 import com.example.todo.model.service.AccountService
-import com.example.todo.model.service.LogService
 import com.example.todo.model.service.StorageService
 import com.example.todo.screen.ToDoAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.byUnicodePattern
+import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,7 +49,8 @@ class HomeScreenViewModel @Inject constructor(
         // pode ser modificado com a interação do usuario com o calendario
         val tasks = storageService.tasks
 
-        private val searchText get()  = uiState.value.searchText
+        private val searchText
+            get()  = uiState.value.searchText
 
         fun onSearchTextChange(text: String){
             uiState.value = uiState.value.copy(searchText = text)
@@ -77,7 +80,6 @@ class HomeScreenViewModel @Inject constructor(
             uiState.value =
                 uiState.value.copy(actualDay = newValue)
 
-
         }
 
 }
@@ -87,6 +89,11 @@ data class HomeScreenUiState(
     val searchText: String = "",
     val pendingTask: Int = 0,
     val openDatePicker: Boolean = false,
-    val actualDay: String = "",
+    val actualDay: String = Clock
+        .System
+        .now()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+        .date
+        .format(LocalDate.Format { byUnicodePattern("dd/MM/yyyy") }),
     val tasksOfTheDay: MutableList<Task> = mutableListOf()
 )
