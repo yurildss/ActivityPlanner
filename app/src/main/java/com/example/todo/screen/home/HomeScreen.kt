@@ -91,7 +91,8 @@ fun HomeScreen(
                 date = uiState.actualDay,
                 onDatePickerChange = viewModel::setOpenDatePicker,
                 onDateSelected = viewModel::updateTaskDeadLine,
-                onAddTaskClick = onAddTaskClick
+                onAddTaskClick = onAddTaskClick,
+                actualDay = uiState.actualDay
             )
             LazyColumn(
                 Modifier
@@ -258,6 +259,7 @@ fun UserHomeScreen(uiState: HomeScreenUiState){
 
 @Composable
 fun SettingsPart(
+    actualDay: String,
     openDatePicker: Boolean,
     date: String,
     onDatePickerChange: (Boolean) -> Unit,
@@ -295,7 +297,8 @@ fun SettingsPart(
                 openDatePicker = openDatePicker,
                 date = date,
                 onDatePickerChange = onDatePickerChange,
-                onDateSelected = onDateSelected
+                onDateSelected = onDateSelected,
+                actualDay = actualDay
             )
         }
         Row(
@@ -374,6 +377,7 @@ fun TaskCard(task: Task){
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun DatePick(
+    actualDay: String,
     openDatePicker: Boolean,
     date: String,
     onDatePickerChange: (Boolean) -> Unit,
@@ -387,7 +391,7 @@ private fun DatePick(
         onValueChange = {},
         label = {
             Text(
-                text = "DeadLine",
+                text = actualDay,
                 color = Color.White,
                 fontFamily = FontFamily.Monospace
             )
@@ -450,11 +454,12 @@ fun TaskCardPreview(){
 @Preview
 fun SettingsPartPreview(){
     SettingsPart(
-        false,
+        "",
         date = TODO(),
         onDatePickerChange = TODO(),
         onDateSelected = TODO(),
-        onAddTaskClick = TODO()
+        onAddTaskClick = TODO(),
+        openDatePicker = TODO()
     )
 }
 
