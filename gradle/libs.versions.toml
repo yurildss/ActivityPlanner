@@ -1,5 +1,6 @@
 [versions]
 agp = "8.8.0"
+composeBomVersion = "2025.01.01"
 googleFirebaseAuthKtx = "22.1.1"
 hiltAndroid = "2.51.1"
 kotlin = "2.0.0"
@@ -15,6 +16,7 @@ lifecycleRuntimeComposeAndroid = "2.8.7"
 playServicesAuth = "21.3.0"
 
 [libraries]
+androidx-compose-bom-v20250101 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 firebase-auth-ktx-v2211 = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "googleFirebaseAuthKtx" }
 firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
