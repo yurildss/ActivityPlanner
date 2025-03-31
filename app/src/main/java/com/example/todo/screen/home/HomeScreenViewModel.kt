@@ -1,6 +1,5 @@
 package com.example.todo.screen.home
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.todo.model.Task
@@ -9,6 +8,8 @@ import com.example.todo.model.service.AccountService
 import com.example.todo.model.service.StorageService
 import com.example.todo.screen.ToDoAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -38,6 +39,9 @@ class HomeScreenViewModel @Inject constructor(
                 pendingTask = storageService.getIncompleteTasksCount()
             )
 
+            uiState.value = uiState.value.copy(
+                tasksOfTheDay = storageService.getTaskByDay(uiState.value.actualDay)
+            )
         }
     }
 
@@ -47,7 +51,6 @@ class HomeScreenViewModel @Inject constructor(
 
         //Modificar para receber as Tasks do dia que está no calendario, e esse dia
         // pode ser modificado com a interação do usuario com o calendario
-        val tasks = storageService.tasks
 
         private val searchText
             get()  = uiState.value.searchText
@@ -65,20 +68,25 @@ class HomeScreenViewModel @Inject constructor(
         fun setOpenDatePicker(newValue: Boolean){
             uiState.value =
                 uiState.value.copy(openDatePicker = newValue)
-
-
         }
 
         fun updateTaskDeadLine(newValue: String){
-            /**
-             * Converte a data no formato dd/MM/yyyy para LocalDate do kotlinx.datetime
-             * */
-            val parsedDate = uiState.value.actualDay.split("/").let { parts ->
-                LocalDate(parts[2].toInt(), parts[1].toInt(), parts[0].toInt())
-            }
 
-            uiState.value =
-                uiState.value.copy(actualDay = newValue)
+            launchCatching{
+                /**
+                 *Converte a data no formato dd/MM/yyyy para LocalDate do kotlinx.datetime
+                 */
+                val parsedDate = uiState.value.actualDay.split("/").let { parts ->
+                    LocalDate(parts[2].toInt(), parts[1].toInt(), parts[0].toInt())
+                }
+
+                uiState.value = uiState.value.copy(
+                    tasksOfTheDay = storageService.getTaskByDay(newValue)
+                )
+
+                uiState.value =
+                    uiState.value.copy(actualDay = newValue)
+            }
 
         }
 
@@ -95,5 +103,5 @@ data class HomeScreenUiState(
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date
         .format(LocalDate.Format { byUnicodePattern("dd/MM/yyyy") }),
-    val tasksOfTheDay: MutableList<Task> = mutableListOf()
+    val tasksOfTheDay: Flow<List<Task>> = MutableStateFlow(emptyList())
 )

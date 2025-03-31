@@ -15,9 +15,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
@@ -44,9 +46,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -85,13 +89,18 @@ fun CreateTaskScreen(
             OutlinedTextField(
                 value = taskuiState.title,
                 onValueChange = viewModel::onTitleTaskChange,
+                modifier = Modifier
+                    .fillMaxWidth(0.75f),
                 label = { Text("Title",
-                    fontFamily = FontFamily.Monospace, color = Color.White) },
+                    fontFamily = FontFamily.Monospace, color = Color.White)
+                        },
                 singleLine = true
             )
             OutlinedTextField(
                 value = taskuiState.description,
                 onValueChange = viewModel::onDescriptionTaskChange,
+                modifier = Modifier
+                    .fillMaxWidth(0.75f),
                 label = { Text("Description",
                     fontFamily = FontFamily.Monospace, color = Color.White) },
             )
@@ -129,9 +138,19 @@ fun CreateTaskScreen(
                 onDeleteGoalsClick = viewModel::onDeleteGoalsClick,
                 onRemoveGoalsClick = viewModel::onRemoveGoalsClick
             )
-            Button(onClick = { viewModel.onSaveTaskClick(onSaveClick) },
-                modifier = Modifier.fillMaxWidth(0.75f)) {
+            Button(
+                onClick = { viewModel.onSaveTaskClick(onSaveClick) },
+                modifier = Modifier.fillMaxWidth(0.75f),
+                colors = ButtonDefaults.buttonColors(Color(0xFFB4EF2C))
+            ) {
                 Text("Save")
+            }
+            Button(
+                onClick = { viewModel.onSaveTaskClick(onSaveClick) },
+                colors = ButtonDefaults.buttonColors(Color.Red),
+                modifier = Modifier.fillMaxWidth(0.75f)
+            ) {
+                Text("Cancel")
             }
         }
     }
@@ -346,7 +365,10 @@ fun AddGoalsCard(
             Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = onAddGolsClick) {
+            Button(
+                onClick = onAddGolsClick,
+                colors = ButtonDefaults.buttonColors(Color(0xFFB4EF2C))
+            ) {
                 Text("Add Goals")
             }
             LazyColumn(contentPadding = PaddingValues(10.dp)) {
@@ -407,6 +429,8 @@ fun GoalsEntry(
             OutlinedTextField(
                 createGoalsScreenState.title,
                 onValueChange = onGoalsTaskChange,
+                modifier = Modifier
+                    .fillMaxWidth(0.75f),
                 label = {
                     Text(
                         "Title",
@@ -414,12 +438,17 @@ fun GoalsEntry(
                         color = Color.White
                     )
                 },
-                singleLine = true
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
             )
 
             OutlinedTextField(
                 createGoalsScreenState.description,
                 onValueChange = onDescriptionGoalsChange,
+                modifier = Modifier
+                    .fillMaxWidth(0.75f),
                 label = {
                     Text(
                         "Description",

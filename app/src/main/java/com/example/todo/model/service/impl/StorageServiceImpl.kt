@@ -67,7 +67,7 @@ class StorageServiceImpl @Inject constructor(
     override suspend fun getTaskByDay(day: String): Flow<List<Task>> {
         return firestore
             .collection(TASK_COLLECTION)
-            .whereEqualTo(DEADLINE_FIELD, day)
+            .whereEqualTo(DEADLINE_FIELD_STRING, day)
             .orderBy(CREATED_AT_FIELD, Query.Direction.DESCENDING)
             .dataObjects()
     }
@@ -82,6 +82,7 @@ class StorageServiceImpl @Inject constructor(
         private const val SAVE_TASK_TRACE = "saveTask"
         private const val UPDATE_TASK_TRACE = "updateTask"
         private const val DEADLINE_FIELD = "deadLine"
+        private const val DEADLINE_FIELD_STRING = "dateInBrazilianFormat"
     }
 
 }

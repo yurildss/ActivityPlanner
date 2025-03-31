@@ -74,8 +74,9 @@ fun HomeScreen(
     onAddTaskClick: () -> Unit,
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ){
-    val tasks = viewModel.tasks.collectAsStateWithLifecycle(emptyList())
+
     val uiState = viewModel.uiState.value
+    val tasks = uiState.tasksOfTheDay.collectAsStateWithLifecycle(emptyList())
 
     Box(contentAlignment = Alignment.BottomEnd,
         modifier = modifier
@@ -102,9 +103,11 @@ fun HomeScreen(
 
                 if (tasks.value.isEmpty()) {
                     item{
-                        Text(text = "No tasks today yet",
+                        Text(text = "No tasks end in this day",
                             color = Color.White,
-                            fontSize = 45.sp)
+                            minLines = 2,
+                            fontSize = 45.sp
+                        )
                     }
                 }
                 else{
@@ -133,7 +136,9 @@ private fun BottomMenu() {
                     tint = Color.White
                 )
             },
-            colors = NavigationBarItemDefaults.colors(indicatorColor = Color(0xFFB4EF2C)),
+            colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color(0xFFB4EF2C)
+            ),
             label = { }
         )
         NavigationBarItem(
