@@ -39,6 +39,7 @@ data class Goals(
     val isCompleted: Boolean = false,
     val deadLine: Long = 0L ,
     val timeToComplete: Long = 0L,
+    val percentComplete: Int = 0,
     val isSave: Boolean = false,
 ){
     val dateInBrazilianFormat: String

@@ -25,9 +25,15 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -186,6 +192,64 @@ fun Goals(){
             }
         }
     }
+}
+
+@Composable
+fun ViewGoalsCard(){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFF588D7D))
+            .padding(10.dp)
+    ){
+        var sliderPosition by remember { mutableFloatStateOf(0.75f) }
+        Column(Modifier.fillMaxWidth().padding(10.dp)) {
+            Text("Focus Block-Code Review",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 5.dp)
+            )
+            Text("Nov 12h, 2024",
+                color = Color.White,
+                modifier = Modifier.padding(top = 5.dp),
+                fontFamily = FontFamily.Monospace,
+                fontSize = 10.sp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Description lorem ipsum dolor sit amet, " +
+                        "consectetur adipiscing elit. ", color = Color.White,
+                    modifier = Modifier
+                        .fillMaxWidth(0.75f)
+                        .padding(top = 5.dp)
+                )
+                CircularProgressIndicator(
+                    progress = 0.5f,
+                    modifier = Modifier.width(64.dp).padding(10.dp),
+                    color = Color(0xFF4E7B6E),
+                    trackColor = Color(0xFFB7EE35),
+                    strokeWidth = 6.dp
+                )
+            }
+            Slider(
+                value = sliderPosition,
+                onValueChange = { sliderPosition = it },
+                colors = SliderDefaults.colors(
+                    thumbColor = Color(0xFF4E7B6E),
+                    activeTrackColor = Color(0xFFB7EE35)
+                )
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+fun PreviewGoalsCard(){
+    ViewGoalsCard()
 }
 
 @Composable
