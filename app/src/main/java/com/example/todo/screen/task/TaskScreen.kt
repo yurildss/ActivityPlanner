@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,6 +25,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -69,19 +71,31 @@ fun TaskInfo(modifier: Modifier = Modifier){
             Modifier
                 .size(150.dp, 54.dp)
                 .clip(CircleShape)
-                .background(Color(0xFFB4EF2C))
-                .padding(16.dp)
+                .background(Color(0xFF363440))
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ){
             Icon(Icons.Default.DateRange,
                 null,
                 tint = Color.White
+            )
+
+            Text("12/01/1998",
+                color = Color.White,
+                fontSize = 17.sp
             )
         }
 
         Text("Client Call ABC Corp.",
             fontSize = 40.sp,
             color = Color.White,
-            modifier = Modifier.fillMaxWidth(0.5f).padding(top = 10.dp))
+            modifier = Modifier.fillMaxWidth(0.5f).padding(top = 20.dp)
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        TaskGoalsAndTeams()
+        Spacer(modifier = Modifier.height(15.dp))
+        Goals()
     }
 
 }
@@ -93,7 +107,7 @@ fun TaskGoalsAndTeams(modifier: Modifier = Modifier){
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xFFB4EF2C))
-            .padding(15.dp) // 25% da altura da tela)
+            .padding(15.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
 
@@ -140,12 +154,25 @@ fun TaskGoalsAndTeams(modifier: Modifier = Modifier){
 
 @Composable
 fun Goals(){
-    Box(Modifier.fillMaxWidth().background(Color(0xFF498374)),
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFF498374)
+        ),
     ){
-        Column(Modifier.fillMaxWidth()) {
-            Row(Modifier.fillMaxWidth(),
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically){
+                verticalAlignment = Alignment.CenterVertically
+            )
+            {
                 Text("Goals(7)",
                     color = Color.White)
                 Icon(Icons.Default.Add,
@@ -153,7 +180,9 @@ fun Goals(){
                     tint = Color.White)
             }
             LazyColumn {
-
+                item {
+                    GoalsCard()
+                }
             }
         }
     }
@@ -163,12 +192,11 @@ fun Goals(){
 fun GoalsCard(){
     Box(
         Modifier
-        .fillMaxWidth()
+        .fillMaxWidth(0.90f)
         .clip(RoundedCornerShape(16.dp))
         .background(Color(0xFF588D7D)).padding(10.dp)
     ){
         Column(Modifier.fillMaxWidth()) {
-
             Text("Focus Block-Code Review",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
@@ -220,7 +248,9 @@ fun GoalsCard(){
 @Composable
 @Preview
 fun GoalsCardPreview(){
-    GoalsCard()
+    Surface(modifier = Modifier.fillMaxWidth()) {
+        GoalsCard()
+    }
 }
 
 @Composable
