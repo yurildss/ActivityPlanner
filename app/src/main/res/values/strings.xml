@@ -4,5 +4,6 @@
     <string name="email_error">Please insert a valid email.</string>
     <string name="empty_password_error">Password cannot be empty.</string>
     <string name="password_match_error">Passwords do not match.</string>
-
+    <string name="empty_field_task">One or more fields are empty</string>
+    <string name="empty_field_goals">It\'s no allow empty fields</string>
 </resources>

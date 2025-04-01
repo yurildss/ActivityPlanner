@@ -50,7 +50,6 @@ fun LoginScreen(
     val context = LocalContext.current
     val uiState by viewModel.uiState
 
-    // Escutando mensagens do SnackbarManager
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let {
             val message = when (it) {

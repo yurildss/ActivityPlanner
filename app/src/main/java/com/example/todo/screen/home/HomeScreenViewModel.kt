@@ -27,13 +27,16 @@ class HomeScreenViewModel @Inject constructor(
     accountService: AccountService,
 ) : ToDoAppViewModel() {
 
+    var uiState = mutableStateOf(HomeScreenUiState())
+        private set
     //Preciso fazer com que o init carrega também todas as tarefas do dia que está no calendario
 
     init {
         launchCatching {
-            accountService.currentUser
-                .onEach { user -> user.let { userName(it.name) } } // ✅
-                .stateIn(viewModelScope, SharingStarted.Eagerly, User())
+
+            accountService.currentUser.collect { user ->
+                userName(user.name)
+            }
 
             uiState.value = uiState.value.copy(
                 pendingTask = storageService.getIncompleteTasksCount()
@@ -44,10 +47,6 @@ class HomeScreenViewModel @Inject constructor(
             )
         }
     }
-
-
-    var uiState = mutableStateOf(HomeScreenUiState())
-            private set
 
         //Modificar para receber as Tasks do dia que está no calendario, e esse dia
         // pode ser modificado com a interação do usuario com o calendario

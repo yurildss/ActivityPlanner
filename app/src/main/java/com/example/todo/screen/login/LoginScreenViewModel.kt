@@ -18,8 +18,10 @@ class LoginScreenViewModel @Inject constructor(
     var uiState = mutableStateOf(LoginUiState())
         private set
 
-    private val email get() = uiState.value.email
-    private val password get() = uiState.value.password
+    private val email
+        get() = uiState.value.email
+    private val password
+        get() = uiState.value.password
 
     fun onEmailChange(newValue: String){
         uiState.value = uiState.value.copy(email = newValue)

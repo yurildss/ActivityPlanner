@@ -33,19 +33,25 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -55,8 +61,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.todo.common.SnackbarManager
+import com.example.todo.common.SnackbarMessage
 import com.example.todo.model.Goals
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -72,13 +81,35 @@ fun CreateTaskScreen(
     onSaveClick: () -> Unit
 ) {
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarMessage by SnackbarManager.snackbarMessages.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    LaunchedEffect(snackbarMessage) {
+        snackbarMessage?.let {
+            val message = when (it) {
+                is SnackbarMessage.StringSnackbar -> it.message
+                is SnackbarMessage.ResourceSnackbar -> context.getString(it.message)
+            }
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(message)
+            }
+        }
+    }
+
     val taskuiState by viewModel.CreateTaskUistate
     val golsUiState by viewModel.CreateGolsUistate
 
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { paddingValues ->
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(Color(0xFF6EA68E))
+            .padding(paddingValues)
     ) {
         Column(
             modifier = Modifier
@@ -153,6 +184,7 @@ fun CreateTaskScreen(
                 Text("Cancel")
             }
         }
+    }
     }
 }
 

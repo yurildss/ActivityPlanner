@@ -11,6 +11,8 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.todo.R
+import com.example.todo.common.SnackbarManager
 import com.example.todo.model.Goals
 import com.example.todo.model.Task
 import com.example.todo.model.service.StorageService
@@ -28,7 +30,7 @@ class CreateTaskScreenViewModel
 ) : ToDoAppViewModel() {
 
 
-    val options = listOf("-"," Priority 1", "Priority 2", "Priority 3")
+    val options = listOf("-","Priority 1", "Priority 2", "Priority 3")
     val icons = listOf(
         Icons.Default.Add to "",
         Icons.Default.Home to "Home",
@@ -177,11 +179,10 @@ class CreateTaskScreenViewModel
             )
             Log.d("TAG", "onCreateGoals: ${CreateTaskUistate.value.gols}")
         }
-
+        SnackbarManager.showMessage(R.string.empty_field_goals)
     }
 
     fun onGoalsIsSaveChange(){
-
         CreateGolsUistate.value = CreateGoalsScreenState()
     }
 
@@ -210,11 +211,10 @@ class CreateTaskScreenViewModel
     fun onSaveTaskClick(onSaveClick: () -> Unit){
         launchCatching {
             if(isEntryTaskValid()){
-                Log.d("TAG", "onSaveTaskClick: ${CreateTaskUistate.value.toTask()}")
                 storageService.save(CreateTaskUistate.value.toTask())
                 onSaveClick()
             }
-
+            SnackbarManager.showMessage(R.string.empty_field_task)
         }
 
     }
@@ -232,7 +232,7 @@ fun CreateTaskScreenState.toTask(): Task {
     }
 
     val priorityInt = when(priority){
-        "- Priority 1" -> 1
+        "Priority 1" -> 1
         "Priority 2" -> 2
         "Priority 3" -> 3
         else -> 0
