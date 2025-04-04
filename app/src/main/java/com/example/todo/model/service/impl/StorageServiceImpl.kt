@@ -31,8 +31,15 @@ class StorageServiceImpl @Inject constructor(
             }
 
     override suspend fun getTask(taskId: String): Task? {
-        TODO("Not yet implemented")
+        val snapshot = firestore
+            .collection(TASK_COLLECTION)
+            .whereEqualTo(TASK_ID_FIELD, taskId)
+            .get()
+            .await()
+
+        return snapshot.documents.firstOrNull()?.toObject(Task::class.java)
     }
+
 
     override suspend fun save(task: Task): String {
         val updatedTask = task.copy(userId = auth.currentUserId)
@@ -83,6 +90,7 @@ class StorageServiceImpl @Inject constructor(
         private const val UPDATE_TASK_TRACE = "updateTask"
         private const val DEADLINE_FIELD = "deadLine"
         private const val DEADLINE_FIELD_STRING = "dateInBrazilianFormat"
+        private const val TASK_ID_FIELD = "id"
     }
 
 }
