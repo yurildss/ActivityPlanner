@@ -24,7 +24,6 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
@@ -43,13 +42,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import androidx.hilt.navigation.compose.hiltViewModel
 
 
 @Composable
-fun TaskInfo(modifier: Modifier = Modifier){
+fun TaskInfo(
+    modifier: Modifier = Modifier,
+    viewModel: TaskScreenViewModel = hiltViewModel()
+             ){
 
-    Column(modifier = Modifier.fillMaxWidth().padding(10.dp)) {
+    val uiState = viewModel._taskScreenState.value
+
+    Column(modifier = modifier
+        .fillMaxWidth()
+        .padding(10.dp)) {
 
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -87,19 +93,23 @@ fun TaskInfo(modifier: Modifier = Modifier){
                 tint = Color.White
             )
 
-            Text("12/01/1998",
+            Text(text = uiState.deadLine,
                 color = Color.White,
                 fontSize = 17.sp
             )
         }
 
-        Text("Client Call ABC Corp.",
+        Text(text = "${uiState.title}.",
             fontSize = 40.sp,
             color = Color.White,
-            modifier = Modifier.fillMaxWidth(0.5f).padding(top = 20.dp)
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .padding(top = 20.dp)
         )
         Spacer(modifier = Modifier.height(15.dp))
-        TaskGoalsAndTeams()
+        TaskGoalsAndTeams(
+            taskScreenState = uiState
+        )
         Spacer(modifier = Modifier.height(15.dp))
         Goals()
     }
@@ -107,9 +117,12 @@ fun TaskInfo(modifier: Modifier = Modifier){
 }
 
 @Composable
-fun TaskGoalsAndTeams(modifier: Modifier = Modifier){
+fun TaskGoalsAndTeams(
+    modifier: Modifier = Modifier,
+    taskScreenState: TaskScreenState
+){
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xFFB4EF2C))
@@ -138,7 +151,7 @@ fun TaskGoalsAndTeams(modifier: Modifier = Modifier){
                 )
             }
 
-            Text("24/30",
+            Text("${taskScreenState.completedGoals}/${taskScreenState.unCompletedGoals}/}",
                 fontSize = 50.sp,
                 color = Color(0xFF242636)
             )
@@ -164,8 +177,9 @@ fun Goals(){
         Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF498374)
-        ),
+            .background(
+                Color(0xFF498374)
+            ),
     ){
         Column(
             Modifier
@@ -204,7 +218,9 @@ fun ViewGoalsCard(){
             .padding(10.dp)
     ){
         var sliderPosition by remember { mutableFloatStateOf(0.75f) }
-        Column(Modifier.fillMaxWidth().padding(10.dp)) {
+        Column(Modifier
+            .fillMaxWidth()
+            .padding(10.dp)) {
             Text("Focus Block-Code Review",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
@@ -228,7 +244,9 @@ fun ViewGoalsCard(){
                 )
                 CircularProgressIndicator(
                     progress = 0.5f,
-                    modifier = Modifier.width(64.dp).padding(10.dp),
+                    modifier = Modifier
+                        .width(64.dp)
+                        .padding(10.dp),
                     color = Color(0xFF4E7B6E),
                     trackColor = Color(0xFFB7EE35),
                     strokeWidth = 6.dp
@@ -256,9 +274,10 @@ fun PreviewGoalsCard(){
 fun GoalsCard(){
     Box(
         Modifier
-        .fillMaxWidth(0.90f)
-        .clip(RoundedCornerShape(16.dp))
-        .background(Color(0xFF588D7D)).padding(10.dp)
+            .fillMaxWidth(0.90f)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFF588D7D))
+            .padding(10.dp)
     ){
         Column(Modifier.fillMaxWidth()) {
             Text("Focus Block-Code Review",
@@ -293,7 +312,9 @@ fun GoalsCard(){
                 Spacer(modifier = Modifier.weight(1f))
                 CircularProgressIndicator(
                     progress = 0.5f,
-                    modifier = Modifier.width(64.dp).padding(end = 10.dp),
+                    modifier = Modifier
+                        .width(64.dp)
+                        .padding(end = 10.dp),
                     color = Color(0xFF4E7B6E),
                     trackColor = Color(0xFFB7EE35),
                     strokeWidth = 6.dp

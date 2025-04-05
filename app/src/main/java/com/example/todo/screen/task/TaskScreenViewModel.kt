@@ -43,7 +43,7 @@ class TaskScreenViewModel
         _sliderPosition.value = position
     }
 
-    fun TaskToTaskScreenState(){
+    private fun TaskToTaskScreenState(){
         _taskScreenState.value = TaskScreenState(
             title = task.value!!.title,
             description = task.value!!.description,
@@ -55,7 +55,7 @@ class TaskScreenViewModel
         )
     }
 
-    fun unCompletedGoals(){
+    private fun unCompletedGoals(){
         var unCompleted = 0
         _taskScreenState.value.gols.forEach {
             if(!it.isSave){
@@ -67,7 +67,7 @@ class TaskScreenViewModel
         )
     }
 
-    fun completedGoals(){
+    private fun completedGoals(){
         var completed = 0
         _taskScreenState.value.gols.forEach {
             if(it.isSave){
