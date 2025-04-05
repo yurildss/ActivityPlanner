@@ -214,7 +214,7 @@ fun Goals(goals: MutableList<Goals> = mutableListOf()){
                 }
                 else{
                     items(items = goals, key = { goals.indexOf(it) }) { goalsItem ->
-                        GoalsCard()
+                        GoalsCard(goalsItem)
                     }
                 }
             }
@@ -223,7 +223,9 @@ fun Goals(goals: MutableList<Goals> = mutableListOf()){
 }
 
 @Composable
-fun ViewGoalsCard(){
+fun ViewGoalsCard(
+    goal: Goals = Goals()
+){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -235,7 +237,7 @@ fun ViewGoalsCard(){
         Column(Modifier
             .fillMaxWidth()
             .padding(10.dp)) {
-            Text("Focus Block-Code Review",
+            Text(goal.title,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 5.dp)
@@ -250,14 +252,13 @@ fun ViewGoalsCard(){
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Description lorem ipsum dolor sit amet, " +
-                        "consectetur adipiscing elit. ", color = Color.White,
+                Text("${goal.description}.", color = Color.White,
                     modifier = Modifier
                         .fillMaxWidth(0.75f)
                         .padding(top = 5.dp)
                 )
                 CircularProgressIndicator(
-                    progress = 0.5f,
+                    progress = goal.percentComplete.toFloat(),
                     modifier = Modifier
                         .width(64.dp)
                         .padding(10.dp),
@@ -267,7 +268,7 @@ fun ViewGoalsCard(){
                 )
             }
             Slider(
-                value = sliderPosition,
+                value = goal.percentComplete.toFloat(),
                 onValueChange = { sliderPosition = it },
                 colors = SliderDefaults.colors(
                     thumbColor = Color(0xFF4E7B6E),
@@ -349,7 +350,7 @@ fun GoalsCard(goal: Goals){
 fun GoalsCardPreview(){
     Surface(modifier = Modifier.fillMaxWidth()) {
         GoalsCard(
-            goal = TODO()
+            goal = Goals()
         )
     }
 }

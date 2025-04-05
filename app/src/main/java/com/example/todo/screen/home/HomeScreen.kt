@@ -2,6 +2,7 @@ package com.example.todo.screen.home
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
@@ -72,6 +73,7 @@ import kotlinx.datetime.toLocalDateTime
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onAddTaskClick: () -> Unit,
+    onTaskClick: (String) -> Unit,
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ){
 
@@ -112,7 +114,7 @@ fun HomeScreen(
                 }
                 else{
                     items(items = tasks.value, key = { it.id }) { taskItem ->
-                        TaskCard(taskItem)
+                        TaskCard(taskItem, onTaskClick)
                     }
                 }
             }
@@ -331,13 +333,16 @@ fun SettingsPart(
 }
 
 @Composable
-fun TaskCard(task: Task){
+fun TaskCard(task: Task, onTaskClick: (String) -> Unit){
     Box(
         modifier = Modifier
             .fillMaxWidth(0.5f) // 50% da largura da tela
         .fillMaxHeight(0.20f)
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xFFB4EF2C))
+            .clickable {
+                onTaskClick(task.id)
+            }
             .padding(15.dp) // 25% da altura da tela)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -452,7 +457,10 @@ private fun DatePick(
 @Composable
 @Preview
 fun TaskCardPreview(){
-    TaskCard(Task())
+    TaskCard(
+        Task(),
+        onTaskClick = TODO()
+    )
 }
 
 @Composable
@@ -472,7 +480,10 @@ fun SettingsPartPreview(){
 @Preview
 fun HomeScreenPreview(){
     HomeScreen(
-        onAddTaskClick = {  },
+        onAddTaskClick = { },
+        modifier = TODO(),
+        onTaskClick = TODO(),
+        viewModel = TODO(),
     )
 }
 
