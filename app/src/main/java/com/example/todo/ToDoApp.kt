@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.todo.screen.OpenScreen
 import com.example.todo.screen.home.HomeScreen
 import com.example.todo.screen.login.LoginScreen
@@ -56,7 +58,11 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
             )
         }
 
-        composable(Screens.TASK_SCREEN.name+"/{taskId}"){
+        composable(Screens.TASK_SCREEN.name+"/{taskId}",
+            arguments = listOf(navArgument("taskId"){
+                type = NavType.StringType
+            })
+        ){
             TaskInfo()
         }
 
