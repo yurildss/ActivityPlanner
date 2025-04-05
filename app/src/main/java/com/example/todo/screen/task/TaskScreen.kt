@@ -285,7 +285,7 @@ fun PreviewGoalsCard(){
 }
 
 @Composable
-fun GoalsCard(){
+fun GoalsCard(goal: Goals){
     Box(
         Modifier
             .fillMaxWidth(0.90f)
@@ -294,7 +294,7 @@ fun GoalsCard(){
             .padding(10.dp)
     ){
         Column(Modifier.fillMaxWidth()) {
-            Text("Focus Block-Code Review",
+            Text(goal.title,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 5.dp))
@@ -325,7 +325,7 @@ fun GoalsCard(){
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 CircularProgressIndicator(
-                    progress = 0.5f,
+                    progress = goal.percentComplete.toFloat(),
                     modifier = Modifier
                         .width(64.dp)
                         .padding(end = 10.dp),
@@ -335,7 +335,7 @@ fun GoalsCard(){
                 )
             }
 
-            Text("Nov 12h, 2024",
+            Text(goal.dateInBrazilianFormat,
                 color = Color.White,
                 modifier = Modifier.padding(top = 5.dp),
                 fontFamily = FontFamily.Monospace,
@@ -348,7 +348,9 @@ fun GoalsCard(){
 @Preview
 fun GoalsCardPreview(){
     Surface(modifier = Modifier.fillMaxWidth()) {
-        GoalsCard()
+        GoalsCard(
+            goal = TODO()
+        )
     }
 }
 
