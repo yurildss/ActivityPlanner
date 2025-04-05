@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -43,6 +44,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.todo.model.Goals
+import com.example.todo.screen.home.TaskCard
 
 
 @Composable
@@ -111,7 +114,7 @@ fun TaskInfo(
             taskScreenState = uiState
         )
         Spacer(modifier = Modifier.height(15.dp))
-        Goals()
+        Goals(uiState.gols)
     }
 
 }
@@ -151,19 +154,19 @@ fun TaskGoalsAndTeams(
                 )
             }
 
-            Text("${taskScreenState.completedGoals}/${taskScreenState.unCompletedGoals}/}",
+            Text("${taskScreenState.completedGoals}/${taskScreenState.gols.size}/}",
                 fontSize = 50.sp,
                 color = Color(0xFF242636)
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 LinearProgressIndicator(
-                    progress = { 24f / 100f },
+                    progress = { (taskScreenState.completedGoals / taskScreenState.gols.size).toFloat() },
                     modifier = Modifier.fillMaxWidth(0.75f),
                     color = Color(0xFF242636),
                     trackColor = Color(0xFF90C323),
                 )
-                Text("24%",
+                Text("${(taskScreenState.completedGoals / taskScreenState.gols.size)*100}%",
                     modifier = Modifier.padding(start = 10.dp),
                     color = Color(0xFF242636))
             }
@@ -172,7 +175,7 @@ fun TaskGoalsAndTeams(
 }
 
 @Composable
-fun Goals(){
+fun Goals(goals: MutableList<Goals> = mutableListOf()){
     Box(
         Modifier
             .fillMaxWidth()
@@ -200,8 +203,19 @@ fun Goals(){
                     tint = Color.White)
             }
             LazyColumn {
-                item {
-                    GoalsCard()
+                if (goals.isEmpty()) {
+                    item{
+                        Text(text = "No tasks end in this day",
+                            color = Color.White,
+                            minLines = 2,
+                            fontSize = 45.sp
+                        )
+                    }
+                }
+                else{
+                    items(items = goals, key = { goals.indexOf(it) }) { goalsItem ->
+                        GoalsCard()
+                    }
                 }
             }
         }
@@ -347,7 +361,9 @@ fun GoalsPreview(){
 @Composable
 @Preview
 fun TaskGoalsAndTeamsPreview(){
-    TaskGoalsAndTeams()
+    TaskGoalsAndTeams(
+        taskScreenState = TaskScreenState()
+    )
 }
 
 @Composable
