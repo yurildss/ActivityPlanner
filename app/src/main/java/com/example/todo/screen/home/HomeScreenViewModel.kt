@@ -29,7 +29,7 @@ class HomeScreenViewModel @Inject constructor(
 
     var uiState = mutableStateOf(HomeScreenUiState())
         private set
-    //Preciso fazer com que o init carrega também todas as tarefas do dia que está no calendario
+
 
     init {
         launchCatching {
