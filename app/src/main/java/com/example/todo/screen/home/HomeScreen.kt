@@ -55,6 +55,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -336,7 +337,7 @@ fun TaskCard(task: Task, onTaskClick: (String) -> Unit){
     Box(
         modifier = Modifier
             .fillMaxWidth(0.5f) // 50% da largura da tela
-        .fillMaxHeight(0.20f)
+            .fillMaxHeight(0.20f)
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xFFB4EF2C))
             .clickable {
@@ -359,10 +360,14 @@ fun TaskCard(task: Task, onTaskClick: (String) -> Unit){
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            Text(task.title,
-                fontSize = 50.sp,
-                color = Color(0xFF242636)
+            Text(
+                text = task.title,
+                fontSize = 25.sp,
+                color = Color(0xFF242636),
+                maxLines = 2, // ou 2 se quiser permitir mais linhas
+                overflow = TextOverflow.Ellipsis
             )
+
 
             Text(task.timeToComplete.toString(),
                 modifier = Modifier.padding(top = 10.dp, bottom = 5.dp),
