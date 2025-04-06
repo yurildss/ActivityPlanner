@@ -167,22 +167,9 @@ fun CreateTaskScreen(
                 onCreateGols = viewModel::onCreateGoals,
                 onGoalsIsSaveChange = viewModel::onGoalsIsSaveChange,
                 onDeleteGoalsClick = viewModel::onDeleteGoalsClick,
-                onRemoveGoalsClick = viewModel::onRemoveGoalsClick
+                onRemoveGoalsClick = viewModel::onRemoveGoalsClick,
+                onSaveTaskClick = { viewModel.onSaveTaskClick(onSaveClick) }
             )
-            Button(
-                onClick = { viewModel.onSaveTaskClick(onSaveClick) },
-                modifier = Modifier.fillMaxWidth(0.75f),
-                colors = ButtonDefaults.buttonColors(Color(0xFFB4EF2C))
-            ) {
-                Text("Save")
-            }
-            Button(
-                onClick = { viewModel.onSaveTaskClick(onSaveClick) },
-                colors = ButtonDefaults.buttonColors(Color.Red),
-                modifier = Modifier.fillMaxWidth(0.75f)
-            ) {
-                Text("Cancel")
-            }
         }
     }
     }
@@ -386,7 +373,9 @@ fun AddGoalsCard(
     onDateSelected: (String) -> Unit,
     onGoalsIsSaveChange : () -> Unit,
     onDeleteGoalsClick: (Int) -> Unit,
-    onRemoveGoalsClick: (Int) -> Unit
+    onRemoveGoalsClick: (Int) -> Unit,
+    onSaveTaskClick: () -> Unit,
+
 ) {
     Box(
         modifier = Modifier
@@ -399,11 +388,14 @@ fun AddGoalsCard(
         ) {
             Button(
                 onClick = onAddGolsClick,
-                colors = ButtonDefaults.buttonColors(Color(0xFFB4EF2C))
+                colors = ButtonDefaults.buttonColors(Color(0xFF386459))
             ) {
                 Text("Add Goals")
             }
-            LazyColumn(contentPadding = PaddingValues(10.dp)) {
+            LazyColumn(modifier = Modifier
+                .weight(1f) // 🔑 Faz a lista ocupar apenas o espaço disponível
+                .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 itemsIndexed(taskScreenState.gols) { index, goal ->
                     if (!goal.isSave) {
                         GoalsEntry(
@@ -425,9 +417,23 @@ fun AddGoalsCard(
                             onDeleteGoalsClick
                         )
                     }
+
                 }
             }
-
+            Button(
+                onClick = onSaveTaskClick,
+                modifier = Modifier.fillMaxWidth(0.75f),
+                colors = ButtonDefaults.buttonColors(Color(0xFF497D83))
+            ) {
+                Text("Save")
+            }
+            Button(
+                onClick = onSaveTaskClick,
+                colors = ButtonDefaults.buttonColors(Color(0xFF83494E)),
+                modifier = Modifier.fillMaxWidth(0.75f)
+            ) {
+                Text("Cancel")
+            }
         }
     }
 }
@@ -514,11 +520,19 @@ fun GoalsEntry(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = {
+                Button(
+                    onClick = {
                     onCreateGols(index)
                     onGoalsIsSaveChange()
-                } ) { Text("Add") }
-                Button(onClick = { onRemoveGoalsClick(index) }) { Text("Remove") }
+                }, colors = ButtonDefaults.buttonColors(Color(0xFF386459)) ) {
+                    Text("Add")
+                }
+                Button(
+                    onClick = { onRemoveGoalsClick(index) },
+                    colors = ButtonDefaults.buttonColors(Color(0xFF83494E))
+                ) {
+                    Text("Remove")
+                }
             }
         }
     }
@@ -572,7 +586,7 @@ fun GoalsShow(
             Button(
                 modifier = Modifier.align(Alignment.End),
                 onClick = { onDeleteGoalsClick(index) },
-                colors = ButtonDefaults.buttonColors(Color.Red)
+                colors = ButtonDefaults.buttonColors(Color(0xFF83494E))
             ) {
                 Text("Delete")
             }
@@ -605,7 +619,8 @@ fun AddGoalsCardPreview() {
         onCreateGols = {},
         onGoalsIsSaveChange = {},
         onDeleteGoalsClick = { },
-        onRemoveGoalsClick = TODO()
+        onRemoveGoalsClick = {},
+        onSaveTaskClick = {}
     )
 }
 
@@ -622,7 +637,7 @@ fun GoalsEntryPreview() {
         onCreateGols = { index: Int -> },
         index = 1,
         onGoalsIsSaveChange = {},
-        onRemoveGoalsClick = TODO()
+        onRemoveGoalsClick = {}
     )
 }
 
@@ -630,9 +645,8 @@ fun GoalsEntryPreview() {
 @Preview
 fun CreateTaskScreenPreview() {
     CreateTaskScreen(
-        modifier = TODO(),
         viewModel = TODO(),
-        onSaveClick = TODO()
+        onSaveClick = {}
     )
 }
 
