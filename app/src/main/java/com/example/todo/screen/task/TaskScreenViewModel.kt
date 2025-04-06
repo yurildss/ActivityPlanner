@@ -1,5 +1,6 @@
 package com.example.todo.screen.task
 
+import android.util.Log
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -21,22 +22,33 @@ class TaskScreenViewModel
         private set
 
     var _sliderPosition = mutableFloatStateOf(0F)
+
+        private set
+    var isLoading = mutableStateOf(true)
         private set
 
     val taskId = savedStateHandle.get<String>("taskId")
     var task = mutableStateOf<Task?>(null)
 
     init {
-        getTask()
-
+        launchCatching{
+            Log.d("TaskScreenViewModel", "init: $task")
+            getTask()
+            Log.d("TaskScreenViewModel", "init2: $task")
+            TaskToTaskScreenState()
+            unCompletedGoals()
+            completedGoals()
+            Log.d("TaskScreenViewModel", "init3: $task")
+            isLoading.value = false
+        }
     }
 
-    fun getTask(){
-        launchCatching {
+    private suspend fun getTask(){
+
             if (taskId != null) {
                 task.value = storageService.getTask(taskId)
             }
-        }
+
     }
 
     fun sliderPosition(position: Float){
@@ -81,12 +93,6 @@ class TaskScreenViewModel
     }
 
 }
-
-//Necessario opter o id da tarefa, que será passado via rota
-//Após isso iremos buscar a tarefa no banco de dados e preencher os campos
-//Tudo isso ocorrerá no init
-//Precisamos de uma variavel que irá controlar a %(percentComplete) de progresso do Goals
-//Esse progresso precisará ser salvo no banco
 
 data class TaskScreenState(
     val openDatePicker: Boolean = false,
