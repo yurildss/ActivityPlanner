@@ -87,7 +87,7 @@ fun HomeScreen(
                 Color(0xFF1D1D2A)
             )
     ){
-        Column {
+        Column(modifier = Modifier.fillMaxSize()) {
             UserHomeScreen(uiState)
             SettingsPart(
                 openDatePicker = uiState.openDatePicker,
@@ -107,8 +107,7 @@ fun HomeScreen(
                     item{
                         Text(text = "No tasks end in this day",
                             color = Color.White,
-                            minLines = 2,
-                            fontSize = 45.sp
+                            fontSize = 35.sp,
                         )
                     }
                 }

@@ -205,13 +205,14 @@ fun Goals(goals: MutableList<Goals> = mutableListOf()){
                 verticalAlignment = Alignment.CenterVertically
             )
             {
-                Text("Goals(7)",
+                Text("Goals(${goals.size})",
                     color = Color.White)
                 Icon(Icons.Default.Add,
                     null,
                     tint = Color.White)
             }
-            LazyColumn {
+            Spacer(modifier = Modifier.height(10.dp))
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp)) {
                 if (goals.isEmpty()) {
                     item{
                         Text(text = "No tasks end in this day",
