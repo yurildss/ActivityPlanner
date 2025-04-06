@@ -33,11 +33,11 @@ class StorageServiceImpl @Inject constructor(
     override suspend fun getTask(taskId: String): Task? {
         val snapshot = firestore
             .collection(TASK_COLLECTION)
-            .whereEqualTo(TASK_ID_FIELD, taskId)
+            .document(taskId)
             .get()
             .await()
 
-        return snapshot.documents.firstOrNull()?.toObject(Task::class.java)
+        return snapshot.toObject(Task::class.java)
     }
 
 

@@ -30,6 +30,7 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -55,68 +56,76 @@ fun TaskInfo(
              ){
 
     val uiState = viewModel._taskScreenState.value
+    val isLoading = viewModel.isLoading
 
-    Column(modifier = modifier
-        .fillMaxWidth()
-        .padding(10.dp)) {
-
-        Row(modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-            ){
-            Icon(
-                Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = null,
-                tint = Color.White
-            )
+    if(!isLoading.value){
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+                Row(
+                    Modifier
+                        .size(54.dp)
+                        .clip(CircleShape)
+                        .background(Color(0x166EA68E))
+                        .padding(16.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Notifications,
+                        null,
+                        tint = Color.White
+                    )
+                }
+            }
             Row(
                 Modifier
-                    .size(54.dp)
+                    .size(150.dp, 54.dp)
                     .clip(CircleShape)
-                    .background(Color(0x166EA68E))
-                    .padding(16.dp)
-            ){
-                Icon(Icons.Default.Notifications,
+                    .background(Color(0xFF363440))
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.DateRange,
                     null,
                     tint = Color.White
                 )
+
+                Text(
+                    text = uiState.deadLine,
+                    color = Color.White,
+                    fontSize = 17.sp
+                )
             }
-        }
-        Row(
-            Modifier
-                .size(150.dp, 54.dp)
-                .clip(CircleShape)
-                .background(Color(0xFF363440))
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Icon(Icons.Default.DateRange,
-                null,
-                tint = Color.White
-            )
 
-            Text(text = uiState.deadLine,
+            Text(
+                text = "${uiState.title}.",
+                fontSize = 40.sp,
                 color = Color.White,
-                fontSize = 17.sp
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .padding(top = 20.dp)
             )
+            Spacer(modifier = Modifier.height(15.dp))
+            TaskGoalsAndTeams(
+                taskScreenState = uiState
+            )
+            Spacer(modifier = Modifier.height(15.dp))
+            Goals(uiState.gols)
         }
-
-        Text(text = "${uiState.title}.",
-            fontSize = 40.sp,
-            color = Color.White,
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .padding(top = 20.dp)
-        )
-        Spacer(modifier = Modifier.height(15.dp))
-        TaskGoalsAndTeams(
-            taskScreenState = uiState
-        )
-        Spacer(modifier = Modifier.height(15.dp))
-        Goals(uiState.gols)
     }
-
 }
 
 @Composable
@@ -154,7 +163,7 @@ fun TaskGoalsAndTeams(
                 )
             }
 
-            Text("${taskScreenState.completedGoals}/${taskScreenState.gols.size}/}",
+            Text("${taskScreenState.completedGoals}/${taskScreenState.gols.size}",
                 fontSize = 50.sp,
                 color = Color(0xFF242636)
             )
