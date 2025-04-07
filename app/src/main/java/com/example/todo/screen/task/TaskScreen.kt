@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -59,71 +60,73 @@ fun TaskInfo(
     val isLoading = viewModel.isLoading
 
     if(!isLoading.value){
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(10.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+        Box(modifier.fillMaxSize().background(Color(0xFF1D1D2A))){
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
             ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null,
-                    tint = Color.White
-                )
                 Row(
-                    Modifier
-                        .size(54.dp)
-                        .clip(CircleShape)
-                        .background(Color(0x166EA68E))
-                        .padding(16.dp)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        Icons.Default.Notifications,
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                    Row(
+                        Modifier
+                            .size(54.dp)
+                            .clip(CircleShape)
+                            .background(Color(0x166EA68E))
+                            .padding(16.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Notifications,
+                            null,
+                            tint = Color.White
+                        )
+                    }
+                }
+                Row(
+                    Modifier
+                        .size(150.dp, 54.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFF363440))
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.DateRange,
                         null,
                         tint = Color.White
                     )
+
+                    Text(
+                        text = uiState.deadLine,
+                        color = Color.White,
+                        fontSize = 17.sp
+                    )
                 }
-            }
-            Row(
-                Modifier
-                    .size(150.dp, 54.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFF363440))
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    Icons.Default.DateRange,
-                    null,
-                    tint = Color.White
-                )
 
                 Text(
-                    text = uiState.deadLine,
+                    text = "${uiState.title}.",
+                    fontSize = 40.sp,
                     color = Color.White,
-                    fontSize = 17.sp
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .padding(top = 20.dp)
                 )
+                Spacer(modifier = Modifier.height(15.dp))
+                TaskGoalsAndTeams(
+                    taskScreenState = uiState
+                )
+                Spacer(modifier = Modifier.height(15.dp))
+                Goals(uiState.gols)
             }
-
-            Text(
-                text = "${uiState.title}.",
-                fontSize = 40.sp,
-                color = Color.White,
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .padding(top = 20.dp)
-            )
-            Spacer(modifier = Modifier.height(15.dp))
-            TaskGoalsAndTeams(
-                taskScreenState = uiState
-            )
-            Spacer(modifier = Modifier.height(15.dp))
-            Goals(uiState.gols)
         }
     }
 }

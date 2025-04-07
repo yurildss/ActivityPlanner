@@ -376,7 +376,8 @@ fun TaskCard(task: Task, onTaskClick: (String) -> Unit){
             )
 
 
-            Text(task.timeToComplete.toString(),
+            Text(
+                "${task.timeToComplete} Hours Needed",
                 modifier = Modifier.padding(top = 10.dp, bottom = 5.dp),
                 color = Color((0xFF242636)))
 
