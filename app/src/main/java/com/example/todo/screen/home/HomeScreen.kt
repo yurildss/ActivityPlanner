@@ -100,28 +100,54 @@ fun HomeScreen(
                 onAddTaskClick = onAddTaskClick,
                 actualDay = uiState.actualDay
             )
-            LazyColumn(
-                Modifier
-                    .padding(10.dp)
-                    .fillMaxSize(1f),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            TasksList(tasks, onTaskClick)
+        }
+        BottomMenu()
+    }
+}
 
-                if (tasks.isEmpty()) {
-                    item{
-                        Text(text = "No tasks end in this day",
-                            color = Color.White,
-                            fontSize = 35.sp,
+@Composable
+private fun TasksList(
+    tasks: List<Task>,
+    onTaskClick: (String) -> Unit
+) {
+    LazyColumn(
+        Modifier
+            .padding(10.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        if (tasks.isEmpty()) {
+            item {
+                Text(
+                    text = "No tasks end in this day",
+                    color = Color.White,
+                    fontSize = 35.sp,
+                )
+            }
+        } else {
+            items(tasks.chunked(2)) { rowTasks ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    for (task in rowTasks) {
+                        TaskCard(
+                            task = task,
+                            onTaskClick = onTaskClick,
+                            Modifier
+                                .weight(1f) //Divida o espaço disponível igualmente entre os itens com o mesmo peso
+                                .fillMaxHeight(0.25f) // Ajuste a altura que quiser
                         )
                     }
-                }
-                else{
-                    items(items = tasks, key = { it.id }) { taskItem ->
-                        TaskCard(taskItem, onTaskClick)
+
+                    // Se só tiver 1 task nesse row, adiciona um espaço vazio pra alinhar corretamente
+                    if (rowTasks.size < 2) {
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                 }
             }
         }
-        BottomMenu()
     }
 }
 
@@ -189,12 +215,12 @@ fun UserHomeScreen(uiState: HomeScreenUiState){
                     .size(54.dp)
                     .clip(CircleShape)
                     .background(Color(0xA320E1FF))
-                    .padding(16.dp)
+                    .padding(16.dp), horizontalArrangement = Arrangement.End
             ){
                 Icon(Icons.Default.AccountCircle, null)
             }
-            Column(Modifier.padding(start = 16.dp)) {
-                Text("Hello",
+            Column(Modifier.padding(start = 16.dp).fillMaxWidth(0.6f)) {
+                Text("Hello,",
                     color = Color.White,
                     fontFamily = FontFamily.Monospace,)
                 Text(
@@ -203,7 +229,6 @@ fun UserHomeScreen(uiState: HomeScreenUiState){
                     fontFamily = FontFamily.Monospace,
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
             Row(
                 Modifier
                     .size(54.dp)
@@ -340,11 +365,14 @@ fun SettingsPart(
 }
 
 @Composable
-fun TaskCard(task: Task, onTaskClick: (String) -> Unit){
+fun TaskCardWithoutGoals(task: Task, onTaskClick: (String) -> Unit, modifier: Modifier = Modifier){
+
+}
+
+@Composable
+fun TaskCard(task: Task, onTaskClick: (String) -> Unit, modifier: Modifier = Modifier){
     Box(
-        modifier = Modifier
-            .fillMaxWidth(0.5f) // 50% da largura da tela
-            .fillMaxHeight(0.20f)
+        modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xFFB4EF2C))
             .clickable {
@@ -471,7 +499,7 @@ private fun DatePick(
 fun TaskCardPreview(){
     TaskCard(
         Task(),
-        onTaskClick = TODO()
+        onTaskClick = {}
     )
 }
 
@@ -480,11 +508,11 @@ fun TaskCardPreview(){
 fun SettingsPartPreview(){
     SettingsPart(
         "",
-        date = TODO(),
-        onDatePickerChange = TODO(),
-        onDateSelected = TODO(),
-        onAddTaskClick = TODO(),
-        openDatePicker = TODO()
+        date = "",
+        onDatePickerChange = {},
+        onDateSelected = {},
+        onAddTaskClick = {},
+        openDatePicker = false
     )
 }
 
@@ -493,8 +521,7 @@ fun SettingsPartPreview(){
 fun HomeScreenPreview(){
     HomeScreen(
         onAddTaskClick = { },
-        modifier = TODO(),
-        onTaskClick = TODO(),
+        onTaskClick = {},
         viewModel = TODO(),
     )
 }
@@ -503,6 +530,37 @@ fun HomeScreenPreview(){
 @Preview
 fun UserHomeScreenPreview(){
     UserHomeScreen(
-        uiState = TODO()
+        uiState = HomeScreenUiState(name = "Yuri Lima")
+    )
+}
+
+@Composable
+@Preview
+fun TaskListPreview(){
+    TasksList(
+        tasks = listOf(
+            Task(id = "1",
+                title = "Teste de uma atividade muito grande",
+                description = "Uma atividade muito grande"),
+            Task(id = "2",
+                title = "Teste de uma atividade muito grande",
+                description = "Uma atividade muito grande"),
+            Task(id = "3",
+                title = "Lorem",
+                description = "Uma atividade muito grande"),
+            Task(id = "4",
+                title = "Lorem",
+                description = "Uma atividade muito grande"),
+            Task(id = "5",
+                title = "Lorem",
+                description = "Uma atividade muito grande"),
+            Task(id = "6",
+                title = "Lorem",
+                description = "Uma atividade muito grande"),
+            Task(id = "7",
+                title = "Lorem",
+                description = "Uma atividade muito grande")
+        ),
+        onTaskClick = {  }
     )
 }
