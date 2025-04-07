@@ -36,6 +36,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -49,6 +50,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -78,8 +80,8 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ){
 
-    val uiState = viewModel.uiState.value
-    val tasks = uiState.tasksOfTheDay.collectAsStateWithLifecycle(emptyList())
+    val uiState by viewModel.uiState
+    val tasks = uiState.tasksOfTheDay
 
     Box(contentAlignment = Alignment.BottomEnd,
         modifier = modifier
@@ -104,7 +106,7 @@ fun HomeScreen(
                     .fillMaxSize(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
-                if (tasks.value.isEmpty()) {
+                if (tasks.isEmpty()) {
                     item{
                         Text(text = "No tasks end in this day",
                             color = Color.White,
@@ -113,7 +115,7 @@ fun HomeScreen(
                     }
                 }
                 else{
-                    items(items = tasks.value, key = { it.id }) { taskItem ->
+                    items(items = tasks, key = { it.id }) { taskItem ->
                         TaskCard(taskItem, onTaskClick)
                     }
                 }
@@ -264,6 +266,7 @@ fun UserHomeScreen(uiState: HomeScreenUiState){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPart(
     actualDay: String,
@@ -273,6 +276,9 @@ fun SettingsPart(
     onDateSelected: (String) -> Unit,
     onAddTaskClick: () -> Unit
 ){
+
+    val dateState = rememberDatePickerState()
+
     Row(Modifier
         .fillMaxWidth()
         .padding(10.dp),
@@ -305,7 +311,8 @@ fun SettingsPart(
                 date = date,
                 onDatePickerChange = onDatePickerChange,
                 onDateSelected = onDateSelected,
-                actualDay = actualDay
+                actualDay = actualDay,
+                dateState = dateState
             )
         }
         Row(
@@ -395,7 +402,8 @@ private fun DatePick(
     openDatePicker: Boolean,
     date: String,
     onDatePickerChange: (Boolean) -> Unit,
-    onDateSelected: (String) -> Unit
+    onDateSelected: (String) -> Unit,
+    dateState: DatePickerState
 ) {
     TextField(
         colors = TextFieldDefaults.textFieldColors(
@@ -426,7 +434,6 @@ private fun DatePick(
         },
         readOnly = true
     )
-    val dateState = rememberDatePickerState()
 
     AnimatedVisibility(visible = openDatePicker) {
         DatePickerDialog(

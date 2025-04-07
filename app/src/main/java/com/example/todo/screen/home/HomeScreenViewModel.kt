@@ -1,5 +1,6 @@
 package com.example.todo.screen.home
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.todo.model.Task
@@ -12,7 +13,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onEmpty
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
@@ -65,26 +68,21 @@ class HomeScreenViewModel @Inject constructor(
                 uiState.value.copy(openDatePicker = newValue)
         }
 
-        fun updateTaskDeadLine(newValue: String){
+    fun updateTaskDeadLine(newValue: String) {
+        Log.d("HomeScreenViewModel", "#1")
+        launchCatching {
+            Log.d("HomeScreenViewModel", "#2")
 
-            launchCatching{
-                /**
-                 *Converte a data no formato dd/MM/yyyy para LocalDate do kotlinx.datetime
-                 */
-                val parsedDate = uiState.value.actualDay.split("/").let { parts ->
-                    LocalDate(parts[2].toInt(), parts[1].toInt(), parts[0].toInt())
-                }
+            uiState.value = uiState.value.copy(actualDay = newValue)
+            Log.d("HomeScreenViewModel", "#3")
 
-                uiState.value = uiState.value.copy(
-                    tasksOfTheDay = storageService.getTaskByDay(newValue)
-                )
+            val tasks = storageService.getTaskByDay(newValue)
+            Log.d("HomeScreenViewModel", "#4 - tasks: $tasks")
 
-                uiState.value =
-                    uiState.value.copy(actualDay = newValue)
-            }
-
+            uiState.value = uiState.value.copy(tasksOfTheDay = tasks)
+            Log.d("HomeScreenViewModel", "#5")
         }
-
+    }
 }
 
 data class HomeScreenUiState(
@@ -98,5 +96,5 @@ data class HomeScreenUiState(
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date
         .format(LocalDate.Format { byUnicodePattern("dd/MM/yyyy") }),
-    val tasksOfTheDay: Flow<List<Task>> = MutableStateFlow(emptyList())
+    val tasksOfTheDay: List<Task> = emptyList()
 )

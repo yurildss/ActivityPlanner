@@ -71,13 +71,16 @@ class StorageServiceImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getTaskByDay(day: String): Flow<List<Task>> {
+    override suspend fun getTaskByDay(day: String): List<Task> {
+        Log.d("TAG", "getTaskByDay: $day")
         return firestore
             .collection(TASK_COLLECTION)
             .whereEqualTo(DEADLINE_FIELD_STRING, day)
-            .orderBy(CREATED_AT_FIELD, Query.Direction.DESCENDING)
-            .dataObjects()
+            .get()
+            .await()
+            .toObjects(Task::class.java)
     }
+
 
     companion object {
         private const val USER_ID_FIELD = "userId"
