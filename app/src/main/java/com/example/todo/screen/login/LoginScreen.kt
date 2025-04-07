@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -16,6 +17,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +40,7 @@ import com.example.todo.common.SnackbarManager
 import com.example.todo.common.SnackbarMessage
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
@@ -80,13 +84,23 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = uiState.email,
                     onValueChange = viewModel::onEmailChange,
-                    label = { Text("Email") }
-                )
+                    label = { Text("Email",
+                        color = Color.White,
+                        fontFamily = FontFamily.Monospace) },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor =  Color(0xFF9FD7B0),
+                        unfocusedBorderColor = Color(0xFFA8D5BA),)
+                    )
                 OutlinedTextField(
                     value = uiState.password,
                     visualTransformation = PasswordVisualTransformation(),
                     onValueChange = viewModel::onPasswordChange,
-                    label = { Text("Password") }
+                    label = { Text("Password",
+                        color = Color.White,
+                        fontFamily = FontFamily.Monospace) },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor =  Color(0xFF9FD7B0),
+                        unfocusedBorderColor = Color(0xFFA8D5BA),)
                 )
                 Text(
                     text = "Forgot Password?",
