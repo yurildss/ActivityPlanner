@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.Clock
@@ -34,13 +35,8 @@ class HomeScreenViewModel @Inject constructor(
     init {
         launchCatching {
 
-            accountService.currentUser.collect { user ->
-                userName(user.name)
-            }
-
-            uiState.value = uiState.value.copy(
-                pendingTask = storageService.getIncompleteTasksCount()
-            )
+            val user = accountService.currentUser.first()
+            userName(user.name)
 
             uiState.value = uiState.value.copy(
                 tasksOfTheDay = storageService.getTaskByDay(uiState.value.actualDay)
