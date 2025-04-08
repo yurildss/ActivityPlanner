@@ -172,6 +172,7 @@ fun TaskGoalsAndTeams(
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
+                if(taskScreenState.gols.size.toFloat() != 0f){
                 LinearProgressIndicator(
                     progress = { (taskScreenState.completedGoals / taskScreenState.gols.size).toFloat() },
                     modifier = Modifier.fillMaxWidth(0.75f),
@@ -181,6 +182,17 @@ fun TaskGoalsAndTeams(
                 Text("${(taskScreenState.completedGoals / taskScreenState.gols.size)*100}%",
                     modifier = Modifier.padding(start = 10.dp),
                     color = Color(0xFF242636))
+            }else{
+                    LinearProgressIndicator(
+                        progress = { (taskScreenState.completedGoals / 1).toFloat() },
+                        modifier = Modifier.fillMaxWidth(0.75f),
+                        color = Color(0xFF242636),
+                        trackColor = Color(0xFF90C323),
+                    )
+                    Text("${(taskScreenState.completedGoals / 1)*100}%",
+                        modifier = Modifier.padding(start = 10.dp),
+                        color = Color(0xFF242636))
+                }
             }
         }
     }

@@ -107,6 +107,7 @@ data class TaskScreenState(
 ){
 
     val isCompletedString = if (isCompleted) "Finish task" else "Not Completed"
+
 }
 
 data class GoalsScreenState(
