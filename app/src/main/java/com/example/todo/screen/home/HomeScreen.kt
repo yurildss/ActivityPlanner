@@ -370,7 +370,16 @@ fun TaskCardWithoutGoals(task: Task, onTaskClick: (String) -> Unit, modifier: Mo
 }
 
 @Composable
-fun TaskCard(task: Task, onTaskClick: (String) -> Unit, modifier: Modifier = Modifier){
+fun TaskCard(
+    task: Task,
+    onTaskClick: (String) -> Unit, modifier: Modifier = Modifier
+){
+
+    val sizeOfGoals = task.gols.size
+    val sizeOfUncompletedGoals = task.gols.count { !it.isCompleted }
+    val sizeOfCompletedGoals = task.gols.count { it.isCompleted }
+    val progress = sizeOfCompletedGoals.toFloat() / sizeOfGoals.toFloat()
+
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
@@ -402,8 +411,6 @@ fun TaskCard(task: Task, onTaskClick: (String) -> Unit, modifier: Modifier = Mod
                 maxLines = 2, // ou 2 se quiser permitir mais linhas
                 overflow = TextOverflow.Ellipsis
             )
-
-
             Text(
                 "${task.timeToComplete} Hours Needed",
                 modifier = Modifier.padding(top = 10.dp, bottom = 5.dp),
@@ -411,12 +418,12 @@ fun TaskCard(task: Task, onTaskClick: (String) -> Unit, modifier: Modifier = Mod
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 LinearProgressIndicator(
-                    progress = { 24f / 100f },
+                    progress = { progress },
                     modifier = Modifier.fillMaxWidth(0.75f),
                     color = Color(0xFF242636),
                     trackColor = Color(0xFF90C323),
                 )
-                Text("24%",
+                Text("$progress%",
                     modifier = Modifier.padding(start = 10.dp),
                     color = Color(0xFF242636))
             }

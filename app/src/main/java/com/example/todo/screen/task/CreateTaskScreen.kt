@@ -510,7 +510,10 @@ fun GoalsEntry(
                         color = Color.White
                     )
                 },
-                singleLine = true
+                singleLine = true,
+                placeholder = {
+                    Text("in hours")
+                }
             )
 
             Row(
@@ -569,7 +572,7 @@ fun GoalsShow(
             )
             HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
             Text(
-                "${goals.dateInBrazilianFormat}",
+                goals.dateInBrazilianFormat,
                 fontFamily = FontFamily.Monospace,
                 fontStyle = FontStyle.Italic,
                 color = Color.White,
@@ -577,7 +580,7 @@ fun GoalsShow(
             )
             HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
             Text(
-                "${goals.timeToComplete}",
+                "${goals.timeToComplete} hours",
                 fontFamily = FontFamily.Monospace,
                 color = Color.White,
                 modifier = Modifier.padding(10.dp)

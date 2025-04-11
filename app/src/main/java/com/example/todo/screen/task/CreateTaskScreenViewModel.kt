@@ -205,7 +205,8 @@ class CreateTaskScreenViewModel
         return CreateTaskUistate.value.title.isNotBlank() &&
                 CreateTaskUistate.value.description.isNotBlank() &&
                 CreateTaskUistate.value.deadLine.isNotBlank() &&
-                CreateTaskUistate.value.priority.isNotBlank()
+                CreateTaskUistate.value.priority.isNotBlank() &&
+                CreateTaskUistate.value.gols.isNotEmpty()
     }
 
     fun onSaveTaskClick(onSaveClick: () -> Unit){
