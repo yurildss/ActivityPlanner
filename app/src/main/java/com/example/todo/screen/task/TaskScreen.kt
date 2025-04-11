@@ -31,7 +31,6 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -47,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todo.model.Goals
-import com.example.todo.screen.home.TaskCard
 
 
 @Composable
@@ -60,7 +58,9 @@ fun TaskInfo(
     val isLoading = viewModel.isLoading
 
     if(!isLoading.value){
-        Box(modifier.fillMaxSize().background(Color(0xFF1D1D2A))){
+        Box(modifier
+            .fillMaxSize()
+            .background(Color(0xFF1D1D2A))){
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,7 +125,7 @@ fun TaskInfo(
                     taskScreenState = uiState
                 )
                 Spacer(modifier = Modifier.height(15.dp))
-                Goals(uiState.gols)
+                GoalsList(uiState.gols)
             }
         }
     }
@@ -199,7 +199,7 @@ fun TaskGoalsAndTeams(
 }
 
 @Composable
-fun Goals(goals: MutableList<Goals> = mutableListOf()){
+fun GoalsList(goals: MutableList<Goals> = mutableListOf()){
     Box(
         Modifier
             .fillMaxWidth()
@@ -227,10 +227,14 @@ fun Goals(goals: MutableList<Goals> = mutableListOf()){
                     tint = Color.White)
             }
             Spacer(modifier = Modifier.height(10.dp))
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            LazyColumn(
+                Modifier.fillMaxSize() ,
+                verticalArrangement = Arrangement.spacedBy(5.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 if (goals.isEmpty()) {
                     item{
-                        Text(text = "No tasks end in this day",
+                        Text(text = "No goals",
                             color = Color.White,
                             minLines = 2,
                             fontSize = 45.sp
@@ -325,40 +329,31 @@ fun GoalsCard(goal: Goals){
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 5.dp))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp),
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically) {
                 Row(
                     Modifier
-                        .size(75.dp, 35.dp)
                         .clip(CircleShape)
                         .background(Color(0xFFB4EF2C))
+                        .fillMaxWidth(0.75f)
                         .padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ){
-                    Text("Code", color = Color(0xFF242636))
+                    Text(goal.description, color = Color(0xFF242636))
                 }
-                Row(
-                    Modifier
-                        .size(75.dp, 35.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFFB4EF2C))
-                        .padding(10.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ){
-                    Text("Code", color = Color(0xFF242636))
+                Box(modifier = Modifier.size(64.dp),
+                    contentAlignment = Alignment.Center){
+                    CircularProgressIndicator(
+                        progress = goal.percentComplete.toFloat(),
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        color = Color(0xFF4E7B6E),
+                        trackColor = Color(0xFFB7EE35),
+                        strokeWidth = 6.dp,
+                    )
                 }
-                Spacer(modifier = Modifier.weight(1f))
-                CircularProgressIndicator(
-                    progress = goal.percentComplete.toFloat(),
-                    modifier = Modifier
-                        .width(64.dp)
-                        .padding(end = 10.dp),
-                    color = Color(0xFF4E7B6E),
-                    trackColor = Color(0xFFB7EE35),
-                    strokeWidth = 6.dp
-                )
             }
 
             Text(goal.dateInBrazilianFormat,
@@ -375,7 +370,7 @@ fun GoalsCard(goal: Goals){
 fun GoalsCardPreview(){
     Surface(modifier = Modifier.fillMaxWidth()) {
         GoalsCard(
-            goal = Goals()
+            goal = Goals(title = "Teste", description = "Testando o card do goals")
         )
     }
 }
@@ -383,7 +378,7 @@ fun GoalsCardPreview(){
 @Composable
 @Preview
 fun GoalsPreview(){
-    Goals()
+    GoalsList()
 }
 
 @Composable
