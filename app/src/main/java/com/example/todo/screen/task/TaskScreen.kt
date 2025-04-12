@@ -1,6 +1,12 @@
 package com.example.todo.screen.task
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +38,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -125,7 +131,11 @@ fun TaskInfo(
                     taskScreenState = uiState
                 )
                 Spacer(modifier = Modifier.height(15.dp))
-                GoalsList(uiState.gols)
+                GoalsList(
+                    uiState.gols,
+                    sliderPositionFunc = viewModel::sliderPositionFun,
+                    sliderPosition = viewModel.sliderPosition.floatValue
+                )
             }
         }
     }
@@ -199,7 +209,9 @@ fun TaskGoalsAndTeams(
 }
 
 @Composable
-fun GoalsList(goals: MutableList<Goals> = mutableListOf()){
+fun GoalsList(goals: MutableList<Goals> = mutableListOf(),
+              sliderPositionFunc: (Float)-> Unit,
+              sliderPosition: Float){
     Box(
         Modifier
             .fillMaxWidth()
@@ -243,7 +255,11 @@ fun GoalsList(goals: MutableList<Goals> = mutableListOf()){
                 }
                 else{
                     items(items = goals, key = { goals.indexOf(it) }) { goalsItem ->
-                        GoalsCard(goalsItem)
+                        GoalsCardSwitcher(
+                            goalsItem,
+                            sliderPositionFunc = sliderPositionFunc,
+                            sliderPosition = sliderPosition
+                        )
                     }
                 }
             }
@@ -253,7 +269,10 @@ fun GoalsList(goals: MutableList<Goals> = mutableListOf()){
 
 @Composable
 fun ViewGoalsCard(
-    goal: Goals = Goals()
+    goal: Goals = Goals(),
+    sliderPositionFunc: (Float) -> Unit,
+    sliderPosition: Float
+
 ){
     Box(
         modifier = Modifier
@@ -262,7 +281,7 @@ fun ViewGoalsCard(
             .background(Color(0xFF588D7D))
             .padding(10.dp)
     ){
-        var sliderPosition by remember { mutableFloatStateOf(0.75f) }
+
         Column(Modifier
             .fillMaxWidth()
             .padding(10.dp)) {
@@ -287,7 +306,7 @@ fun ViewGoalsCard(
                         .padding(top = 5.dp)
                 )
                 CircularProgressIndicator(
-                    progress = goal.percentComplete.toFloat(),
+                    progress = goal.percentComplete,
                     modifier = Modifier
                         .width(64.dp)
                         .padding(10.dp),
@@ -297,8 +316,8 @@ fun ViewGoalsCard(
                 )
             }
             Slider(
-                value = goal.percentComplete.toFloat(),
-                onValueChange = { sliderPosition = it },
+                value = sliderPosition,
+                onValueChange = { sliderPositionFunc(it) },
                 colors = SliderDefaults.colors(
                     thumbColor = Color(0xFF4E7B6E),
                     activeTrackColor = Color(0xFFB7EE35)
@@ -306,19 +325,6 @@ fun ViewGoalsCard(
             )
         }
     }
-}
-
-@Composable
-@Preview
-fun PreviewGoalsCard(){
-    ViewGoalsCard(
-        goal = Goals(
-            title = "Testando a visualização",
-            description = "Aqui eu estou testando a visualização de um Goals de uma terafa para ver se" +
-                    "eu paro de enrolar e termino logo isso hihi",
-            percentComplete = 0.5F
-            )
-    )
 }
 
 @Composable
@@ -367,6 +373,48 @@ fun GoalsCard(goal: Goals){
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun GoalsCardSwitcher(goal: Goals = Goals(), sliderPositionFunc: (Float)->Unit, sliderPosition: Float) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .clickable { expanded = !expanded }
+        .padding(8.dp)
+    ) {
+        AnimatedContent(targetState = expanded, transitionSpec = {
+            fadeIn() with fadeOut()
+        }) { isExpanded ->
+            if (isExpanded) {
+                ViewGoalsCard(
+                    goal = goal,
+                    sliderPositionFunc = sliderPositionFunc,
+                    sliderPosition = sliderPosition
+                )
+            } else {
+                GoalsCard(goal = goal)
+            }
+        }
+    }
+}
+
+
+@Composable
+@Preview
+fun PreviewGoalsCard(){
+    ViewGoalsCard(
+        goal = Goals(
+            title = "Testando a visualização",
+            description = "Aqui eu estou testando a visualização de um Goals de uma terafa para ver se" +
+                    "eu paro de enrolar e termino logo isso hihi",
+            percentComplete = 0.5F
+        ),
+        sliderPositionFunc = {},
+        sliderPosition = 0.3f
+    )
+}
+
 @Composable
 @Preview
 fun GoalsCardPreview(){
@@ -380,14 +428,18 @@ fun GoalsCardPreview(){
 @Composable
 @Preview
 fun GoalsPreview(){
-    GoalsList()
+    GoalsList(
+        goals = mutableListOf(Goals()),
+        sliderPositionFunc = {},
+        sliderPosition = 0.3F
+    )
 }
 
 @Composable
 @Preview
 fun TaskGoalsAndTeamsPreview(){
     TaskGoalsAndTeams(
-        taskScreenState = TaskScreenState()
+        taskScreenState = TaskScreenState(gols = mutableListOf(Goals()))
     )
 }
 

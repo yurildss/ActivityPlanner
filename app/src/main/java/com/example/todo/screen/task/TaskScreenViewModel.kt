@@ -21,11 +21,12 @@ class TaskScreenViewModel
     var _taskScreenState = mutableStateOf(TaskScreenState())
         private set
 
-    var _sliderPosition = mutableFloatStateOf(0F)
-
+    var sliderPosition = mutableFloatStateOf(0F)
         private set
+
     var isLoading = mutableStateOf(true)
         private set
+
 
     val taskId = savedStateHandle.get<String>("taskId")
     var task = mutableStateOf<Task?>(null)
@@ -49,8 +50,8 @@ class TaskScreenViewModel
             }
     }
 
-    fun sliderPosition(position: Float){
-        _sliderPosition.value = position
+    fun sliderPositionFun(position: Float){
+        sliderPosition.floatValue = position
     }
 
     private fun TaskToTaskScreenState(){
@@ -116,5 +117,5 @@ data class GoalsScreenState(
     val description: String = "",
     val deadLine: String = "",
     val timeToComplete: String = "",
-    val percentComplete: Int = 0,
+    val percentComplete: Float = 0F,
 )
