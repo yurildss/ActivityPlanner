@@ -311,7 +311,14 @@ fun ViewGoalsCard(
 @Composable
 @Preview
 fun PreviewGoalsCard(){
-    ViewGoalsCard()
+    ViewGoalsCard(
+        goal = Goals(
+            title = "Testando a visualização",
+            description = "Aqui eu estou testando a visualização de um Goals de uma terafa para ver se" +
+                    "eu paro de enrolar e termino logo isso hihi",
+            percentComplete = 0.5F
+            )
+    )
 }
 
 @Composable
@@ -324,24 +331,19 @@ fun GoalsCard(goal: Goals){
             .padding(10.dp)
     ){
         Column(Modifier.fillMaxWidth()) {
-            Text(goal.title,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 5.dp))
-
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically) {
                 Row(
                     Modifier
-                        .clip(CircleShape)
+                        .clip(RoundedCornerShape(8.dp))
                         .background(Color(0xFFB4EF2C))
                         .fillMaxWidth(0.75f)
                         .padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ){
-                    Text(goal.description, color = Color(0xFF242636))
+                    Text(goal.title, color = Color(0xFF242636))
                 }
                 Box(modifier = Modifier.size(64.dp),
                     contentAlignment = Alignment.Center){
