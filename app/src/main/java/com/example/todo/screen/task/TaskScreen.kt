@@ -371,7 +371,7 @@ fun ViewGoalsCard(
 fun GoalsCard(goal: Goals){
     Box(
         Modifier
-            .fillMaxWidth(0.90f)
+            .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xFF588D7D))
             .padding(10.dp)

@@ -1,6 +1,5 @@
 package com.example.todo.screen.task
 
-import android.util.Log
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -10,6 +9,15 @@ import com.example.todo.model.service.StorageService
 import com.example.todo.screen.ToDoAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+
+/**
+ * Precisa melhorar os estilos das fontes, estao feias
+ * precisa resolver o espaçamento do titulo quando o titulo é grande demais
+ * precisa mostrar a descrição da tarefa
+ * precisa mudar a paleta de cores principalmente do goals
+ * precisa fazer o botão de voltar funcionar
+ * precisa fazer o botão de adicionar uma tarefa funcionar
+ */
 
 @HiltViewModel
 class TaskScreenViewModel
@@ -28,12 +36,12 @@ class TaskScreenViewModel
         private set
 
     val taskId = savedStateHandle.get<String>("taskId")
-    var task = mutableStateOf<Task?>(null)
+    private var task = mutableStateOf<Task?>(null)
 
     init {
         launchCatching{
             getTask()
-            TaskToTaskScreenState()
+            taskToTaskScreenState()
             unCompletedGoals()
             completedGoals()
             isLoading.value = false
@@ -42,7 +50,7 @@ class TaskScreenViewModel
 
     private suspend fun updateTaskScreen(){
         getTask()
-        TaskToTaskScreenState()
+        taskToTaskScreenState()
         unCompletedGoals()
         completedGoals()
         isLoading.value = false
@@ -58,7 +66,7 @@ class TaskScreenViewModel
         sliderPosition.floatValue = position
     }
 
-    private fun TaskToTaskScreenState(){
+    private fun taskToTaskScreenState(){
         _taskScreenState.value = TaskScreenState(
             title = task.value!!.title,
             description = task.value!!.description,
