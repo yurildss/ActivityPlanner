@@ -71,6 +71,20 @@ class StorageServiceImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    override suspend fun updateGoalPercent(taskId: String, goalIndex: Int, percent: Float) {
+        val taskRef = firestore.collection(TASK_COLLECTION).document(taskId)
+        val snapshot = taskRef.get().await()
+        val task = snapshot.toObject(Task::class.java)
+
+        if (task != null && goalIndex in task.goals.indices) {
+
+            val updatedGols = task.goals.toMutableList()
+            updatedGols[goalIndex] = updatedGols[goalIndex].copy(percentComplete = percent)
+            taskRef.update("goals", updatedGols).await()
+            Log.d("TAG", "updateGoalPercent: $updatedGols")
+        }
+    }
+
     override suspend fun getTaskByDay(day: String): List<Task> {
         Log.d("TAG", "getTaskByDay: $day")
         return firestore

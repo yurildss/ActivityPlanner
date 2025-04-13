@@ -27,7 +27,6 @@ class TaskScreenViewModel
     var isLoading = mutableStateOf(true)
         private set
 
-
     val taskId = savedStateHandle.get<String>("taskId")
     var task = mutableStateOf<Task?>(null)
 
@@ -60,7 +59,7 @@ class TaskScreenViewModel
             description = task.value!!.description,
             deadLine = task.value!!.dateInBrazilianFormat,
             priority = task.value!!.priority.toString(),
-            gols = task.value!!.gols,
+            gols = task.value!!.goals,
             tags = task.value!!.tags,
             isCompleted = task.value!!.isCompleted
         )
@@ -89,6 +88,14 @@ class TaskScreenViewModel
         _taskScreenState.value = _taskScreenState.value.copy(
             completedGoals = completed
         )
+    }
+
+    fun updatePercentGoals(goalIndex: Int, percent: Float){
+        launchCatching {
+            if (taskId != null) {
+                storageService.updateGoalPercent(taskId, goalIndex, percent)
+            }
+        }
     }
 
 }

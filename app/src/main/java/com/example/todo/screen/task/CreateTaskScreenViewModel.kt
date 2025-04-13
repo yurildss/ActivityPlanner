@@ -244,7 +244,7 @@ fun CreateTaskScreenState.toTask(): Task {
         description = description,
         deadLine = parsedDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds(),
         priority = priorityInt,
-        gols = gols,
+        goals = gols,
         tags = tags,
         timeToComplete = total.toLong()
     )

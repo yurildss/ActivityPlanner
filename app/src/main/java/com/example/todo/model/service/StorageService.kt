@@ -15,4 +15,5 @@ interface StorageService {
     suspend fun getMediumHighTasksToCompleteCount(): Int
     suspend fun getIncompleteTasksCount(): Int
     suspend fun getTaskByDay(day: String): List<Task>
+    suspend fun updateGoalPercent(taskId: String, goalId: Int, percent: Float)
 }

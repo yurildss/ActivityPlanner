@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -62,7 +61,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.todo.model.Task
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.Instant
@@ -375,9 +373,9 @@ fun TaskCard(
     onTaskClick: (String) -> Unit, modifier: Modifier = Modifier
 ){
 
-    val sizeOfGoals = task.gols.size
-    val sizeOfUncompletedGoals = task.gols.count { !it.isCompleted }
-    val sizeOfCompletedGoals = task.gols.count { it.isCompleted }
+    val sizeOfGoals = task.goals.size
+    val sizeOfUncompletedGoals = task.goals.count { !it.isCompleted }
+    val sizeOfCompletedGoals = task.goals.count { it.isCompleted }
     val progress = sizeOfCompletedGoals.toFloat() / sizeOfGoals.toFloat()
 
     Box(

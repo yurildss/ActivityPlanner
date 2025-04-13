@@ -27,8 +27,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -164,12 +166,19 @@ fun TaskGoalsAndTeams(
                         .padding(5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ){
-                    Icon(Icons.Default.Check,
-                        null,
-                        tint = Color(0xFFB4EF2C)
-                    )
+                    if(taskScreenState.isCompleted){
+                        Icon(Icons.Default.Check,
+                            null,
+                            tint = Color(0xFFB4EF2C)
+                        )
+                    }else{
+                        Icon(Icons.Default.Close,
+                            null,
+                            tint = Color(0xFFB4EF2C)
+                        )
+                    }
                 }
-                Text("Finish tasked",
+                Text(taskScreenState.isCompletedString,
                     fontSize = 15.sp,
                     color = Color(0xFF242636),
                     modifier = Modifier.padding(start = 10.dp)
@@ -323,6 +332,9 @@ fun ViewGoalsCard(
                     activeTrackColor = Color(0xFFB7EE35)
                 )
             )
+            Button(onClick = {}) {
+                Text("Save")
+            }
         }
     }
 }
@@ -420,7 +432,10 @@ fun PreviewGoalsCard(){
 fun GoalsCardPreview(){
     Surface(modifier = Modifier.fillMaxWidth()) {
         GoalsCard(
-            goal = Goals(title = "Teste", description = "Testando o card do goals")
+            goal = Goals(
+                title = "Teste",
+                description = "Testando o card do goals"
+            )
         )
     }
 }
