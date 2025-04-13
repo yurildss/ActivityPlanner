@@ -137,7 +137,9 @@ fun TaskInfo(
                     uiState.gols,
                     sliderPositionFunc = viewModel::sliderPositionFun,
                     sliderPosition = viewModel.sliderPosition.floatValue,
-                    onUpdatePercentGoalsClick = viewModel::updatePercentGoals
+                    onUpdatePercentGoalsClick = viewModel::updatePercentGoals,
+                    expanded = uiState.goalsCardExpand,
+                    onCardGoalsExpand = viewModel::onCardGoalsExpand
                 )
             }
         }
@@ -222,7 +224,9 @@ fun TaskGoalsAndTeams(
 fun GoalsList(goals: MutableList<Goals> = mutableListOf(),
               sliderPositionFunc: (Float)-> Unit,
               sliderPosition: Float,
-              onUpdatePercentGoalsClick: (Int)-> Unit
+              onUpdatePercentGoalsClick: (Int)-> Unit,
+              expanded: Boolean,
+              onCardGoalsExpand: (Boolean)->Unit
               ){
     Box(
         Modifier
@@ -277,7 +281,9 @@ fun GoalsList(goals: MutableList<Goals> = mutableListOf(),
                                         goalsItem
                                     )
                                 )
-                            }
+                            },
+                            expanded = expanded,
+                            expandedChange = onCardGoalsExpand
                         )
                     }
                 }
@@ -329,20 +335,30 @@ fun ViewGoalsCard(
                     modifier = Modifier
                         .width(64.dp)
                         .padding(10.dp),
-                    color = Color(0xFF4E7B6E),
-                    trackColor = Color(0xFFB7EE35),
+                    color = Color(0xFFB7EE35),
+                    trackColor = Color(0xFF4E7B6E),
                     strokeWidth = 6.dp
                 )
             }
-            Slider(
-                value = sliderPosition,
-                onValueChange = { sliderPositionFunc(it) },
-                colors = SliderDefaults.colors(
-                    thumbColor = Color(0xFF4E7B6E),
-                    activeTrackColor = Color(0xFFB7EE35)
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically){
+                Slider(
+                    value = sliderPosition,
+                    onValueChange = { sliderPositionFunc(it) },
+                    colors = SliderDefaults.colors(
+                        thumbColor = Color(0xFF4E7B6E),
+                        activeTrackColor = Color(0xFFB7EE35)
+                    ),
+                    modifier = Modifier.fillMaxWidth(0.85f)
                 )
-            )
-            Button(onClick = 
+                Text(
+                    "${(sliderPosition * 100).toInt()}%",
+                    fontFamily = FontFamily.Monospace,
+                    color = Color.White
+                )
+            }
+            Button(onClick =
                 onUpdatePercentGoalsClick
             ) {
                 Text("Save")
@@ -378,11 +394,11 @@ fun GoalsCard(goal: Goals){
                 Box(modifier = Modifier.size(64.dp),
                     contentAlignment = Alignment.Center){
                     CircularProgressIndicator(
-                        progress = goal.percentComplete.toFloat(),
+                        progress = goal.percentComplete,
                         modifier = Modifier
                             .fillMaxSize(),
-                        color = Color(0xFF4E7B6E),
-                        trackColor = Color(0xFFB7EE35),
+                        color =  Color(0xFFB7EE35),
+                        trackColor =Color(0xFF4E7B6E),
                         strokeWidth = 6.dp,
                     )
                 }
@@ -401,12 +417,12 @@ fun GoalsCard(goal: Goals){
 @Composable
 fun GoalsCardSwitcher(goal: Goals = Goals(), sliderPositionFunc: (Float)->Unit,
                       sliderPosition: Float,
-                      onUpdatePercentGoalsClick: ()-> Unit) {
-    var expanded by remember { mutableStateOf(false) }
+                      onUpdatePercentGoalsClick: ()-> Unit, expanded: Boolean,
+                      expandedChange: (Boolean) -> Unit) {
 
     Box(modifier = Modifier
         .fillMaxWidth()
-        .clickable { expanded = !expanded }
+        .clickable { expandedChange(!expanded) }
         .padding(8.dp)
     ) {
         AnimatedContent(targetState = expanded, transitionSpec = {
@@ -439,7 +455,7 @@ fun PreviewGoalsCard(){
         ),
         sliderPositionFunc = {},
         sliderPosition = 0.3f,
-        onUpdatePercentGoalsClick = TODO()
+        onUpdatePercentGoalsClick = {}
     )
 }
 
@@ -463,7 +479,9 @@ fun GoalsPreview(){
         goals = mutableListOf(Goals()),
         sliderPositionFunc = {},
         sliderPosition = 0.3F,
-        onUpdatePercentGoalsClick = TODO()
+        onUpdatePercentGoalsClick = {},
+        expanded = false,
+        onCardGoalsExpand = {}
     )
 }
 

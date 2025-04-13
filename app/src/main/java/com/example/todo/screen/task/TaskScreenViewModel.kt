@@ -22,7 +22,7 @@ class TaskScreenViewModel
         private set
 
     var sliderPosition = mutableFloatStateOf(0F)
-        private set
+
 
     var isLoading = mutableStateOf(true)
         private set
@@ -90,10 +90,19 @@ class TaskScreenViewModel
         )
     }
 
+    fun onCardGoalsExpand(expanded: Boolean){
+        _taskScreenState.value = _taskScreenState.value.copy(
+            goalsCardExpand = expanded
+        )
+    }
+
     fun updatePercentGoals(goalIndex: Int){
         launchCatching {
             if (taskId != null) {
                 storageService.updateGoalPercent(taskId, goalIndex, sliderPosition.floatValue)
+                _taskScreenState.value = _taskScreenState.value.copy(
+                    goalsCardExpand = false
+                )
             }
         }
     }
@@ -112,6 +121,7 @@ data class TaskScreenState(
     val unCompletedGoals: Int = 0,
     val completedGoals: Int = 0,
     val isCompleted: Boolean = false,
+    val goalsCardExpand: Boolean = false,
 ){
 
     val isCompletedString = if (isCompleted) "Finish task" else "Not Completed"
