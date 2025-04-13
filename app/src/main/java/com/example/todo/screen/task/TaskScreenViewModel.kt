@@ -33,19 +33,24 @@ class TaskScreenViewModel
     init {
         launchCatching{
             getTask()
-            Log.d("TaskScreenViewModel", "init2: ${task.value}")
             TaskToTaskScreenState()
             unCompletedGoals()
             completedGoals()
-            Log.d("TaskScreenViewModel", "init3: ${task.value}")
             isLoading.value = false
         }
+    }
+
+    private suspend fun updateTaskScreen(){
+        getTask()
+        TaskToTaskScreenState()
+        unCompletedGoals()
+        completedGoals()
+        isLoading.value = false
     }
 
     private suspend fun getTask(){
             if (taskId != null) {
                 task.value = storageService.getTask(taskId)
-                Log.d("TaskScreenViewModel", "init4: ${storageService.getTask(taskId)}")
             }
     }
 
@@ -104,6 +109,8 @@ class TaskScreenViewModel
                     goalsCardExpand = false
                 )
             }
+
+            updateTaskScreen()
         }
     }
 
