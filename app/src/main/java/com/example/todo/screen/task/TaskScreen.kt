@@ -136,7 +136,8 @@ fun TaskInfo(
                 GoalsList(
                     uiState.gols,
                     sliderPositionFunc = viewModel::sliderPositionFun,
-                    sliderPosition = viewModel.sliderPosition.floatValue
+                    sliderPosition = viewModel.sliderPosition.floatValue,
+                    onUpdatePercentGoalsClick = viewModel::updatePercentGoals
                 )
             }
         }
@@ -220,7 +221,9 @@ fun TaskGoalsAndTeams(
 @Composable
 fun GoalsList(goals: MutableList<Goals> = mutableListOf(),
               sliderPositionFunc: (Float)-> Unit,
-              sliderPosition: Float){
+              sliderPosition: Float,
+              onUpdatePercentGoalsClick: (Int)-> Unit
+              ){
     Box(
         Modifier
             .fillMaxWidth()
@@ -267,7 +270,14 @@ fun GoalsList(goals: MutableList<Goals> = mutableListOf(),
                         GoalsCardSwitcher(
                             goalsItem,
                             sliderPositionFunc = sliderPositionFunc,
-                            sliderPosition = sliderPosition
+                            sliderPosition = sliderPosition,
+                            onUpdatePercentGoalsClick = {
+                                onUpdatePercentGoalsClick(
+                                    goals.indexOf(
+                                        goalsItem
+                                    )
+                                )
+                            }
                         )
                     }
                 }
@@ -280,8 +290,8 @@ fun GoalsList(goals: MutableList<Goals> = mutableListOf(),
 fun ViewGoalsCard(
     goal: Goals = Goals(),
     sliderPositionFunc: (Float) -> Unit,
-    sliderPosition: Float
-
+    sliderPosition: Float,
+    onUpdatePercentGoalsClick: () -> Unit
 ){
     Box(
         modifier = Modifier
@@ -332,7 +342,9 @@ fun ViewGoalsCard(
                     activeTrackColor = Color(0xFFB7EE35)
                 )
             )
-            Button(onClick = {}) {
+            Button(onClick = 
+                onUpdatePercentGoalsClick
+            ) {
                 Text("Save")
             }
         }
@@ -387,7 +399,9 @@ fun GoalsCard(goal: Goals){
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GoalsCardSwitcher(goal: Goals = Goals(), sliderPositionFunc: (Float)->Unit, sliderPosition: Float) {
+fun GoalsCardSwitcher(goal: Goals = Goals(), sliderPositionFunc: (Float)->Unit,
+                      sliderPosition: Float,
+                      onUpdatePercentGoalsClick: ()-> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier
@@ -402,7 +416,8 @@ fun GoalsCardSwitcher(goal: Goals = Goals(), sliderPositionFunc: (Float)->Unit, 
                 ViewGoalsCard(
                     goal = goal,
                     sliderPositionFunc = sliderPositionFunc,
-                    sliderPosition = sliderPosition
+                    sliderPosition = sliderPosition,
+                    onUpdatePercentGoalsClick = onUpdatePercentGoalsClick
                 )
             } else {
                 GoalsCard(goal = goal)
@@ -423,7 +438,8 @@ fun PreviewGoalsCard(){
             percentComplete = 0.5F
         ),
         sliderPositionFunc = {},
-        sliderPosition = 0.3f
+        sliderPosition = 0.3f,
+        onUpdatePercentGoalsClick = TODO()
     )
 }
 
@@ -446,7 +462,8 @@ fun GoalsPreview(){
     GoalsList(
         goals = mutableListOf(Goals()),
         sliderPositionFunc = {},
-        sliderPosition = 0.3F
+        sliderPosition = 0.3F,
+        onUpdatePercentGoalsClick = TODO()
     )
 }
 

@@ -90,10 +90,10 @@ class TaskScreenViewModel
         )
     }
 
-    fun updatePercentGoals(goalIndex: Int, percent: Float){
+    fun updatePercentGoals(goalIndex: Int){
         launchCatching {
             if (taskId != null) {
-                storageService.updateGoalPercent(taskId, goalIndex, percent)
+                storageService.updateGoalPercent(taskId, goalIndex, sliderPosition.floatValue)
             }
         }
     }
