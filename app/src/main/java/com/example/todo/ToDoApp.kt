@@ -63,7 +63,13 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
                 type = NavType.StringType
             })
         ){
-            TaskInfo()
+            TaskInfo(onBackClick = {
+                navController.navigate(Screens.HOME_SCREEN.name){
+                    popUpTo(Screens.HOME_SCREEN.name){
+                        inclusive = true
+                    }
+                }
+            })
         }
 
         composable(Screens.ADD_TASK_SCREEN.name){

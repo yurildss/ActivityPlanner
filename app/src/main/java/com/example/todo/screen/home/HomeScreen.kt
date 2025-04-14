@@ -414,15 +414,16 @@ fun TaskCard(
                 modifier = Modifier.padding(top = 10.dp, bottom = 5.dp),
                 color = Color((0xFF242636)))
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween) {
                 LinearProgressIndicator(
                     progress = { progress },
-                    modifier = Modifier.fillMaxWidth(0.75f),
+                    modifier = Modifier.fillMaxWidth(0.70f),
                     color = Color(0xFF242636),
                     trackColor = Color(0xFF90C323),
                 )
                 Text("$progress%",
-                    modifier = Modifier.padding(start = 10.dp),
                     color = Color(0xFF242636))
             }
         }

@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -55,7 +56,8 @@ import com.example.todo.model.Goals
 @Composable
 fun TaskInfo(
     modifier: Modifier = Modifier,
-    viewModel: TaskScreenViewModel = hiltViewModel()
+    viewModel: TaskScreenViewModel = hiltViewModel(),
+    onBackClick: () -> Unit = {}
              ){
 
     val uiState = viewModel._taskScreenState.value
@@ -75,11 +77,16 @@ fun TaskInfo(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null,
-                        tint = Color.White
-                    )
+                    Button(
+                        onClick = onBackClick,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                    ){
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
                     Row(
                         Modifier
                             .size(54.dp)
@@ -120,6 +127,7 @@ fun TaskInfo(
                     fontSize = 40.sp,
                     color = Color.White,
                     lineHeight = 48.sp,
+                    fontFamily = FontFamily.Monospace,
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .padding(top = 10.dp)
@@ -180,14 +188,22 @@ fun TaskGoalsAndTeams(
                 Text(taskScreenState.isCompletedString,
                     fontSize = 15.sp,
                     color = Color(0xFF242636),
-                    modifier = Modifier.padding(start = 10.dp)
+                    modifier = Modifier.padding(start = 10.dp),
+                    fontFamily = FontFamily.Monospace
                 )
             }
 
-            Text("${taskScreenState.completedGoals}/${taskScreenState.gols.size}",
-                fontSize = 50.sp,
-                color = Color(0xFF242636)
-            )
+            Row(modifier = Modifier.fillMaxWidth().padding(5.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                Text(taskScreenState.description, modifier = Modifier.fillMaxWidth(0.75f),
+                    fontFamily = FontFamily.Monospace,)
+                Text("${taskScreenState.completedGoals}/${taskScreenState.gols.size}",
+                    fontSize = 45.sp,
+                    color = Color(0xFF242636),
+                    fontFamily = FontFamily.Monospace
+                )
+            }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if(taskScreenState.gols.size.toFloat() != 0f){
@@ -309,7 +325,8 @@ fun ViewGoalsCard(
             Text(goal.title,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 5.dp)
+                modifier = Modifier.padding(bottom = 5.dp),
+                fontFamily = FontFamily.Monospace
             )
             Text("Nov 12h, 2024",
                 color = Color.White,
@@ -321,7 +338,9 @@ fun ViewGoalsCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("${goal.description}.", color = Color.White,
+                Text("${goal.description}.",
+                    color = Color.White,
+                    fontFamily = FontFamily.Monospace,
                     modifier = Modifier
                         .fillMaxWidth(0.75f)
                         .padding(top = 5.dp)
@@ -485,7 +504,7 @@ fun GoalsPreview(){
 @Preview
 fun TaskGoalsAndTeamsPreview(){
     TaskGoalsAndTeams(
-        taskScreenState = TaskScreenState(gols = mutableListOf(Goals()))
+        taskScreenState = TaskScreenState( description = "Testando alguma coisa nova que me veio a cabeça",gols = mutableListOf(Goals()))
     )
 }
 
