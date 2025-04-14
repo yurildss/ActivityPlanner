@@ -261,7 +261,8 @@ fun GoalsList(goals: MutableList<Goals> = mutableListOf(),
             )
             {
                 Text("Goals(${goals.size})",
-                    color = Color.White)
+                    color = Color.White,
+                    fontFamily = FontFamily.Monospace)
                 Icon(Icons.Default.Add,
                     null,
                     tint = Color.White)

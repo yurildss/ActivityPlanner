@@ -77,9 +77,13 @@ class StorageServiceImpl @Inject constructor(
         val task = snapshot.toObject(Task::class.java)
 
         if (task != null && goalIndex in task.goals.indices) {
-
             val updatedGols = task.goals.toMutableList()
+
+            if(percent == 1F){
+                updatedGols[goalIndex] = updatedGols[goalIndex].copy(isSave = true, percentComplete = percent)
+            }
             updatedGols[goalIndex] = updatedGols[goalIndex].copy(percentComplete = percent)
+
             taskRef.update("goals", updatedGols).await()
             Log.d("TAG", "updateGoalPercent: $updatedGols")
         }

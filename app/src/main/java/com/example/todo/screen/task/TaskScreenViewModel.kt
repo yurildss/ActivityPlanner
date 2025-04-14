@@ -110,9 +110,12 @@ class TaskScreenViewModel
     }
 
     fun updatePercentGoals(goalIndex: Int){
+
         launchCatching {
             if (taskId != null) {
+
                 storageService.updateGoalPercent(taskId, goalIndex, sliderPosition.floatValue)
+
                 _taskScreenState.value = _taskScreenState.value.copy(
                     goalsCardExpand = false
                 )
@@ -120,6 +123,7 @@ class TaskScreenViewModel
 
             updateTaskScreen()
         }
+
     }
 
 }
