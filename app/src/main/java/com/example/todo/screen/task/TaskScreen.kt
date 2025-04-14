@@ -39,10 +39,6 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -71,7 +67,7 @@ fun TaskInfo(
             .background(Color(0xFF1D1D2A))){
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(10.dp)
             ) {
                 Row(
@@ -119,14 +115,14 @@ fun TaskInfo(
                         fontSize = 17.sp
                     )
                 }
-
                 Text(
                     text = "${uiState.title}.",
                     fontSize = 40.sp,
                     color = Color.White,
+                    lineHeight = 48.sp,
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
-                        .padding(top = 20.dp)
+                        .padding(top = 10.dp)
                 )
                 Spacer(modifier = Modifier.height(15.dp))
                 TaskGoalsAndTeams(

@@ -16,7 +16,7 @@ import javax.inject.Inject
  * precisa mostrar a descrição da tarefa
  * precisa mudar a paleta de cores principalmente do goals
  * precisa fazer o botão de voltar funcionar
- * precisa fazer o botão de adicionar uma tarefa funcionar
+ * precisa fazer o botão de adicionar uma goals em uma tarefa funcionar
  */
 
 @HiltViewModel
