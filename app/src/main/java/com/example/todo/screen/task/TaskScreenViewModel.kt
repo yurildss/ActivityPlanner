@@ -1,5 +1,6 @@
 package com.example.todo.screen.task
 
+import android.util.Log
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -72,16 +73,16 @@ class TaskScreenViewModel
             description = task.value!!.description,
             deadLine = task.value!!.dateInBrazilianFormat,
             priority = task.value!!.priority.toString(),
-            gols = task.value!!.goals,
+            goals = task.value!!.goals,
             tags = task.value!!.tags,
-            isCompleted = task.value!!.isCompleted
+            isCompleted = task.value!!.completed
         )
     }
 
     private fun unCompletedGoals(){
         var unCompleted = 0
-        _taskScreenState.value.gols.forEach {
-            if(!it.isSave){
+        _taskScreenState.value.goals.forEach {
+            if(!it.completed){
                 unCompleted++
             }
     }
@@ -91,16 +92,27 @@ class TaskScreenViewModel
     }
 
     private fun completedGoals(){
+
         var completed = 0
-        _taskScreenState.value.gols.forEach {
-            if(it.isSave){
+
+        Log.d("TAG", "completedGoals: ${_taskScreenState.value.goals}")
+
+        _taskScreenState.value.goals.forEach {
+
+            if(it.completed){
+
                 completed++
+
             }
 
-    }
+        }
+
         _taskScreenState.value = _taskScreenState.value.copy(
+
             completedGoals = completed
+
         )
+
     }
 
     fun onCardGoalsExpand(expanded: Boolean){
@@ -113,7 +125,6 @@ class TaskScreenViewModel
 
         launchCatching {
             if (taskId != null) {
-
                 storageService.updateGoalPercent(taskId, goalIndex, sliderPosition.floatValue)
 
                 _taskScreenState.value = _taskScreenState.value.copy(
@@ -134,7 +145,7 @@ data class TaskScreenState(
     val description: String = "",
     val deadLine: String = "",
     val priority: String = "",
-    val gols: MutableList<Goals> = mutableListOf(),
+    val goals: MutableList<Goals> = mutableListOf(),
     val tags: MutableList<String> = mutableListOf(),
     val timeToComplete: Long  = 0,
     val unCompletedGoals: Int = 0,

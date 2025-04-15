@@ -74,15 +74,22 @@ class StorageServiceImpl @Inject constructor(
     override suspend fun updateGoalPercent(taskId: String, goalIndex: Int, percent: Float) {
         val taskRef = firestore.collection(TASK_COLLECTION).document(taskId)
         val snapshot = taskRef.get().await()
+        Log.d("TESTE", "Raw Data: ${snapshot.data}")
         val task = snapshot.toObject(Task::class.java)
+        Log.d("TESTE", "isCompleted no Firestore: ${snapshot.data?.get("goals")}")
+        Log.d("TESTE", "isCompleted convertido (Task): ${task?.goals}")
 
         if (task != null && goalIndex in task.goals.indices) {
             val updatedGols = task.goals.toMutableList()
 
             if(percent == 1F){
-                updatedGols[goalIndex] = updatedGols[goalIndex].copy(isSave = true, percentComplete = percent)
+                updatedGols[goalIndex] = updatedGols[goalIndex].copy(completed = true, percentComplete = percent)
             }
-            updatedGols[goalIndex] = updatedGols[goalIndex].copy(percentComplete = percent)
+            else{
+                Log.d("TAG", "Else")
+                updatedGols[goalIndex] = updatedGols[goalIndex].copy(percentComplete = percent, completed = false)
+            }
+
 
             taskRef.update("goals", updatedGols).await()
             Log.d("TAG", "updateGoalPercent: $updatedGols")

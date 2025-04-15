@@ -374,8 +374,8 @@ fun TaskCard(
 ){
 
     val sizeOfGoals = task.goals.size
-    val sizeOfUncompletedGoals = task.goals.count { !it.isCompleted }
-    val sizeOfCompletedGoals = task.goals.count { it.isCompleted }
+    val sizeOfUncompletedGoals = task.goals.count { !it.completed }
+    val sizeOfCompletedGoals = task.goals.count { it.completed }
     val progress = sizeOfCompletedGoals.toFloat() / sizeOfGoals.toFloat()
 
     Box(

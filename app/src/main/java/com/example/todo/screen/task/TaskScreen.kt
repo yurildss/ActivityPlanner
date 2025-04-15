@@ -79,7 +79,10 @@ fun TaskInfo(
                 ) {
                     Button(
                         onClick = onBackClick,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clip(CircleShape)
                     ){
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
@@ -138,7 +141,7 @@ fun TaskInfo(
                 )
                 Spacer(modifier = Modifier.height(15.dp))
                 GoalsList(
-                    uiState.gols,
+                    uiState.goals,
                     sliderPositionFunc = viewModel::sliderPositionFun,
                     sliderPosition = viewModel.sliderPosition.floatValue,
                     onUpdatePercentGoalsClick = viewModel::updatePercentGoals,
@@ -198,7 +201,7 @@ fun TaskGoalsAndTeams(
                 horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(taskScreenState.description, modifier = Modifier.fillMaxWidth(0.75f),
                     fontFamily = FontFamily.Monospace,)
-                Text("${taskScreenState.completedGoals}/${taskScreenState.gols.size}",
+                Text("${taskScreenState.completedGoals}/${taskScreenState.goals.size}",
                     fontSize = 45.sp,
                     color = Color(0xFF242636),
                     fontFamily = FontFamily.Monospace
@@ -206,14 +209,14 @@ fun TaskGoalsAndTeams(
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if(taskScreenState.gols.size.toFloat() != 0f){
+                if(taskScreenState.goals.size.toFloat() != 0f){
                 LinearProgressIndicator(
-                    progress = { (taskScreenState.completedGoals / taskScreenState.gols.size).toFloat() },
+                    progress = { (taskScreenState.completedGoals / taskScreenState.goals.size).toFloat() },
                     modifier = Modifier.fillMaxWidth(0.75f),
                     color = Color(0xFF242636),
                     trackColor = Color(0xFF90C323),
                 )
-                Text("${(taskScreenState.completedGoals / taskScreenState.gols.size)*100}%",
+                Text("${(taskScreenState.completedGoals / taskScreenState.goals.size)*100}%",
                     modifier = Modifier.padding(start = 10.dp),
                     color = Color(0xFF242636))
             }else{
@@ -505,7 +508,7 @@ fun GoalsPreview(){
 @Preview
 fun TaskGoalsAndTeamsPreview(){
     TaskGoalsAndTeams(
-        taskScreenState = TaskScreenState( description = "Testando alguma coisa nova que me veio a cabeça",gols = mutableListOf(Goals()))
+        taskScreenState = TaskScreenState( description = "Testando alguma coisa nova que me veio a cabeça",goals = mutableListOf(Goals()))
     )
 }
 
