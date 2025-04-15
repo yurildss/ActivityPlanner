@@ -2,6 +2,7 @@ package com.example.todo.model
 
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -30,6 +31,10 @@ data class Task(
                 .date // Extrai apenas a parte da data (sem hora)
                 .format(LocalDate.Format { byUnicodePattern("dd/MM/yyyy") }) // Formata a data no padrão brasileiro
         }
+
+    val isOverdue: Boolean
+        get() = !completed && deadLine < Clock.System.now().toEpochMilliseconds()
+
 }
 
 data class Goals(

@@ -62,6 +62,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todo.model.Task
+import kotlinx.coroutines.Delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -130,13 +131,23 @@ private fun TasksList(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     for (task in rowTasks) {
-                        TaskCard(
-                            task = task,
-                            onTaskClick = onTaskClick,
-                            Modifier
-                                .weight(1f) //Divida o espaço disponível igualmente entre os itens com o mesmo peso
-                                .fillMaxHeight(0.25f) // Ajuste a altura que quiser
-                        )
+                        if(task.isOverdue){
+                            DelayTaskCard(
+                                task = task,
+                                onTaskClick = onTaskClick,
+                                Modifier
+                                    .weight(1f) //Divida o espaço disponível igualmente entre os itens com o mesmo peso
+                                    .fillMaxHeight(0.25f) // Ajuste a altura que quiser)
+                            )
+                        }else{
+                            TaskCard(
+                                task = task,
+                                onTaskClick = onTaskClick,
+                                Modifier
+                                    .weight(1f) //Divida o espaço disponível igualmente entre os itens com o mesmo peso
+                                    .fillMaxHeight(0.25f) // Ajuste a altura que quiser
+                            )
+                        }
                     }
 
                     // Se só tiver 1 task nesse row, adiciona um espaço vazio pra alinhar corretamente
@@ -217,7 +228,9 @@ fun UserHomeScreen(uiState: HomeScreenUiState){
             ){
                 Icon(Icons.Default.AccountCircle, null)
             }
-            Column(Modifier.padding(start = 16.dp).fillMaxWidth(0.6f)) {
+            Column(Modifier
+                .padding(start = 16.dp)
+                .fillMaxWidth(0.6f)) {
                 Text("Hello,",
                     color = Color.White,
                     fontFamily = FontFamily.Monospace,)
@@ -365,6 +378,70 @@ fun SettingsPart(
 @Composable
 fun TaskCardWithoutGoals(task: Task, onTaskClick: (String) -> Unit, modifier: Modifier = Modifier){
 
+}
+
+@Composable
+fun DelayTaskCard(
+    task: Task,
+    onTaskClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+){
+    val sizeOfGoals = task.goals.size
+    val sizeOfUncompletedGoals = task.goals.count { !it.completed }
+    val sizeOfCompletedGoals = task.goals.count { it.completed }
+    val progress = sizeOfCompletedGoals.toFloat() / sizeOfGoals.toFloat()
+
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFFD64545))
+            .clickable {
+                onTaskClick(task.id)
+            }
+            .padding(15.dp) // 25% da altura da tela)
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Row(
+                Modifier
+                    .size(54.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFFFF6B6B))
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Icon(Icons.Default.DateRange,
+                    null,
+                    tint = Color(0xFFFFECEC)
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = task.title,
+                fontSize = 25.sp,
+                color = Color(0xFFF5F5F5),
+                maxLines = 2, // ou 2 se quiser permitir mais linhas
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text ="${task.timeToComplete} Hours Needed",
+                modifier = Modifier.padding(top = 10.dp, bottom = 5.dp),
+                color = Color((0xFFF5F5F5))
+            )
+
+            Row(Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                LinearProgressIndicator(
+                    progress = { progress },
+                    modifier = Modifier.fillMaxWidth(0.70f),
+                    color = Color(0xFFFFFFFF),
+                    trackColor = Color(0xFFFFD93D),
+                )
+                Text("${progress*100}%",
+                    color = Color(0xFFF5F5F5))
+            }
+        }
+    }
 }
 
 @Composable
@@ -538,6 +615,17 @@ fun UserHomeScreenPreview(){
     UserHomeScreen(
         uiState = HomeScreenUiState(name = "Yuri Lima")
     )
+}
+
+@Preview
+@Composable
+fun DelayTaskCardPreview(){
+    DelayTaskCard(
+        task = Task(
+            title = "Teste de uma atividade muito grande",
+            description = "Uma atividade muito grande"
+        )
+        , onTaskClick = {})
 }
 
 @Composable

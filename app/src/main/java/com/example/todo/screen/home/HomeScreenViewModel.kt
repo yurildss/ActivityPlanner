@@ -96,5 +96,6 @@ data class HomeScreenUiState(
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date
         .format(LocalDate.Format { byUnicodePattern("dd/MM/yyyy") }),
-    val tasksOfTheDay: List<Task> = emptyList()
+    val tasksOfTheDay: List<Task> = emptyList(),
+    val isDelay: Boolean = false
 )
