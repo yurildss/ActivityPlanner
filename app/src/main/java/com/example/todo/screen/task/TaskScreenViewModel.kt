@@ -57,6 +57,27 @@ class TaskScreenViewModel
         isLoading.value = false
     }
 
+    private suspend fun isTaskCompleted() {
+
+            val goals = _taskScreenState.value.goals
+
+            val completedGoals = goals.count { it.completed }
+            val unCompletedGoals = goals.size - completedGoals
+
+            _taskScreenState.value = _taskScreenState.value.copy(
+                completedGoals = completedGoals,
+                unCompletedGoals = unCompletedGoals
+            )
+
+            if (completedGoals == goals.size && goals.isNotEmpty()) {
+                storageService.updateTaskCompleted(taskId!!, true)
+                _taskScreenState.value = _taskScreenState.value.copy(
+                    isCompleted = true
+                )
+            }
+    }
+
+
     private suspend fun getTask(){
             if (taskId != null) {
                 task.value = storageService.getTask(taskId)
@@ -123,16 +144,21 @@ class TaskScreenViewModel
 
     fun updatePercentGoals(goalIndex: Int){
 
-        launchCatching {
-            if (taskId != null) {
-                storageService.updateGoalPercent(taskId, goalIndex, sliderPosition.floatValue)
+        Log.d("updatePercentGoals", "#1")
 
+        launchCatching {
+            Log.d("updatePercentGoals", "#2")
+            if (taskId != null) {
+                Log.d("updatePercentGoals", "#3")
+                storageService.updateGoalPercent(taskId, goalIndex, sliderPosition.floatValue)
+                Log.d("updatePercentGoals", "#4")
                 _taskScreenState.value = _taskScreenState.value.copy(
                     goalsCardExpand = false
                 )
             }
-
+            Log.d("updatePercentGoals", "#5")
             updateTaskScreen()
+            isTaskCompleted()
         }
 
     }

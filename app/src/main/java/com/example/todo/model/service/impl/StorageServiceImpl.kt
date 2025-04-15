@@ -47,8 +47,16 @@ class StorageServiceImpl @Inject constructor(
         return firestore.collection(TASK_COLLECTION).add(updatedTask).await().id
     }
 
-    override suspend fun update(task: Task) {
-        TODO("Not yet implemented")
+    override suspend fun update(task: Task, taskId: String) {
+
+        val taskRef = firestore.collection(TASK_COLLECTION).document(taskId)
+        taskRef.set(task).await()
+
+    }
+
+    override suspend fun updateTaskCompleted(taskId: String, completed: Boolean) {
+        val taskRef = firestore.collection(TASK_COLLECTION).document(taskId)
+        taskRef.update("completed", completed).await()
     }
 
     override suspend fun delete(taskId: String) {

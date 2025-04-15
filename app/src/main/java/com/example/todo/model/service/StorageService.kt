@@ -8,7 +8,8 @@ interface StorageService {
     val tasks: Flow<List<Task>>
     suspend fun getTask(taskId: String): Task?
     suspend fun save(task: Task): String
-    suspend fun update(task: Task)
+    suspend fun update(task: Task, taskId: String)
+    suspend fun updateTaskCompleted(taskId: String, completed: Boolean)
     suspend fun delete(taskId: String)
     suspend fun getCompletedTasksCount(): Int
     suspend fun getImportantCompletedTasksCount(): Int
