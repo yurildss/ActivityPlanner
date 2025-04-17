@@ -44,6 +44,8 @@ class HomeScreenViewModel @Inject constructor(
             uiState.value = uiState.value.copy(
                 tasksOfTheDay = storageService.getTaskByDay(uiState.value.actualDay)
             )
+
+            delayTask()
         }
     }
 
@@ -61,6 +63,13 @@ class HomeScreenViewModel @Inject constructor(
             uiState.value = uiState.value.copy(
                 name = userName
             )
+        }
+
+        private suspend fun delayTask(){
+               val delayedTasks = storageService.getDelayedTasks().size
+                uiState.value = uiState.value.copy(
+                    notifications = delayedTasks
+                )
         }
 
         fun setOpenDatePicker(newValue: Boolean){
@@ -97,5 +106,5 @@ data class HomeScreenUiState(
         .date
         .format(LocalDate.Format { byUnicodePattern("dd/MM/yyyy") }),
     val tasksOfTheDay: List<Task> = emptyList(),
-    val isDelay: Boolean = false
+    val notifications: Int = 0
 )
