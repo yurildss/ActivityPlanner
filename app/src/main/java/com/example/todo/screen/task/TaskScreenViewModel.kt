@@ -36,7 +36,7 @@ class TaskScreenViewModel
     var isLoading = mutableStateOf(true)
         private set
 
-    val taskId = savedStateHandle.get<String>("taskId")
+    private val taskId = savedStateHandle.get<String>("taskId")
     private var task = mutableStateOf<Task?>(null)
 
     init {

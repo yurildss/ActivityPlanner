@@ -1,6 +1,7 @@
 package com.example.todo.model.service.impl
 
 import android.util.Log
+import com.example.todo.model.Goals
 import com.example.todo.model.Task
 import com.example.todo.model.service.AccountService
 import com.example.todo.model.service.StorageService
@@ -102,6 +103,23 @@ class StorageServiceImpl @Inject constructor(
             taskRef.update("goals", updatedGols).await()
             Log.d("TAG", "updateGoalPercent: $updatedGols")
         }
+    }
+
+    override suspend fun getDelayedTasks(): List<Task> {
+        val taskRef = firestore.collection(TASK_COLLECTION)
+        val now = System.currentTimeMillis()
+
+        val snapshot = taskRef
+            .whereLessThan(DEADLINE_FIELD, now)
+            .whereEqualTo("completed", false)
+            .get()
+            .await()
+
+        return snapshot.toObjects(Task::class.java)
+    }
+
+    override suspend fun getDelayedGoals(taskId: String): List<Goals> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun getTaskByDay(day: String): List<Task> {

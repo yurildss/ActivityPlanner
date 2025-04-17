@@ -213,12 +213,14 @@ private fun BottomMenu() {
 fun UserHomeScreen(uiState: HomeScreenUiState){
     Column(Modifier
         .fillMaxWidth()
-        .padding(10.dp)) {
+        .padding(10.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically) {
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Row(
                 Modifier
                     .size(54.dp)
@@ -228,12 +230,15 @@ fun UserHomeScreen(uiState: HomeScreenUiState){
             ){
                 Icon(Icons.Default.AccountCircle, null)
             }
-            Column(Modifier
+            Column(
+                Modifier
                 .padding(start = 16.dp)
-                .fillMaxWidth(0.6f)) {
+                .fillMaxWidth(0.6f)
+            ) {
                 Text("Hello,",
                     color = Color.White,
-                    fontFamily = FontFamily.Monospace,)
+                    fontFamily = FontFamily.Monospace
+                    )
                 Text(
                     "${uiState.name}!", color = Color.White,
                     fontSize = 25.sp,
