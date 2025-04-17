@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.example.todo.screen.OpenScreen
 import com.example.todo.screen.home.HomeScreen
 import com.example.todo.screen.login.LoginScreen
+import com.example.todo.screen.notifications.NotificationScreen
 import com.example.todo.screen.sign_up.SignUpScreen
 import com.example.todo.screen.task.CreateTaskScreen
 import com.example.todo.screen.task.TaskInfo
@@ -55,6 +56,9 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
                 onTaskClick = {
                     navController.navigate("${Screens.TASK_SCREEN.name}/$it")
                 },
+                onNotificationClick = {
+                    navController.navigate(Screens.NOTIFICATION_SCREEN.name)
+                },
             )
         }
 
@@ -78,6 +82,10 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
                     navController.navigate(Screens.HOME_SCREEN.name)
                 }
             )
+        }
+
+        composable(Screens.NOTIFICATION_SCREEN.name){
+            NotificationScreen()
         }
     }
 }

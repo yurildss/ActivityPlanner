@@ -44,7 +44,6 @@ class HomeScreenViewModel @Inject constructor(
             uiState.value = uiState.value.copy(
                 tasksOfTheDay = storageService.getTaskByDay(uiState.value.actualDay)
             )
-
             delayTask()
         }
     }
@@ -67,6 +66,7 @@ class HomeScreenViewModel @Inject constructor(
 
         private suspend fun delayTask(){
                val delayedTasks = storageService.getDelayedTasks().size
+                Log.d("HomeScreenViewModel", "delayedTasks: $delayedTasks")
                 uiState.value = uiState.value.copy(
                     notifications = delayedTasks
                 )

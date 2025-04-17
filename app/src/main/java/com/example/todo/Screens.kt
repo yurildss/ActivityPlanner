@@ -6,5 +6,6 @@ enum class Screens {
     SIGN_IN_SCREEN,
     TASK_SCREEN,
     OPEN_SCREEN,
-    ADD_TASK_SCREEN
+    ADD_TASK_SCREEN,
+    NOTIFICATION_SCREEN
 }

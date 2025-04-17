@@ -114,7 +114,7 @@ class StorageServiceImpl @Inject constructor(
             .whereEqualTo("completed", false)
             .get()
             .await()
-
+        Log.d("TAG", "getDelayedTasks: $snapshot")
         return snapshot.toObjects(Task::class.java)
     }
 

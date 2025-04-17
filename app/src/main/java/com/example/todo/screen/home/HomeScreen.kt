@@ -76,6 +76,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     onAddTaskClick: () -> Unit,
     onTaskClick: (String) -> Unit,
+    onNotificationClick: () -> Unit,
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ){
 
@@ -90,7 +91,7 @@ fun HomeScreen(
             )
     ){
         Column(modifier = Modifier.fillMaxSize()) {
-            UserHomeScreen(uiState)
+            UserHomeScreen(uiState, onNotificationClick)
             SettingsPart(
                 openDatePicker = uiState.openDatePicker,
                 date = uiState.actualDay,
@@ -210,7 +211,7 @@ private fun BottomMenu() {
 }
 
 @Composable
-fun UserHomeScreen(uiState: HomeScreenUiState){
+fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit = {}){
     Column(Modifier
         .fillMaxWidth()
         .padding(10.dp)
@@ -258,17 +259,36 @@ fun UserHomeScreen(uiState: HomeScreenUiState){
                     tint = Color.White
                 )
             }
-            Row(
-                Modifier
-                    .size(54.dp)
-                    .clip(CircleShape)
-                    .background(Color(0x166EA68E))
-                    .padding(16.dp)
-            ){
-                Icon(Icons.Default.Notifications,
-                    null,
-                    tint = Color.White
-                )
+            if (uiState.notifications>0){
+                Row(
+                    Modifier
+                        .size(54.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFFF6B6B))
+                        .padding(16.dp).clickable {
+                            onNotificationClick()
+                        }
+                ){
+                    Icon(Icons.Default.Notifications,
+                        null,
+                        tint = Color.White
+                    )
+                }
+            }else{
+                Row(
+                    Modifier
+                        .size(54.dp)
+                        .clip(CircleShape)
+                        .background(Color(0x166EA68E))
+                        .padding(16.dp).clickable {
+                            onNotificationClick()
+                        }
+                ){
+                    Icon(Icons.Default.Notifications,
+                        null,
+                        tint = Color.White
+                    )
+                }
             }
         }
 
@@ -612,6 +632,7 @@ fun HomeScreenPreview(){
         onAddTaskClick = { },
         onTaskClick = {},
         viewModel = TODO(),
+        onNotificationClick = TODO(),
     )
 }
 
