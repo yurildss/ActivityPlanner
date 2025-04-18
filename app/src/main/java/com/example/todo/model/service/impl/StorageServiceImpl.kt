@@ -60,6 +60,11 @@ class StorageServiceImpl @Inject constructor(
         taskRef.update("completed", completed).await()
     }
 
+    override suspend fun uptadeTaskNotification(taskId: String, notificationRead: Boolean) {
+        val taskRef = firestore.collection(TASK_COLLECTION).document(taskId)
+        taskRef.update("notificationRead", notificationRead).await()
+    }
+
     override suspend fun delete(taskId: String) {
         TODO("Not yet implemented")
     }
@@ -112,6 +117,7 @@ class StorageServiceImpl @Inject constructor(
         val snapshot = taskRef
             .whereLessThan(DEADLINE_FIELD, now)
             .whereEqualTo("completed", false)
+            .whereEqualTo("notificationRead", false)
             .get()
             .await()
         Log.d("TAG", "getDelayedTasks: $snapshot")

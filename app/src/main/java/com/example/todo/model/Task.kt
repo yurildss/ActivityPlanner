@@ -23,6 +23,7 @@ data class Task(
     val goals: MutableList<Goals> = mutableListOf(),
     val userId: String = "",
     val timeToComplete: Long = 0L,
+    val notificationRead: Boolean = false,
 ){
     val dateInBrazilianFormat: String
         get() = deadLine.let { // Verifica se 'dateBirth' não é nulo

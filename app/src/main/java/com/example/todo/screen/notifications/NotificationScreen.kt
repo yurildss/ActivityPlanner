@@ -13,7 +13,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,20 +42,35 @@ fun NotificationScreen(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NotificationsList(tasks: List<Task>, onTaskClick: (String) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF1D1D2A))
+            .background(Color(0xFF1D1D2A)).padding(top = 30.dp)
     ) {
-        LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(10.dp)) {
-            items(tasks) { task ->
-                NotificationCardScreen(
-                    task = task,
-                    modifier = Modifier.padding(vertical = 5.dp),
-                    onTaskClick = onTaskClick,
-                )
+        if (tasks.isEmpty()) {
+            Text("Any notifications", color = Color.White, fontFamily = FontFamily.Monospace)
+        }else{
+            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(10.dp)) {
+                items(tasks, key = {
+                    it.id
+                }) { task ->
+                    val swipeState = rememberSwipeToDismissBoxState()
+                    SwipeToDismissBox(
+                        state = swipeState,
+                        backgroundContent = {
+
+                        }
+                    ){
+                        NotificationCardScreen(
+                            task = task,
+                            modifier = Modifier.padding(vertical = 5.dp),
+                            onTaskClick = onTaskClick,
+                        )
+                    }
+                }
             }
         }
     }
