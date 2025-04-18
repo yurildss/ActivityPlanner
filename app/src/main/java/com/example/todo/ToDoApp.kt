@@ -85,7 +85,11 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
         }
 
         composable(Screens.NOTIFICATION_SCREEN.name){
-            NotificationScreen()
+            NotificationScreen(
+                onTaskClick = {
+                    navController.navigate("${Screens.TASK_SCREEN.name}/$it")
+                },
+            )
         }
     }
 }

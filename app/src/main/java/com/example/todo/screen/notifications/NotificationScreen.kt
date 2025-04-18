@@ -1,6 +1,7 @@
 package com.example.todo.screen.notifications
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,17 +27,18 @@ import org.checkerframework.checker.units.qual.C
 
 @Composable
 fun NotificationScreen(
+    onTaskClick: (String) -> Unit,
     viewModel: NotificationScreenViewModel = hiltViewModel()
 ) {
 
     val tasks = viewModel.notificationScreenState.value.taskList
 
-    NotificationsList(tasks)
+    NotificationsList(tasks, onTaskClick)
 
 }
 
 @Composable
-private fun NotificationsList(tasks: List<Task>) {
+private fun NotificationsList(tasks: List<Task>, onTaskClick: (String) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -44,19 +46,25 @@ private fun NotificationsList(tasks: List<Task>) {
     ) {
         LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(10.dp)) {
             items(tasks) { task ->
-                NotificationCardScreen(task = task, modifier = Modifier.padding(vertical = 5.dp))
+                NotificationCardScreen(
+                    task = task,
+                    modifier = Modifier.padding(vertical = 5.dp),
+                    onTaskClick = onTaskClick,
+                )
             }
         }
     }
 }
 
 @Composable
-fun NotificationCardScreen(modifier: Modifier = Modifier, task: Task){
+fun NotificationCardScreen(modifier: Modifier = Modifier, task: Task, onTaskClick: (String) -> Unit){
     Box(
         modifier
             .clip(RoundedCornerShape(5.dp))
             .fillMaxWidth()
-            .background(Color(0xFF0E0E15))
+            .background(Color(0xFF0E0E15)).clickable {
+                onTaskClick(task.id)
+            }
     ){
         Column(Modifier.fillMaxWidth().padding(10.dp)) {
 
@@ -67,7 +75,7 @@ fun NotificationCardScreen(modifier: Modifier = Modifier, task: Task){
             )
             
             Text(
-                text = "DeadLine: ${task.deadLine}",
+                text = "DeadLine: ${task.dateInBrazilianFormat}",
                 fontFamily = FontFamily.Monospace,
                 color = Color.White,
                 fontSize = 10.sp,
@@ -83,7 +91,8 @@ fun NotificationCardScreen(modifier: Modifier = Modifier, task: Task){
 fun NotificationCardScreenPreview() {
     NotificationCardScreen(
         modifier = TODO(),
-        task = TODO()
+        task = TODO(),
+        onTaskClick = TODO()
     )
 }
 
@@ -91,12 +100,16 @@ fun NotificationCardScreenPreview() {
 @Preview
 fun NotificationsListPreview() {
     NotificationsList(
-        tasks = listOf(Task(title = "Tesk 1"), Task(title = "Tesk 2"), Task(title = "Tesk 3"))
+        tasks = listOf(Task(title = "Tesk 1"), Task(title = "Tesk 2"), Task(title = "Tesk 3")),
+        onTaskClick = { }
     )
 }
 
 @Composable
 @Preview
 fun NotificationScreenPreview() {
-    NotificationScreen()
+    NotificationScreen(
+        onTaskClick = TODO(),
+        viewModel = TODO()
+    )
 }

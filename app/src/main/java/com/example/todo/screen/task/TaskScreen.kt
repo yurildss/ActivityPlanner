@@ -132,7 +132,7 @@ fun TaskInfo(
                     lineHeight = 48.sp,
                     fontFamily = FontFamily.Monospace,
                     modifier = Modifier
-                        .fillMaxWidth(0.5f)
+                        .fillMaxWidth(0.75f)
                         .padding(top = 10.dp)
                 )
                 Spacer(modifier = Modifier.height(15.dp))
