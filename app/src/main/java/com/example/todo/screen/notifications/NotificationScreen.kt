@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,17 +64,33 @@ fun NotificationCardScreen(modifier: Modifier = Modifier, task: Task, onTaskClic
         modifier
             .clip(RoundedCornerShape(5.dp))
             .fillMaxWidth()
-            .background(Color(0xFF0E0E15)).clickable {
+            .background(Color(0xFF0E0E15))
+            .clickable {
                 onTaskClick(task.id)
             }
     ){
-        Column(Modifier.fillMaxWidth().padding(10.dp)) {
+        Column(Modifier
+            .fillMaxWidth()
+            .padding(10.dp)) {
 
-            Text(
-                text = "The task ${task.title} is late",
-                fontFamily = FontFamily.Monospace,
-                color = Color.White
-            )
+            Row(){
+                Text(
+                    text = "The task ",
+                    fontFamily = FontFamily.Monospace,
+                    color = Color.White
+                )
+                Text(
+                    text = task.title,
+                    fontFamily = FontFamily.Monospace,
+                    color = Color.White,
+                    fontStyle = FontStyle.Italic,
+                )
+                Text(
+                    text = " is lates",
+                    fontFamily = FontFamily.Monospace,
+                    color = Color.White
+                )
+            }
             
             Text(
                 text = "DeadLine: ${task.dateInBrazilianFormat}",
