@@ -15,9 +15,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -38,31 +41,53 @@ fun NotificationScreen(
 
     val tasks = viewModel.notificationScreenState.value.taskList
 
-    NotificationsList(tasks, onTaskClick)
+    NotificationsList(tasks, onTaskClick, viewModel::updateTaskNotification)
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun NotificationsList(tasks: List<Task>, onTaskClick: (String) -> Unit) {
+private fun NotificationsList(tasks: List<Task>, onTaskClick: (String) -> Unit, onSlideToDeletedNotification: (String, Boolean) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF1D1D2A)).padding(top = 30.dp)
+            .background(Color(0xFF1D1D2A))
+            .padding(top = 30.dp)
     ) {
         if (tasks.isEmpty()) {
             Text("Any notifications", color = Color.White, fontFamily = FontFamily.Monospace)
         }else{
-            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(10.dp)) {
-                items(tasks, key = {
-                    it.id
-                }) { task ->
+            LazyColumn(
+                Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(10.dp)
+            ) {
+                items(tasks, key = {it.id}) { task ->
                     val swipeState = rememberSwipeToDismissBoxState()
+                    LaunchedEffect(swipeState.currentValue) {
+                        if (swipeState.currentValue == SwipeToDismissBoxValue.EndToStart){
+                            onSlideToDeletedNotification(task.id, true)
+                        }
+                    }
                     SwipeToDismissBox(
                         state = swipeState,
                         backgroundContent = {
-
-                        }
+                            when(swipeState.dismissDirection){
+                                SwipeToDismissBoxValue.StartToEnd -> {}
+                                SwipeToDismissBoxValue.EndToStart -> {
+                                    Box(Modifier.fillMaxSize().background(Color.Red)){
+                                        Text("Dismissed",
+                                            Modifier.padding(16.dp)
+                                                .align(Alignment.CenterEnd),
+                                            fontSize = 16.sp,
+                                            color = Color.White,
+                                            fontFamily = FontFamily.Monospace
+                                        )
+                                    }
+                                }
+                                SwipeToDismissBoxValue.Settled -> {}
+                            }
+                        },
+                        enableDismissFromStartToEnd = false
                     ){
                         NotificationCardScreen(
                             task = task,
@@ -137,7 +162,8 @@ fun NotificationCardScreenPreview() {
 fun NotificationsListPreview() {
     NotificationsList(
         tasks = listOf(Task(title = "Tesk 1"), Task(title = "Tesk 2"), Task(title = "Tesk 3")),
-        onTaskClick = { }
+        onTaskClick = { },
+        onSlideToDeletedNotification = { _, _ -> }
     )
 }
 

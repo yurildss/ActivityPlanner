@@ -21,6 +21,15 @@ class NotificationScreenViewModel @Inject constructor(
             )
         }
     }
+
+    fun updateTaskNotification(taskId: String, notificationRead: Boolean){
+        launchCatching {
+            taskRepository.uptadeTaskNotification(taskId, notificationRead)
+            notificationScreenState.value = NotificationScreenState(
+                taskList = taskRepository.getDelayedTasks()
+            )
+        }
+    }
 }
 
 
