@@ -65,76 +65,14 @@ fun TaskInfo(
 
     if(!isLoading.value){
         Box(modifier
-            .fillMaxSize()
+            .fillMaxSize().padding(top = 20.dp)
             .background(Color(0xFF1D1D2A))){
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(10.dp)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(
-                        onClick = onBackClick,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                        modifier = Modifier
-                            .size(30.dp)
-                            .clip(CircleShape)
-                    ){
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                    Row(
-                        Modifier
-                            .size(54.dp)
-                            .clip(CircleShape)
-                            .background(Color(0x166EA68E))
-                            .padding(16.dp)
-                    ) {
-                        Icon(
-                            Icons.Default.Notifications,
-                            null,
-                            tint = Color.White
-                        )
-                    }
-                }
-                Row(
-                    Modifier
-                        .size(150.dp, 54.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFF363440))
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        Icons.Default.DateRange,
-                        null,
-                        tint = Color.White
-                    )
-
-                    Text(
-                        text = uiState.deadLine,
-                        color = Color.White,
-                        fontSize = 17.sp
-                    )
-                }
-                Text(
-                    text = "${uiState.title}.",
-                    fontSize = 40.sp,
-                    color = Color.White,
-                    lineHeight = 48.sp,
-                    fontFamily = FontFamily.Monospace,
-                    modifier = Modifier
-                        .fillMaxWidth(0.75f)
-                        .padding(top = 10.dp)
-                )
+                TaskInfos(onBackClick, uiState)
                 Spacer(modifier = Modifier.height(15.dp))
                 TaskGoalsAndTeams(
                     taskScreenState = uiState
@@ -151,6 +89,73 @@ fun TaskInfo(
             }
         }
     }
+}
+
+@Composable
+private fun TaskInfos(
+    onBackClick: () -> Unit,
+    uiState: TaskScreenState
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(
+            onClick = onBackClick,
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+        ) {
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
+        Row(
+            Modifier
+                .size(54.dp)
+                .clip(CircleShape)
+                .background(Color(0x166EA68E))
+                .padding(16.dp)
+        ) {
+            Icon(
+                Icons.Default.Notifications,
+                null,
+                tint = Color.White
+            )
+        }
+    }
+    Row(
+        Modifier
+            .size(150.dp, 54.dp)
+            .clip(CircleShape)
+            .background(Color(0xFF363440))
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            Icons.Default.DateRange,
+            null,
+            tint = Color.White
+        )
+
+        Text(
+            text = uiState.deadLine,
+            color = Color.White,
+            fontSize = 17.sp
+        )
+    }
+    Text(
+        text = "${uiState.title}.",
+        fontSize = 40.sp,
+        color = Color.White,
+        lineHeight = 48.sp,
+        fontFamily = FontFamily.Monospace,
+        modifier = Modifier
+            .fillMaxWidth(0.75f)
+            .padding(top = 10.dp)
+    )
 }
 
 @Composable
@@ -512,6 +517,11 @@ fun TaskGoalsAndTeamsPreview(){
     )
 }
 
+@Composable
+@Preview
+fun TaskInfosPreview(){
+    TaskInfos(onBackClick = {}, uiState = TaskScreenState())
+}
 @Composable
 @Preview
 fun TaskInfoPreview(){

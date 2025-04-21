@@ -85,7 +85,7 @@ fun HomeScreen(
 
     Box(contentAlignment = Alignment.BottomEnd,
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxSize().padding(top = 20.dp)
             .background(
                 Color(0xFF1D1D2A)
             )
