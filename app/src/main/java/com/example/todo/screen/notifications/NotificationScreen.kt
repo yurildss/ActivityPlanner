@@ -13,7 +13,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
@@ -36,12 +41,25 @@ import org.checkerframework.checker.units.qual.C
 @Composable
 fun NotificationScreen(
     onTaskClick: (String) -> Unit,
+    onArrowBackClick: () -> Unit,
     viewModel: NotificationScreenViewModel = hiltViewModel()
 ) {
 
     val tasks = viewModel.notificationScreenState.value.taskList
 
-    NotificationsList(tasks, onTaskClick, viewModel::updateTaskNotification)
+    Column {
+        Button(
+            onClick = onArrowBackClick,
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+        ) {
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
+        NotificationsList(tasks, onTaskClick, viewModel::updateTaskNotification)
+    }
 
 }
 
@@ -55,7 +73,11 @@ private fun NotificationsList(tasks: List<Task>, onTaskClick: (String) -> Unit, 
             .padding(top = 30.dp)
     ) {
         if (tasks.isEmpty()) {
-            Text("Any notifications", color = Color.White, fontFamily = FontFamily.Monospace)
+            Text("Any notifications",
+                modifier = Modifier.align(Alignment.Center),
+                color = Color.White,
+                fontFamily = FontFamily.Monospace
+            )
         }else{
             LazyColumn(
                 Modifier.fillMaxSize(),
@@ -74,9 +96,12 @@ private fun NotificationsList(tasks: List<Task>, onTaskClick: (String) -> Unit, 
                             when(swipeState.dismissDirection){
                                 SwipeToDismissBoxValue.StartToEnd -> {}
                                 SwipeToDismissBoxValue.EndToStart -> {
-                                    Box(Modifier.fillMaxSize().background(Color.Red)){
+                                    Box(Modifier
+                                        .fillMaxSize()
+                                        .background(Color.Red)){
                                         Text("Dismissed",
-                                            Modifier.padding(16.dp)
+                                            Modifier
+                                                .padding(16.dp)
                                                 .align(Alignment.CenterEnd),
                                             fontSize = 16.sp,
                                             color = Color.White,
@@ -151,9 +176,8 @@ fun NotificationCardScreen(modifier: Modifier = Modifier, task: Task, onTaskClic
 @Preview
 fun NotificationCardScreenPreview() {
     NotificationCardScreen(
-        modifier = TODO(),
-        task = TODO(),
-        onTaskClick = TODO()
+        task = Task(),
+        onTaskClick = {}
     )
 }
 

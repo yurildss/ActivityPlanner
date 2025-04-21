@@ -80,6 +80,9 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
             CreateTaskScreen(
                 onSaveClick = {
                     navController.navigate(Screens.HOME_SCREEN.name)
+                },
+                onCancelTaskClick = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -88,6 +91,9 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
             NotificationScreen(
                 onTaskClick = {
                     navController.navigate("${Screens.TASK_SCREEN.name}/$it")
+                },
+                onArrowBackClick = {
+                    navController.popBackStack()
                 },
             )
         }

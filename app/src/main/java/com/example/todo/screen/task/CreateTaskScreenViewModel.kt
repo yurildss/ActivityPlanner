@@ -137,7 +137,7 @@ class CreateTaskScreenViewModel
     /**
      * Botao para criar um novo Goals no cadastro de uma nova Task
      */
-    fun onAddGolsClick() {
+    fun onAddGoalsClick() {
         CreateTaskUistate.value = CreateTaskUistate.value.copy(
             gols = CreateTaskUistate.value.gols.toMutableList().apply {
                 add(Goals())
@@ -178,8 +178,9 @@ class CreateTaskScreenViewModel
                 isSave = true
             )
             Log.d("TAG", "onCreateGoals: ${CreateTaskUistate.value.gols}")
+        }else{
+            SnackbarManager.showMessage(R.string.empty_field_goals)
         }
-        SnackbarManager.showMessage(R.string.empty_field_goals)
     }
 
     fun onGoalsIsSaveChange(){
@@ -214,8 +215,9 @@ class CreateTaskScreenViewModel
             if(isEntryTaskValid()){
                 storageService.save(CreateTaskUistate.value.toTask())
                 onSaveClick()
+            }else{
+                SnackbarManager.showMessage(R.string.empty_field_task)
             }
-            SnackbarManager.showMessage(R.string.empty_field_task)
         }
 
     }
