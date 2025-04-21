@@ -78,7 +78,8 @@ import kotlinx.datetime.toLocalDateTime
 fun CreateTaskScreen(
     modifier: Modifier = Modifier,
     viewModel: CreateTaskScreenViewModel = hiltViewModel(),
-    onSaveClick: () -> Unit
+    onSaveClick: () -> Unit,
+    onCancelTaskClick: () -> Unit
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -168,7 +169,8 @@ fun CreateTaskScreen(
                 onGoalsIsSaveChange = viewModel::onGoalsIsSaveChange,
                 onDeleteGoalsClick = viewModel::onDeleteGoalsClick,
                 onRemoveGoalsClick = viewModel::onRemoveGoalsClick,
-                onSaveTaskClick = { viewModel.onSaveTaskClick(onSaveClick) }
+                onSaveTaskClick = { viewModel.onSaveTaskClick(onSaveClick) },
+                onCancelTaskClick = onCancelTaskClick
             )
         }
     }
@@ -375,6 +377,7 @@ fun AddGoalsCard(
     onDeleteGoalsClick: (Int) -> Unit,
     onRemoveGoalsClick: (Int) -> Unit,
     onSaveTaskClick: () -> Unit,
+    onCancelTaskClick: () -> Unit
 
 ) {
     Box(
@@ -428,7 +431,7 @@ fun AddGoalsCard(
                 Text("Save")
             }
             Button(
-                onClick = onSaveTaskClick,
+                onClick = onCancelTaskClick,
                 colors = ButtonDefaults.buttonColors(Color(0xFFFF4C4C)),
                 modifier = Modifier.fillMaxWidth(0.75f)
             ) {
@@ -551,7 +554,7 @@ fun GoalsShow(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF498374))
+            .background(Color(0xFF2C2C3A))
             .padding(10.dp)
     ) {
         Column(Modifier.fillMaxWidth(),) {
@@ -562,7 +565,7 @@ fun GoalsShow(
                 fontSize = 25.sp,
                 modifier = Modifier.padding(10.dp)
             )
-            HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
+            HorizontalDivider(thickness = 1.dp, color = Color(0xFF1D1D2A))
             Text("description: ${goals.description}",
                 fontFamily = FontFamily.Monospace,
                 maxLines = 2,
@@ -570,7 +573,7 @@ fun GoalsShow(
                 color = Color.White,
                 modifier = Modifier.padding(10.dp)
             )
-            HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
+            HorizontalDivider(thickness = 1.dp, color = Color(0xFF1D1D2A))
             Text(
                 goals.dateInBrazilianFormat,
                 fontFamily = FontFamily.Monospace,
@@ -578,7 +581,7 @@ fun GoalsShow(
                 color = Color.White,
                 modifier = Modifier.padding(10.dp)
             )
-            HorizontalDivider(thickness = 1.dp, color = Color(0xFF386459))
+            HorizontalDivider(thickness = 1.dp, color = Color(0xFF1D1D2A))
             Text(
                 "${goals.timeToComplete} hours",
                 fontFamily = FontFamily.Monospace,
@@ -589,7 +592,7 @@ fun GoalsShow(
             Button(
                 modifier = Modifier.align(Alignment.End),
                 onClick = { onDeleteGoalsClick(index) },
-                colors = ButtonDefaults.buttonColors(Color(0xFF83494E))
+                colors = ButtonDefaults.buttonColors(Color(0xFFFF4C4C))
             ) {
                 Text("Delete")
             }
@@ -623,7 +626,8 @@ fun AddGoalsCardPreview() {
         onGoalsIsSaveChange = {},
         onDeleteGoalsClick = { },
         onRemoveGoalsClick = {},
-        onSaveTaskClick = {}
+        onSaveTaskClick = {},
+        onCancelTaskClick = {}
     )
 }
 
@@ -649,7 +653,9 @@ fun GoalsEntryPreview() {
 fun CreateTaskScreenPreview() {
     CreateTaskScreen(
         viewModel = TODO(),
-        onSaveClick = {}
+        onSaveClick = {},
+        modifier = TODO(),
+        onCancelTaskClick = TODO()
     )
 }
 
