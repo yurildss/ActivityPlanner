@@ -108,7 +108,7 @@ fun CreateTaskScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFF6EA68E))
+            .background(Color(0xFF1D1D2A))
             .padding(paddingValues)
     ) {
         Column(
@@ -388,7 +388,7 @@ fun AddGoalsCard(
         ) {
             Button(
                 onClick = onAddGolsClick,
-                colors = ButtonDefaults.buttonColors(Color(0xFF386459))
+                colors = ButtonDefaults.buttonColors(Color(0xFF00FF95))
             ) {
                 Text("Add Goals")
             }
@@ -423,13 +423,13 @@ fun AddGoalsCard(
             Button(
                 onClick = onSaveTaskClick,
                 modifier = Modifier.fillMaxWidth(0.75f),
-                colors = ButtonDefaults.buttonColors(Color(0xFF497D83))
+                colors = ButtonDefaults.buttonColors(Color(0xFF008CBA))
             ) {
                 Text("Save")
             }
             Button(
                 onClick = onSaveTaskClick,
-                colors = ButtonDefaults.buttonColors(Color(0xFF83494E)),
+                colors = ButtonDefaults.buttonColors(Color(0xFFFF4C4C)),
                 modifier = Modifier.fillMaxWidth(0.75f)
             ) {
                 Text("Cancel")
@@ -455,7 +455,7 @@ fun GoalsEntry(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF498374))
+            .background(Color(0xFF2C2C3A))
             .padding(10.dp)
     ) {
         Column(
@@ -527,12 +527,12 @@ fun GoalsEntry(
                     onClick = {
                     onCreateGols(index)
                     onGoalsIsSaveChange()
-                }, colors = ButtonDefaults.buttonColors(Color(0xFF386459)) ) {
+                }, colors = ButtonDefaults.buttonColors(Color(0xFF00FF95)) ) {
                     Text("Add")
                 }
                 Button(
                     onClick = { onRemoveGoalsClick(index) },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF83494E))
+                    colors = ButtonDefaults.buttonColors(Color(0xFFFF4C4C))
                 ) {
                     Text("Remove")
                 }
