@@ -47,7 +47,7 @@ fun NotificationScreen(
 
     val tasks = viewModel.notificationScreenState.value.taskList
 
-    Column {
+    Column(Modifier.fillMaxSize().background(Color(0xFF1D1D2A)).padding(top = 20.dp)) {
         Button(
             onClick = onArrowBackClick,
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -66,12 +66,7 @@ fun NotificationScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NotificationsList(tasks: List<Task>, onTaskClick: (String) -> Unit, onSlideToDeletedNotification: (String, Boolean) -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF1D1D2A))
-            .padding(top = 30.dp)
-    ) {
+    Box(Modifier.fillMaxSize()){
         if (tasks.isEmpty()) {
             Text("Any notifications",
                 modifier = Modifier.align(Alignment.Center),
@@ -196,6 +191,7 @@ fun NotificationsListPreview() {
 fun NotificationScreenPreview() {
     NotificationScreen(
         onTaskClick = TODO(),
-        viewModel = TODO()
+        viewModel = TODO(),
+        onArrowBackClick = TODO()
     )
 }
