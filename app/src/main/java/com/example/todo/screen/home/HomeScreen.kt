@@ -36,21 +36,29 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,6 +72,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todo.model.Task
 import kotlinx.coroutines.Delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -296,11 +305,11 @@ fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit =
 
         Text("Activity", color = Color.White,
             fontSize = 60.sp,
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = FontFamily.Monospace,
             modifier = Modifier.padding(top = 10.dp, start = 10.dp))
         Text("Planner",
             color = Color.White,
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = FontFamily.Monospace,
             modifier = Modifier.padding(start = 10.dp),
             fontSize = 60.sp)
 
@@ -340,62 +349,76 @@ fun SettingsPart(
 ){
 
     val dateState = rememberDatePickerState()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
-    Row(Modifier
-        .fillMaxWidth()
-        .padding(10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween) {
-        Row(
-            Modifier
-                .size(54.dp)
-                .clip(CircleShape)
-                .background(Color(0x166EA68E))
-                .padding(16.dp)
-        ){
-            Icon(Icons.Default.Menu,
-                null,
-                tint = Color.White
-            )
-        }
-        Row(
-            Modifier
-                .size(150.dp, 54.dp)
-                .clip(CircleShape)
-                .background(Color(0xFFB4EF2C))
-                .padding(16.dp)
-        ){
-            Icon(Icons.Default.DateRange,
-                null,
-                tint = Color.White
-            )
-            DatePick(
-                openDatePicker = openDatePicker,
-                date = date,
-                onDatePickerChange = onDatePickerChange,
-                onDateSelected = onDateSelected,
-                actualDay = actualDay,
-                dateState = dateState
-            )
-        }
-        Row(
-            Modifier
-                .size(150.dp, 54.dp)
-                .clip(CircleShape)
-                .background(Color(0x166EA68E))
-                .padding(5.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Button(modifier = Modifier.fillMaxWidth(),
-                onClick = onAddTaskClick,
-                colors = ButtonDefaults.buttonColors(Color.Transparent)
-            ) {
-                Icon(Icons.Default.Add,
+    ModalNavigationDrawer(
+        drawerState =  drawerState,
+        drawerContent = {
+            DrawerContent()
+        },
+    ) {
+        Row(Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                Modifier
+                    .size(54.dp)
+                    .clip(CircleShape)
+                    .background(Color(0x166EA68E))
+                    .padding(16.dp).clickable {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }
+            ){
+                Icon(Icons.Default.Menu,
                     null,
                     tint = Color.White
                 )
-                Text("Add Task",
-                    modifier = Modifier.padding(start = 10.dp),
-                    color = Color.White)
+            }
+            Row(
+                Modifier
+                    .size(150.dp, 54.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFFB4EF2C))
+                    .padding(16.dp)
+            ){
+                Icon(Icons.Default.DateRange,
+                    null,
+                    tint = Color.White
+                )
+                DatePick(
+                    openDatePicker = openDatePicker,
+                    date = date,
+                    onDatePickerChange = onDatePickerChange,
+                    onDateSelected = onDateSelected,
+                    actualDay = actualDay,
+                    dateState = dateState
+                )
+            }
+            Row(
+                Modifier
+                    .size(150.dp, 54.dp)
+                    .clip(CircleShape)
+                    .background(Color(0x166EA68E))
+                    .padding(5.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Button(modifier = Modifier.fillMaxWidth(),
+                    onClick = onAddTaskClick,
+                    colors = ButtonDefaults.buttonColors(Color.Transparent)
+                ) {
+                    Icon(Icons.Default.Add,
+                        null,
+                        tint = Color.White
+                    )
+                    Text("Add Task",
+                        modifier = Modifier.padding(start = 10.dp),
+                        color = Color.White)
+                }
             }
         }
     }
@@ -530,6 +553,53 @@ fun TaskCard(
                     color = Color(0xFF242636))
             }
         }
+    }
+}
+
+@Composable
+fun DrawerContent(){
+    ModalDrawerSheet(
+        drawerContainerColor = Color(0xFF2C2C3A)
+    ) {
+        Text(
+            "Tasks infos",
+            modifier = Modifier.padding(16.dp),
+            fontFamily = FontFamily.Monospace,
+            fontSize = 25.sp,
+            color = Color.White)
+        HorizontalDivider()
+        NavigationDrawerItem(
+            label = {
+                Text("Late tasks",
+                    color = Color.White,
+                    fontFamily = FontFamily.Monospace)
+            },
+            selected = false,
+            onClick = {
+            },
+            colors = NavigationDrawerItemDefaults.colors(
+                unselectedContainerColor = Color.Transparent,
+                unselectedTextColor = Color.White,
+                unselectedIconColor = Color.White,
+                selectedContainerColor = Color(0xFF2D2D3A),
+            )
+        )
+        NavigationDrawerItem(
+            label = {
+                Text("Completed tasks",
+                    color = Color.White,
+                    fontFamily = FontFamily.Monospace)
+            },
+            selected = false,
+            onClick = {
+            },
+            colors = NavigationDrawerItemDefaults.colors(
+                unselectedContainerColor = Color.Transparent,
+                unselectedTextColor = Color.White,
+                unselectedIconColor = Color.White,
+                selectedContainerColor = Color(0xFF2D2D3A)
+            )
+        )
     }
 }
 

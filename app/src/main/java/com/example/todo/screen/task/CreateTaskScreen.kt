@@ -79,19 +79,19 @@ fun CreateTaskScreen(
     onCancelTaskClick: () -> Unit
 ) {
 
-    val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessage by SnackbarManager.snackbarMessages.collectAsState()
+    val snackBarHostState = remember { SnackbarHostState() }
+    val snackBarMessage by SnackbarManager.snackbarMessages.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    LaunchedEffect(snackbarMessage) {
-        snackbarMessage?.let {
+    LaunchedEffect(snackBarMessage) {
+        snackBarMessage?.let {
             val message = when (it) {
                 is SnackbarMessage.StringSnackbar -> it.message
                 is SnackbarMessage.ResourceSnackbar -> context.getString(it.message)
             }
             coroutineScope.launch {
-                snackbarHostState.showSnackbar(message)
+                snackBarHostState.showSnackbar(message)
             }
         }
     }
@@ -100,8 +100,8 @@ fun CreateTaskScreen(
     val golsUiState by viewModel.CreateGolsUistate
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        modifier = modifier.fillMaxSize().padding(top = 20.dp),
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) { paddingValues ->
     Box(
         modifier = modifier

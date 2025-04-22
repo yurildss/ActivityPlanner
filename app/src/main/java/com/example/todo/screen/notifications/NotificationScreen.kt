@@ -47,7 +47,7 @@ fun NotificationScreen(
 
     val tasks = viewModel.notificationScreenState.value.taskList
 
-    Column(Modifier.fillMaxSize().background(Color(0xFF1D1D2A)).padding(top = 20.dp)) {
+    Column(Modifier.fillMaxSize().padding(top = 20.dp).background(Color(0xFF1D1D2A))) {
         Button(
             onClick = onArrowBackClick,
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
