@@ -20,5 +20,5 @@ interface StorageService {
     suspend fun updateGoalPercent(taskId: String, goalId: Int, percent: Float)
     suspend fun getDelayedTasks(): List<Task>
     suspend fun getDelayedGoals(taskId: String): List<Goals>
-    suspend fun uptadeTaskNotification(taskId: String, notificationRead: Boolean)
+    suspend fun updateTaskNotification(taskId: String, notificationRead: Boolean)
 }

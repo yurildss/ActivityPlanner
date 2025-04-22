@@ -60,7 +60,7 @@ class StorageServiceImpl @Inject constructor(
         taskRef.update("completed", completed).await()
     }
 
-    override suspend fun uptadeTaskNotification(taskId: String, notificationRead: Boolean) {
+    override suspend fun updateTaskNotification(taskId: String, notificationRead: Boolean) {
         val taskRef = firestore.collection(TASK_COLLECTION).document(taskId)
         taskRef.update("notificationRead", notificationRead).await()
     }

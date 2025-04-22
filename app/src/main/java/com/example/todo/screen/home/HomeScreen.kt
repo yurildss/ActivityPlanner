@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -86,6 +87,8 @@ fun HomeScreen(
     onAddTaskClick: () -> Unit,
     onTaskClick: (String) -> Unit,
     onNotificationClick: () -> Unit,
+    onLateTaskClick: () -> Unit,
+    onCompletedTaskClick: () -> Unit,
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ){
 
@@ -94,7 +97,8 @@ fun HomeScreen(
 
     Box(contentAlignment = Alignment.BottomEnd,
         modifier = modifier
-            .fillMaxSize().padding(top = 20.dp)
+            .fillMaxSize()
+            .padding(top = 20.dp)
             .background(
                 Color(0xFF1D1D2A)
             )
@@ -107,7 +111,9 @@ fun HomeScreen(
                 onDatePickerChange = viewModel::setOpenDatePicker,
                 onDateSelected = viewModel::updateTaskDeadLine,
                 onAddTaskClick = onAddTaskClick,
-                actualDay = uiState.actualDay
+                actualDay = uiState.actualDay,
+                onLateTaskClick = onLateTaskClick,
+                onCompletedTaskClick = onCompletedTaskClick
             )
             TasksList(tasks, onTaskClick)
         }
@@ -116,7 +122,7 @@ fun HomeScreen(
 }
 
 @Composable
-private fun TasksList(
+fun TasksList(
     tasks: List<Task>,
     onTaskClick: (String) -> Unit
 ) {
@@ -243,8 +249,8 @@ fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit =
             }
             Column(
                 Modifier
-                .padding(start = 16.dp)
-                .fillMaxWidth(0.6f)
+                    .padding(start = 16.dp)
+                    .fillMaxWidth(0.6f)
             ) {
                 Text("Hello,",
                     color = Color.White,
@@ -274,7 +280,8 @@ fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit =
                         .size(54.dp)
                         .clip(CircleShape)
                         .background(Color(0xFFFF6B6B))
-                        .padding(16.dp).clickable {
+                        .padding(16.dp)
+                        .clickable {
                             onNotificationClick()
                         }
                 ){
@@ -289,7 +296,8 @@ fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit =
                         .size(54.dp)
                         .clip(CircleShape)
                         .background(Color(0x166EA68E))
-                        .padding(16.dp).clickable {
+                        .padding(16.dp)
+                        .clickable {
                             onNotificationClick()
                         }
                 ){
@@ -345,6 +353,8 @@ fun SettingsPart(
     date: String,
     onDatePickerChange: (Boolean) -> Unit,
     onDateSelected: (String) -> Unit,
+    onLateTaskClick: () -> Unit,
+    onCompletedTaskClick: () -> Unit,
     onAddTaskClick: () -> Unit
 ){
 
@@ -355,7 +365,7 @@ fun SettingsPart(
     ModalNavigationDrawer(
         drawerState =  drawerState,
         drawerContent = {
-            DrawerContent()
+            DrawerContent(onLateTaskClick, onCompletedTaskClick)
         },
     ) {
         Row(Modifier
@@ -368,7 +378,8 @@ fun SettingsPart(
                     .size(54.dp)
                     .clip(CircleShape)
                     .background(Color(0x166EA68E))
-                    .padding(16.dp).clickable {
+                    .padding(16.dp)
+                    .clickable {
                         scope.launch {
                             drawerState.open()
                         }
@@ -557,7 +568,7 @@ fun TaskCard(
 }
 
 @Composable
-fun DrawerContent(){
+fun DrawerContent(onLateTaskClick: () -> Unit, onCompletedTaskClick: () -> Unit){
     ModalDrawerSheet(
         drawerContainerColor = Color(0xFF2C2C3A)
     ) {
@@ -570,13 +581,12 @@ fun DrawerContent(){
         HorizontalDivider()
         NavigationDrawerItem(
             label = {
-                Text("Late tasks",
+                Text("All delay tasks",
                     color = Color.White,
                     fontFamily = FontFamily.Monospace)
             },
             selected = false,
-            onClick = {
-            },
+            onClick = onLateTaskClick,
             colors = NavigationDrawerItemDefaults.colors(
                 unselectedContainerColor = Color.Transparent,
                 unselectedTextColor = Color.White,
@@ -586,13 +596,12 @@ fun DrawerContent(){
         )
         NavigationDrawerItem(
             label = {
-                Text("Completed tasks",
+                Text("All completed tasks",
                     color = Color.White,
                     fontFamily = FontFamily.Monospace)
             },
             selected = false,
-            onClick = {
-            },
+            onClick = onCompletedTaskClick,
             colors = NavigationDrawerItemDefaults.colors(
                 unselectedContainerColor = Color.Transparent,
                 unselectedTextColor = Color.White,
@@ -676,10 +685,12 @@ private fun DatePick(
 @Composable
 @Preview
 fun TaskCardPreview(){
-    TaskCard(
-        Task(),
-        onTaskClick = {}
-    )
+    Row(modifier = Modifier.width(200.dp).height(200.dp)){
+        TaskCard(
+            Task(),
+            onTaskClick = {}
+        )
+    }
 }
 
 @Composable
@@ -691,18 +702,9 @@ fun SettingsPartPreview(){
         onDatePickerChange = {},
         onDateSelected = {},
         onAddTaskClick = {},
-        openDatePicker = false
-    )
-}
-
-@Composable
-@Preview
-fun HomeScreenPreview(){
-    HomeScreen(
-        onAddTaskClick = { },
-        onTaskClick = {},
-        viewModel = TODO(),
-        onNotificationClick = TODO(),
+        openDatePicker = false,
+        onLateTaskClick = {},
+        onCompletedTaskClick = {}
     )
 }
 
@@ -717,12 +719,15 @@ fun UserHomeScreenPreview(){
 @Preview
 @Composable
 fun DelayTaskCardPreview(){
-    DelayTaskCard(
-        task = Task(
-            title = "Teste de uma atividade muito grande",
-            description = "Uma atividade muito grande"
-        )
-        , onTaskClick = {})
+    Row(modifier = Modifier
+        .height(200.dp)
+        .width(200.dp)){
+        DelayTaskCard(
+            task = Task(
+                title = "Teste de uma atividade muito grande",
+                description = "Uma atividade muito grande"
+            ), onTaskClick = {})
+    }
 }
 
 @Composable
