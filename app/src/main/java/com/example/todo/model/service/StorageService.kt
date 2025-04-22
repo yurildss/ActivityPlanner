@@ -21,4 +21,5 @@ interface StorageService {
     suspend fun getDelayedTasks(): List<Task>
     suspend fun getDelayedGoals(taskId: String): List<Goals>
     suspend fun updateTaskNotification(taskId: String, notificationRead: Boolean)
+    suspend fun getCompletedTask(): List<Task>
 }

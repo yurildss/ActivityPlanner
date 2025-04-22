@@ -560,7 +560,7 @@ fun TaskCard(
                     color = Color(0xFF242636),
                     trackColor = Color(0xFF90C323),
                 )
-                Text("$progress%",
+                Text("${progress * 100}%",
                     color = Color(0xFF242636))
             }
         }
@@ -685,7 +685,9 @@ private fun DatePick(
 @Composable
 @Preview
 fun TaskCardPreview(){
-    Row(modifier = Modifier.width(200.dp).height(200.dp)){
+    Row(modifier = Modifier
+        .width(200.dp)
+        .height(200.dp)){
         TaskCard(
             Task(),
             onTaskClick = {}

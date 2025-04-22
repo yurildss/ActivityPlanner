@@ -8,22 +8,22 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class DelayTasksViewModel
-@Inject constructor(storageService: StorageService) : ToDoAppViewModel()
-{
-    var delayTaskUiState = mutableStateOf(DelayTaskUiState())
-        private set
+class CompletedTasksViewModel @Inject constructor(storageService: StorageService) : ToDoAppViewModel() {
+
+    var completedTaskUiState = mutableStateOf(CompletedTaskUiState())
+    private set
 
     init {
         launchCatching {
-            delayTaskUiState.value = DelayTaskUiState(
-                tasks = storageService.getCompletedTask()
+            completedTaskUiState.value = CompletedTaskUiState(
+                tasks = storageService.getDelayedTasks()
             )
         }
     }
 
 }
 
-data class DelayTaskUiState(
+
+data class CompletedTaskUiState(
     val tasks: List<Task> = emptyList()
 )

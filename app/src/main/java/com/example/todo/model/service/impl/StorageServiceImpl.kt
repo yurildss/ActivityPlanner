@@ -65,6 +65,15 @@ class StorageServiceImpl @Inject constructor(
         taskRef.update("notificationRead", notificationRead).await()
     }
 
+    override suspend fun getCompletedTask(): List<Task> {
+        val taskRef = firestore.collection(TASK_COLLECTION)
+        val snapshot = taskRef
+            .whereEqualTo("completed", true)
+            .get()
+            .await()
+        return snapshot.toObjects(Task::class.java)
+    }
+
     override suspend fun delete(taskId: String) {
         TODO("Not yet implemented")
     }

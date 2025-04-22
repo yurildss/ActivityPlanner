@@ -16,6 +16,7 @@ import com.example.todo.screen.notifications.NotificationScreen
 import com.example.todo.screen.sign_up.SignUpScreen
 import com.example.todo.screen.task.CreateTaskScreen
 import com.example.todo.screen.task.TaskInfo
+import com.example.todo.screen.task.ViewCompletedTasks
 import com.example.todo.screen.task.ViewDelayTasks
 
 @Composable
@@ -107,6 +108,10 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
 
         composable(Screens.DELAY_TASK_SCREEN.name){
             ViewDelayTasks()
+        }
+
+        composable(Screens.COMPLETED_TASK_SCREEN.name) {
+            ViewCompletedTasks()
         }
     }
 }
