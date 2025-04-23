@@ -13,4 +13,5 @@ interface AccountService {
     suspend fun createAnonymousAccount()
     suspend fun authenticate(email: String, password: String)
     suspend fun linkAccount(email: String, password: String)
+
 }

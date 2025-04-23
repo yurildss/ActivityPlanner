@@ -64,6 +64,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -71,13 +72,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todo.model.Task
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.toLocalDateTime
 
@@ -101,7 +102,7 @@ fun HomeScreen(
             .padding(top = 20.dp)
             .background(
                 Color(0xFF1D1D2A)
-            )
+            ).testTag("home_screen")
     ){
         Column(modifier = Modifier.fillMaxSize()) {
             UserHomeScreen(uiState, onNotificationClick)
@@ -418,7 +419,7 @@ fun SettingsPart(
                     .padding(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Button(modifier = Modifier.fillMaxWidth(),
+                Button(modifier = Modifier.fillMaxWidth().testTag("add_task_button"),
                     onClick = onAddTaskClick,
                     colors = ButtonDefaults.buttonColors(Color.Transparent)
                 ) {
@@ -433,11 +434,6 @@ fun SettingsPart(
             }
         }
     }
-}
-
-@Composable
-fun TaskCardWithoutGoals(task: Task, onTaskClick: (String) -> Unit, modifier: Modifier = Modifier){
-
 }
 
 @Composable
@@ -613,7 +609,7 @@ fun DrawerContent(onLateTaskClick: () -> Unit, onCompletedTaskClick: () -> Unit)
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, FormatStringsInDatetimeFormats::class)
 private fun DatePick(
     actualDay: String,
     openDatePicker: Boolean,

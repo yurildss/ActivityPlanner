@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,8 +47,8 @@ fun OpenScreen(modifier: Modifier = Modifier,
             )
             Button(
                 onClick = onGetStarted,
-                modifier = Modifier.padding(10.dp,20.dp).size(350.dp, 50.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xFFD5FFA4))
+                modifier = Modifier.padding(10.dp,20.dp).size(350.dp, 50.dp).testTag("getStartedButton"),
+                colors = ButtonDefaults.buttonColors(Color(0xFFD5FFA4)),
             ){
                 Text("Get Started", color = Color.Black, fontSize = 20.sp)
 

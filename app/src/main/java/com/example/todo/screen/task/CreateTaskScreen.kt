@@ -50,6 +50,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -63,6 +64,7 @@ import com.example.todo.common.SnackbarMessage
 import com.example.todo.model.Goals
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -100,7 +102,7 @@ fun CreateTaskScreen(
     val golsUiState by viewModel.CreateGolsUistate
 
     Scaffold(
-        modifier = modifier.fillMaxSize().padding(top = 20.dp),
+        modifier = modifier.fillMaxSize().padding(top = 20.dp).testTag("add_task_screen"),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) { paddingValues ->
     Box(
@@ -180,7 +182,8 @@ private fun ColumnScope.DatePick(
     openDatePicker: Boolean,
     date: String,
     onDatePickerChange: (Boolean) -> Unit,
-    onDateSelected: (String) -> Unit
+    onDateSelected: (String) -> Unit,
+
 ) {
     TextField(
         colors = TextFieldDefaults.textFieldColors(
@@ -211,7 +214,7 @@ private fun ColumnScope.DatePick(
         },
         readOnly = true
     )
-    val dateState = rememberDatePickerState()
+    val dateState = rememberDatePickerState( initialSelectedDateMillis = Clock.System.now().toEpochMilliseconds())
 
     AnimatedVisibility(visible = openDatePicker) {
         DatePickerDialog(
@@ -266,7 +269,7 @@ fun DropDownMenuSample(
             readOnly = true,
             modifier = Modifier
                 .menuAnchor()
-                .fillMaxWidth(),
+                .fillMaxWidth().testTag("priority_dropdown"),
             label = {
                 Text(
                     "Select the priority",
@@ -288,7 +291,7 @@ fun DropDownMenuSample(
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = { Text(option, color = Color.White) },
                     onClick = {
                         onPriorityTaskChange(option)
                         onExpandedChange(false)
@@ -322,7 +325,7 @@ fun IconPickerDropdown(
             readOnly = true,
             modifier = Modifier
                 .menuAnchor()
-                .fillMaxWidth(),
+                .fillMaxWidth().testTag("select_a_icon"),
             label = { Text("Select a icon", color = Color.White, fontFamily = FontFamily.Monospace) },
             trailingIcon = {
                 Row(
@@ -388,7 +391,8 @@ fun AddGoalsCard(
         ) {
             Button(
                 onClick = onAddGolsClick,
-                colors = ButtonDefaults.buttonColors(Color(0xFF00FF95))
+                colors = ButtonDefaults.buttonColors(Color(0xFF00FF95)),
+                modifier = Modifier.testTag("add_goals_button")
             ) {
                 Text("Add Goals")
             }
@@ -422,7 +426,7 @@ fun AddGoalsCard(
             }
             Button(
                 onClick = onSaveTaskClick,
-                modifier = Modifier.fillMaxWidth(0.75f),
+                modifier = Modifier.fillMaxWidth(0.75f).testTag("save_task_button"),
                 colors = ButtonDefaults.buttonColors(Color(0xFF008CBA))
             ) {
                 Text("Save")
@@ -468,7 +472,7 @@ fun GoalsEntry(
                 createGoalsScreenState.title,
                 onValueChange = onGoalsTaskChange,
                 modifier = Modifier
-                    .fillMaxWidth(0.75f),
+                    .fillMaxWidth(0.75f).testTag("goals_title"),
                 label = {
                     Text(
                         "Title",
@@ -486,7 +490,7 @@ fun GoalsEntry(
                 createGoalsScreenState.description,
                 onValueChange = onDescriptionGoalsChange,
                 modifier = Modifier
-                    .fillMaxWidth(0.75f),
+                    .fillMaxWidth(0.75f).testTag("goals_description"),
                 label = {
                     Text(
                         "Description",
@@ -503,6 +507,7 @@ fun GoalsEntry(
             OutlinedTextField(
                 createGoalsScreenState.timeToComplete,
                 onValueChange = onTimeToCompleteChange,
+                modifier = Modifier.testTag("time_to_complete"),
                 label = {
                     Text(
                         "Time to complete",
@@ -527,7 +532,8 @@ fun GoalsEntry(
                     onClick = {
                     onCreateGols(index)
                     onGoalsIsSaveChange()
-                }, colors = ButtonDefaults.buttonColors(Color(0xFF00FF95)) ) {
+                }, colors = ButtonDefaults.buttonColors(Color(0xFF00FF95)),
+                    modifier = Modifier.testTag("add_goals_button") ) {
                     Text("Add")
                 }
                 Button(

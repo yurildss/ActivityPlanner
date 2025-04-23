@@ -1,19 +1,20 @@
 [versions]
 agp = "8.8.0"
-composeBomVersion = "2025.01.01"
+composeBomVersion = "2025.04.00"
 googleFirebaseAuthKtx = "22.1.1"
 hiltAndroid = "2.51.1"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
+junitVersion = "1.1.5"
+espressoCore = "3.5.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2024.04.01"
 firebaseAuthKtx = "23.2.0"
 lifecycleRuntimeComposeAndroid = "2.8.7"
 playServicesAuth = "21.3.0"
+uiTestJunit4Android = "1.7.8"
 
 [libraries]
 androidx-compose-bom-v20250101 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
@@ -38,6 +39,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

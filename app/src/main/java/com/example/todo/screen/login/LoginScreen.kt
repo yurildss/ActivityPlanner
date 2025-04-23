@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,7 +68,7 @@ fun LoginScreen(
     }
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().testTag("login_screen"),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
         Box(
@@ -114,7 +115,7 @@ fun LoginScreen(
                     onClick = { viewModel.onSignInClick(navigateToHome) },
                     modifier = Modifier
                         .padding(5.dp)
-                        .size(350.dp, 50.dp),
+                        .size(350.dp, 50.dp).testTag("login_button"),
                     colors = ButtonDefaults.buttonColors(Color(0xFFB2F02C))
                 ) {
                     Text("Login", color = Color.Black, fontSize = 20.sp)

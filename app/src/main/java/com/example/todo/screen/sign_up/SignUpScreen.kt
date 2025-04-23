@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,7 +33,7 @@ fun SignUpScreen(
 
     Box(modifier = modifier
         .fillMaxSize()
-        .background(Color(0xFF6EA68E))){
+        .background(Color(0xFF6EA68E)).testTag("register_screen")){
         Column(
             Modifier
                 .fillMaxSize()
