@@ -37,6 +37,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -72,6 +73,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todo.model.Task
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
@@ -96,29 +98,40 @@ fun HomeScreen(
     val uiState by viewModel.uiState
     val tasks = uiState.tasksOfTheDay
 
-    Box(contentAlignment = Alignment.BottomEnd,
-        modifier = modifier
-            .fillMaxSize()
-            .padding(top = 20.dp)
-            .background(
-                Color(0xFF1D1D2A)
-            ).testTag("home_screen")
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState =  drawerState,
+        drawerContent = {
+            DrawerContent(onLateTaskClick, onCompletedTaskClick)
+        },
     ){
-        Column(modifier = Modifier.fillMaxSize()) {
-            UserHomeScreen(uiState, onNotificationClick)
-            SettingsPart(
-                openDatePicker = uiState.openDatePicker,
-                date = uiState.actualDay,
-                onDatePickerChange = viewModel::setOpenDatePicker,
-                onDateSelected = viewModel::updateTaskDeadLine,
-                onAddTaskClick = onAddTaskClick,
-                actualDay = uiState.actualDay,
-                onLateTaskClick = onLateTaskClick,
-                onCompletedTaskClick = onCompletedTaskClick
-            )
-            TasksList(tasks, onTaskClick)
+
+        Box(contentAlignment = Alignment.BottomEnd,
+            modifier = modifier
+                .fillMaxSize()
+                .padding(top = 20.dp)
+                .background(
+                    Color(0xFF1D1D2A)
+                ).testTag("home_screen")
+        ){
+            Column(modifier = Modifier.fillMaxSize()) {
+                UserHomeScreen(uiState, onNotificationClick)
+                SettingsPart(
+                    openDatePicker = uiState.openDatePicker,
+                    date = uiState.actualDay,
+                    onDatePickerChange = viewModel::setOpenDatePicker,
+                    onDateSelected = viewModel::updateTaskDeadLine,
+                    onAddTaskClick = onAddTaskClick,
+                    actualDay = uiState.actualDay,
+                    drawerState = drawerState,
+                    scope = scope
+                )
+                TasksList(tasks, onTaskClick)
+            }
+            BottomMenu()
         }
-        BottomMenu()
     }
 }
 
@@ -284,7 +297,7 @@ fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit =
                         .padding(16.dp)
                         .clickable {
                             onNotificationClick()
-                        }
+                        }.testTag("has_notification")
                 ){
                     Icon(Icons.Default.Notifications,
                         null,
@@ -300,7 +313,7 @@ fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit =
                         .padding(16.dp)
                         .clickable {
                             onNotificationClick()
-                        }
+                        }.testTag("notification_button")
                 ){
                     Icon(Icons.Default.Notifications,
                         null,
@@ -354,21 +367,13 @@ fun SettingsPart(
     date: String,
     onDatePickerChange: (Boolean) -> Unit,
     onDateSelected: (String) -> Unit,
-    onLateTaskClick: () -> Unit,
-    onCompletedTaskClick: () -> Unit,
-    onAddTaskClick: () -> Unit
+    onAddTaskClick: () -> Unit,
+    drawerState: DrawerState,
+    scope: CoroutineScope
 ){
 
     val dateState = rememberDatePickerState()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
 
-    ModalNavigationDrawer(
-        drawerState =  drawerState,
-        drawerContent = {
-            DrawerContent(onLateTaskClick, onCompletedTaskClick)
-        },
-    ) {
         Row(Modifier
             .fillMaxWidth()
             .padding(10.dp),
@@ -433,7 +438,6 @@ fun SettingsPart(
                 }
             }
         }
-    }
 }
 
 @Composable
@@ -518,7 +522,7 @@ fun TaskCard(
             .clickable {
                 onTaskClick(task.id)
             }
-            .padding(15.dp) // 25% da altura da tela)
+            .padding(15.dp).testTag("task_card") // 25% da altura da tela)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -701,8 +705,8 @@ fun SettingsPartPreview(){
         onDateSelected = {},
         onAddTaskClick = {},
         openDatePicker = false,
-        onLateTaskClick = {},
-        onCompletedTaskClick = {}
+        drawerState = TODO(),
+        scope = TODO()
     )
 }
 
@@ -753,7 +757,8 @@ fun TaskListPreview(){
                 description = "Uma atividade muito grande"),
             Task(id = "7",
                 title = "Lorem",
-                description = "Uma atividade muito grande")
+                description = "Uma atividade muito grande"),
+            Task(id = "8", title = "Tarefa 2", completed = true)
         ),
         onTaskClick = {  }
     )
