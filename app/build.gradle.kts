@@ -50,12 +50,12 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx)
-    implementation("com.google.firebase:firebase-analytics")
+    implementation(libs.firebase.analytics)
 
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0") // não tá no catálogo, pode adicionar se quiser
+    implementation(libs.androidx.hilt.navigation.compose) // não tá no catálogo, pode adicionar se quiser
 
     // Compose
     implementation(platform(libs.androidx.compose.bom))
@@ -72,12 +72,12 @@ dependencies {
     implementation(libs.play.services.auth)
 
     // Kotlinx datetime
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+    implementation(libs.kotlinx.datetime)
 
     // Testes unitários
     testImplementation(libs.junit)
-    testImplementation("org.mockito:mockito-core:3.11.2")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
     implementation(kotlin("test"))
 
@@ -85,9 +85,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit) // esse precisa ser 1.1.5 no catálogo, não 1.2.1
     androidTestImplementation(libs.androidx.espresso.core) // precisa ser 3.5.0 no catálogo
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+    androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(platform(libs.androidx.compose.bom))  // Add this for test too
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.51.1")
+    kaptAndroidTest(libs.hilt.android.compiler)
 
     // Debug/Test tooling
     debugImplementation(libs.androidx.ui.tooling)

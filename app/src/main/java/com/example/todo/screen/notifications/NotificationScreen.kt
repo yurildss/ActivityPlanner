@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -75,7 +76,7 @@ private fun NotificationsList(tasks: List<Task>, onTaskClick: (String) -> Unit, 
             )
         }else{
             LazyColumn(
-                Modifier.fillMaxSize(),
+                Modifier.fillMaxSize().testTag("notification_screen"),
                 contentPadding = PaddingValues(10.dp)
             ) {
                 items(tasks, key = {it.id}) { task ->
@@ -130,7 +131,7 @@ fun NotificationCardScreen(modifier: Modifier = Modifier, task: Task, onTaskClic
             .background(Color(0xFF0E0E15))
             .clickable {
                 onTaskClick(task.id)
-            }
+            }.testTag("tag_task${task.title}")
     ){
         Column(Modifier
             .fillMaxWidth()
@@ -147,6 +148,7 @@ fun NotificationCardScreen(modifier: Modifier = Modifier, task: Task, onTaskClic
                     fontFamily = FontFamily.Monospace,
                     color = Color.White,
                     fontStyle = FontStyle.Italic,
+                    modifier = Modifier.testTag("task_title")
                 )
                 Text(
                     text = " is lates",

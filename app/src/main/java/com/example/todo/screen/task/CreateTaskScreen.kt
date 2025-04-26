@@ -139,7 +139,8 @@ fun CreateTaskScreen(
                 taskuiState.openDatePicker,
                 taskuiState.deadLine,
                 viewModel::setOpenDatePicker,
-                viewModel::updateTaskDeadLine
+                viewModel::updateTaskDeadLine,
+                "DeadLine_task"
             )
             DropDownMenuSample(
                 options = viewModel.options,
@@ -183,7 +184,7 @@ private fun ColumnScope.DatePick(
     date: String,
     onDatePickerChange: (Boolean) -> Unit,
     onDateSelected: (String) -> Unit,
-
+    textTagDeadLine: String,
 ) {
     TextField(
         colors = TextFieldDefaults.textFieldColors(
@@ -195,7 +196,7 @@ private fun ColumnScope.DatePick(
             Text(
                 text = "DeadLine",
                 color = Color.White,
-                fontFamily = FontFamily.Monospace
+                fontFamily = FontFamily.Monospace,
             )
         },
         interactionSource = remember {
@@ -212,7 +213,8 @@ private fun ColumnScope.DatePick(
                 }
             }
         },
-        readOnly = true
+        readOnly = true,
+        modifier = Modifier.testTag(textTagDeadLine)
     )
     val dateState = rememberDatePickerState( initialSelectedDateMillis = Clock.System.now().toEpochMilliseconds())
 
@@ -502,7 +504,8 @@ fun GoalsEntry(
             DatePick(
                 createGoalsScreenState.openGoalsDatePicker,
                 createGoalsScreenState.deadLine, onDatePickerChange,
-                onDateSelected
+                onDateSelected,
+                "DeadLine_goals"
             )
             OutlinedTextField(
                 createGoalsScreenState.timeToComplete,
@@ -533,7 +536,7 @@ fun GoalsEntry(
                     onCreateGols(index)
                     onGoalsIsSaveChange()
                 }, colors = ButtonDefaults.buttonColors(Color(0xFF00FF95)),
-                    modifier = Modifier.testTag("add_goals_button") ) {
+                    modifier = Modifier.testTag("confirm_goals_button") ) {
                     Text("Add")
                 }
                 Button(

@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -325,7 +326,7 @@ fun ViewGoalsCard(
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xFF588D7D))
-            .padding(10.dp)
+            .padding(10.dp).testTag("view_goals_card")
     ){
 
         Column(Modifier
@@ -374,7 +375,7 @@ fun ViewGoalsCard(
                         thumbColor = Color(0xFF4E7B6E),
                         activeTrackColor = Color(0xFFB7EE35)
                     ),
-                    modifier = Modifier.fillMaxWidth(0.85f)
+                    modifier = Modifier.fillMaxWidth(0.85f).testTag("slider_goal_progress")
                 )
                 Text(
                     "${(sliderPosition * 100).toInt()}%",
@@ -398,7 +399,7 @@ fun GoalsCard(goal: Goals){
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xFF588D7D))
-            .padding(10.dp)
+            .padding(10.dp).testTag("goals_card")
     ){
         Column(Modifier.fillMaxWidth()) {
             Row(modifier = Modifier.fillMaxWidth(),
@@ -439,15 +440,16 @@ fun GoalsCard(goal: Goals){
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GoalsCardSwitcher(goal: Goals = Goals(), sliderPositionFunc: (Float)->Unit,
-                      sliderPosition: Float,
-                      onUpdatePercentGoalsClick: ()-> Unit, expanded: Boolean,
-                      expandedChange: (Boolean) -> Unit) {
+fun GoalsCardSwitcher(
+    goal: Goals = Goals(), sliderPositionFunc: (Float)->Unit,
+    sliderPosition: Float,
+    onUpdatePercentGoalsClick: ()-> Unit, expanded: Boolean,
+    expandedChange: (Boolean) -> Unit) {
 
     Box(modifier = Modifier
         .fillMaxWidth()
         .clickable { expandedChange(!expanded) }
-        .padding(8.dp)
+        .padding(8.dp).testTag("goals_card_switcher")
     ) {
         AnimatedContent(targetState = expanded, transitionSpec = {
             fadeIn() with fadeOut()
