@@ -17,7 +17,7 @@ class DelayTasksViewModel
     init {
         launchCatching {
             delayTaskUiState.value = DelayTaskUiState(
-                tasks = storageService.getCompletedTask()
+                tasks = storageService.getDelayedTasks()
             )
         }
     }
