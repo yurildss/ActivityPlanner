@@ -94,7 +94,7 @@ class StorageServiceImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateGoalPercent(taskId: String, goalIndex: Int, percent: Float) {
+    override suspend fun updateGoalPercent(taskId: String, goalId: Int, percent: Float) {
         val taskRef = firestore.collection(TASK_COLLECTION).document(taskId)
         val snapshot = taskRef.get().await()
         Log.d("TESTE", "Raw Data: ${snapshot.data}")
@@ -102,15 +102,15 @@ class StorageServiceImpl @Inject constructor(
         Log.d("TESTE", "isCompleted no Firestore: ${snapshot.data?.get("goals")}")
         Log.d("TESTE", "isCompleted convertido (Task): ${task?.goals}")
 
-        if (task != null && goalIndex in task.goals.indices) {
+        if (task != null && goalId in task.goals.indices) {
             val updatedGols = task.goals.toMutableList()
 
             if(percent == 1F){
-                updatedGols[goalIndex] = updatedGols[goalIndex].copy(completed = true, percentComplete = percent)
+                updatedGols[goalId] = updatedGols[goalId].copy(completed = true, percentComplete = percent)
             }
             else{
                 Log.d("TAG", "Else")
-                updatedGols[goalIndex] = updatedGols[goalIndex].copy(percentComplete = percent, completed = false)
+                updatedGols[goalId] = updatedGols[goalId].copy(percentComplete = percent, completed = false)
             }
 
 
@@ -129,7 +129,6 @@ class StorageServiceImpl @Inject constructor(
             .whereEqualTo("notificationRead", false)
             .get()
             .await()
-        Log.d("TAG", "getDelayedTasks: $snapshot")
         return snapshot.toObjects(Task::class.java)
     }
 

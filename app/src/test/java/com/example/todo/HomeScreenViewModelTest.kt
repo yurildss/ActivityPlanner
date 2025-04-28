@@ -140,4 +140,29 @@ class HomeScreenViewModelTest {
     fun `should update user name after init`() = runTest {
         assertEquals("Test Home Screen", viewModel.uiState.value.name)
     }
+
+    @Test
+    fun `should update serach text`(){
+        viewModel.onSearchTextChange("test")
+        assertEquals("test", viewModel.uiState.value.searchText)
+    }
+
+    @Test
+    fun `should update date picker state`(){
+        viewModel.setOpenDatePicker(true)
+        assertEquals(true, viewModel.uiState.value.openDatePicker)
+    }
+
+    @Test
+    fun `should update actual day and tasks when updateTaskDeadLine is called`() = runTest {
+        viewModel.updateTaskDeadLine("28/04/2025")
+        assertEquals("28/04/2025", viewModel.uiState.value.actualDay)
+        assertEquals(tasks, viewModel.uiState.value.tasksOfTheDay)
+    }
+
+    @Test
+    fun `init should setUp the user name and delay tasks`() = runTest {
+        assertEquals( "Test Home Screen",viewModel.uiState.value.name)
+        assertEquals(tasks, viewModel.uiState.value.tasksOfTheDay)
+    }
 }
