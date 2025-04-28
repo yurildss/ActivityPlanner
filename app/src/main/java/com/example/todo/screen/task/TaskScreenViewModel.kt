@@ -74,6 +74,11 @@ class TaskScreenViewModel
                 _taskScreenState.value = _taskScreenState.value.copy(
                     isCompleted = true
                 )
+            }else{
+                storageService.updateTaskCompleted(taskId!!, false)
+                _taskScreenState.value = _taskScreenState.value.copy(
+                    isCompleted = false
+                )
             }
     }
 
@@ -144,19 +149,13 @@ class TaskScreenViewModel
 
     fun updatePercentGoals(goalIndex: Int){
 
-        Log.d("updatePercentGoals", "#1")
-
         launchCatching {
-            Log.d("updatePercentGoals", "#2")
             if (taskId != null) {
-                Log.d("updatePercentGoals", "#3")
                 storageService.updateGoalPercent(taskId, goalIndex, sliderPosition.floatValue)
-                Log.d("updatePercentGoals", "#4")
                 _taskScreenState.value = _taskScreenState.value.copy(
                     goalsCardExpand = false
                 )
             }
-            Log.d("updatePercentGoals", "#5")
             updateTaskScreen()
             isTaskCompleted()
         }

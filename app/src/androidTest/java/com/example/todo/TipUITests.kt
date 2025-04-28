@@ -18,6 +18,7 @@ import org.junit.Test
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
+import androidx.compose.ui.test.swipeRight
 
 @HiltAndroidTest
 class TipUITests {
@@ -148,18 +149,14 @@ class TipUITests {
             .onNodeWithTag("slider_goal_progress")
             .assertExists()
 
-        val bounds = sliderNode.fetchSemanticsNode().boundsInRoot
-
         sliderNode.performTouchInput {
-            swipe(
-                start = Offset(bounds.left + 5f, bounds.center.y),
-                end = Offset(bounds.right - 5f, bounds.center.y),
-                durationMillis = 300
-            )
+            down(centerLeft)
+            moveTo(centerRight)
+            up() //levantamento do dedo
         }
 
         composeTestRule
-            .onNodeWithText("100%")
+            .onNodeWithText("100%", useUnmergedTree = true)
             .assertExists()
     }
 
@@ -171,22 +168,43 @@ class TipUITests {
         addTaskWithGoals()
 
         composeTestRule.waitUntil(timeoutMillis = 5000) {
-            composeTestRule.onAllNodesWithTag("task_card").fetchSemanticsNodes().isNotEmpty()
+            composeTestRule.onAllNodesWithTag("delay_task_card").fetchSemanticsNodes().isNotEmpty()
         }
 
-        composeTestRule.onNodeWithTag("task_card").performClick()
+        // performa o click no primeiro node encontrado
+        composeTestRule
+            .onAllNodesWithTag("delay_task_card")[0]
+            .performClick()
+
 
         composeTestRule.waitUntil(timeoutMillis = 5000){
-            composeTestRule.onAllNodesWithTag("goals_card").fetchSemanticsNodes().isNotEmpty()
+            composeTestRule.onAllNodesWithTag("goals_card", useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
         }
 
-        composeTestRule.onNodeWithTag("goals_card_switcher").performClick()
+        composeTestRule.onNodeWithTag("goals_card_switcher", useUnmergedTree = true).performClick()
 
         composeTestRule.waitUntil {
-            composeTestRule.onAllNodesWithTag("view_goals_card").fetchSemanticsNodes().isNotEmpty()
+            composeTestRule.onAllNodesWithTag("view_goals_card", useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
         }
 
         slideTo100Percent()
+
     }
+
+    @Test
+    fun allTasksCompleted(){
+        login()
+
+        composeTestRule.onNodeWithTag("tasks_menu").performClick()
+
+        composeTestRule.waitUntil {
+            composeTestRule.onAllNodesWithTag("drawer_content", useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
+        }
+
+        composeTestRule.onNodeWithTag("all_completed_task").performClick()
+
+        composeTestRule.onNodeWithTag("completed_task_screen").assertExists()
+    }
+
 
 }

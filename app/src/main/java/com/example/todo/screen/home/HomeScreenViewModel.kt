@@ -78,18 +78,13 @@ class HomeScreenViewModel @Inject constructor(
         }
 
     fun updateTaskDeadLine(newValue: String) {
-        Log.d("HomeScreenViewModel", "#1")
         launchCatching {
-            Log.d("HomeScreenViewModel", "#2")
 
             uiState.value = uiState.value.copy(actualDay = newValue)
-            Log.d("HomeScreenViewModel", "#3")
 
             val tasks = storageService.getTaskByDay(newValue)
-            Log.d("HomeScreenViewModel", "#4 - tasks: $tasks")
 
             uiState.value = uiState.value.copy(tasksOfTheDay = tasks)
-            Log.d("HomeScreenViewModel", "#5")
         }
     }
 }

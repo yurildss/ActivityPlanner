@@ -80,6 +80,8 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
     implementation(kotlin("test"))
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+
 
     // Testes instrumentados
     androidTestImplementation(libs.androidx.junit) // esse precisa ser 1.1.5 no catálogo, não 1.2.1

@@ -359,6 +359,7 @@ fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit =
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPart(
@@ -374,9 +375,8 @@ fun SettingsPart(
 
     val dateState = rememberDatePickerState()
 
-        Row(Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
+        Row(
+            Modifier.fillMaxWidth().padding(10.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
@@ -389,7 +389,7 @@ fun SettingsPart(
                         scope.launch {
                             drawerState.open()
                         }
-                    }
+                    }.testTag("tasks_menu")
             ){
                 Icon(Icons.Default.Menu,
                     null,
@@ -458,7 +458,7 @@ fun DelayTaskCard(
             .clickable {
                 onTaskClick(task.id)
             }
-            .padding(15.dp) // 25% da altura da tela)
+            .padding(15.dp).testTag("delay_task_card") // 25% da altura da tela)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -570,7 +570,8 @@ fun TaskCard(
 @Composable
 fun DrawerContent(onLateTaskClick: () -> Unit, onCompletedTaskClick: () -> Unit){
     ModalDrawerSheet(
-        drawerContainerColor = Color(0xFF2C2C3A)
+        drawerContainerColor = Color(0xFF2C2C3A),
+        modifier = Modifier.testTag("drawer_content")
     ) {
         Text(
             "Tasks infos",
@@ -607,7 +608,8 @@ fun DrawerContent(onLateTaskClick: () -> Unit, onCompletedTaskClick: () -> Unit)
                 unselectedTextColor = Color.White,
                 unselectedIconColor = Color.White,
                 selectedContainerColor = Color(0xFF2D2D3A)
-            )
+            ),
+            modifier = Modifier.testTag("all_completed_task")
         )
     }
 }

@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,8 +35,9 @@ fun ViewCompletedTasks(
     Box(modifier
         .fillMaxSize()
         .padding(top = 20.dp)
-        .background(Color(0xFF1D1D2A)),
-        contentAlignment = Alignment.BottomEnd)
+        .background(Color(0xFF1D1D2A)).testTag("completed_task_screen"),
+        contentAlignment = Alignment.BottomEnd
+    )
     {
         Column(modifier.fillMaxSize()) {
             CompletedTasksList(viewModel.delayTaskUiState.value.tasks, {})

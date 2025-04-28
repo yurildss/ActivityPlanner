@@ -138,7 +138,6 @@ class StorageServiceImpl @Inject constructor(
     }
 
     override suspend fun getTaskByDay(day: String): List<Task> {
-        Log.d("TAG", "getTaskByDay: $day")
         return firestore
             .collection(TASK_COLLECTION)
             .whereEqualTo(DEADLINE_FIELD_STRING, day)

@@ -5,19 +5,13 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="TipUITests">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="addTaskWithGoals()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="login()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="viewTaskByNotification()">
+      <SelectionState runConfigName="makeTaskComplete()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="makeTaskComplete()">
+      <SelectionState runConfigName="allTasksCompleted()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
