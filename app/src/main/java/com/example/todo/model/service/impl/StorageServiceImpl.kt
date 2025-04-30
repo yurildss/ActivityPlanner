@@ -44,7 +44,6 @@ class StorageServiceImpl @Inject constructor(
 
     override suspend fun save(task: Task): String {
         val updatedTask = task.copy(userId = auth.currentUserId)
-        Log.d("TAG", "save: ${auth.currentUserId}")
         return firestore.collection(TASK_COLLECTION).add(updatedTask).await().id
     }
 

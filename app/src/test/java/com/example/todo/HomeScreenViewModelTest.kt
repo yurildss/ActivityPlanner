@@ -165,4 +165,10 @@ class HomeScreenViewModelTest {
         assertEquals( "Test Home Screen",viewModel.uiState.value.name)
         assertEquals(tasks, viewModel.uiState.value.tasksOfTheDay)
     }
+
+    @Test
+    fun `should get delay task`(){
+        assertEquals(3, viewModel.uiState.value.notifications)
+    }
+
 }

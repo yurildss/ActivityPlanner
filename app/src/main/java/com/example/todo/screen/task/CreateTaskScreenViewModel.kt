@@ -77,8 +77,6 @@ class CreateTaskScreenViewModel
                 }
             }
         )
-
-        Log.d("TAG", "onSelectedIconChange: ${CreateTaskUistate.value.tags}")
     }
 
     fun onExpandedIconChange(newValue: Boolean){
@@ -130,8 +128,6 @@ class CreateTaskScreenViewModel
             CreateTaskUistate.value.copy(priority = newValue)
 
         selectedPriorityOption.value = newValue
-
-        Log.d("TAG", "onPriorityTaskChange: $newValue")
     }
 
     /**
@@ -177,7 +173,6 @@ class CreateTaskScreenViewModel
                 deadLine = parsedDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds(),
                 isSave = true
             )
-            Log.d("TAG", "onCreateGoals: ${CreateTaskUistate.value.gols}")
         }else{
             SnackbarManager.showMessage(R.string.empty_field_goals)
         }

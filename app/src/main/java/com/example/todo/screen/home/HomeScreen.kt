@@ -375,8 +375,7 @@ fun SettingsPart(
 
     val dateState = rememberDatePickerState()
 
-        Row(
-            Modifier.fillMaxWidth().padding(10.dp),
+        Row(Modifier.fillMaxWidth().padding(10.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
