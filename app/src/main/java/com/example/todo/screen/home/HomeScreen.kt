@@ -375,7 +375,8 @@ fun SettingsPart(
 
     val dateState = rememberDatePickerState()
 
-        Row(Modifier.fillMaxWidth().padding(10.dp),
+        Row(
+            Modifier.fillMaxWidth().padding(10.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
@@ -492,7 +493,7 @@ fun DelayTaskCard(
                 horizontalArrangement = Arrangement.SpaceBetween) {
                 LinearProgressIndicator(
                     progress = { progress },
-                    modifier = Modifier.fillMaxWidth(0.70f),
+                    modifier = Modifier.fillMaxWidth(0.65f),
                     color = Color(0xFFFFFFFF),
                     trackColor = Color(0xFFFFD93D),
                 )
@@ -555,7 +556,7 @@ fun TaskCard(
                 horizontalArrangement = Arrangement.SpaceBetween) {
                 LinearProgressIndicator(
                     progress = { progress },
-                    modifier = Modifier.fillMaxWidth(0.70f),
+                    modifier = Modifier.fillMaxWidth(0.65f),
                     color = Color(0xFF242636),
                     trackColor = Color(0xFF90C323),
                 )
@@ -683,22 +684,20 @@ private fun DatePick(
     }
 }
 
+
 @Composable
 @Preview
-fun TaskCardPreview(){
-    Row(modifier = Modifier
-        .width(200.dp)
-        .height(200.dp)){
-        TaskCard(
-            Task(),
-            onTaskClick = {}
-        )
-    }
+fun UserHomeScreenPreview(){
+    UserHomeScreen(
+        uiState = HomeScreenUiState(name = "Yuri Lima")
+    )
 }
 
 @Composable
 @Preview
 fun SettingsPartPreview(){
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val rememberCoroutineScope = rememberCoroutineScope()
     SettingsPart(
         "",
         date = "",
@@ -706,16 +705,8 @@ fun SettingsPartPreview(){
         onDateSelected = {},
         onAddTaskClick = {},
         openDatePicker = false,
-        drawerState = TODO(),
-        scope = TODO()
-    )
-}
-
-@Composable
-@Preview
-fun UserHomeScreenPreview(){
-    UserHomeScreen(
-        uiState = HomeScreenUiState(name = "Yuri Lima")
+        drawerState = drawerState,
+        scope = rememberCoroutineScope
     )
 }
 
@@ -763,4 +754,17 @@ fun TaskListPreview(){
         ),
         onTaskClick = {  }
     )
+}
+
+@Composable
+@Preview
+fun TaskCardPreview(){
+    Row(modifier = Modifier
+        .width(200.dp)
+        .height(200.dp)){
+        TaskCard(
+            Task(),
+            onTaskClick = {}
+        )
+    }
 }
