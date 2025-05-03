@@ -27,18 +27,26 @@ class AccountServiceImpl @Inject constructor(
 
     override val currentUser: Flow<User>
         get() = callbackFlow {
-            val listener =
-                FirebaseAuth.AuthStateListener { auth ->
-                    this.trySend(auth.currentUser?.let { it.displayName?.let { it1 ->
-                        User(
-                            it.uid,
-                            it1
-                        )
-                    } } ?: User())
+            val listener = FirebaseAuth.AuthStateListener { auth ->
+                val firebaseUser = auth.currentUser
+
+                val user = if (firebaseUser != null) {
+                    User(
+                        id = firebaseUser.uid,
+                        name = firebaseUser.displayName ?: "",
+                        email = firebaseUser.email ?: ""
+                    )
+                } else {
+                    User() // Usuário vazio ou não autenticado
                 }
-            auth.addAuthStateListener(listener)
-            awaitClose { auth.removeAuthStateListener(listener) }
+
+                trySend(user).isSuccess
+            }
+
+            Firebase.auth.addAuthStateListener(listener)
+            awaitClose { Firebase.auth.removeAuthStateListener(listener) }
         }
+
 
 
     override suspend fun register(email: String, password: String, name: String) {
@@ -54,7 +62,9 @@ class AccountServiceImpl @Inject constructor(
                         .setDisplayName(name)
                         .build()
 
+
                     user?.updateProfile(profilesUpdates)
+
                 }else{
                     it.exception?.printStackTrace()
                 }
@@ -83,6 +93,17 @@ class AccountServiceImpl @Inject constructor(
         val credential = EmailAuthProvider.getCredential(email, password)
         Firebase.auth.currentUser!!.linkWithCredential(credential)
             .await()
+    }
+
+    override suspend fun updatePassword(password: String) {
+        val user = auth.currentUser
+        user!!.updatePassword(password).await()
+    }
+
+    override suspend fun updateName(name: String) {
+        val user = auth.currentUser
+        user!!.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build()).await()
+
     }
 
 }

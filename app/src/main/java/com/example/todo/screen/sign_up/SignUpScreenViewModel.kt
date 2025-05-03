@@ -46,6 +46,7 @@ class SignUpScreenViewModel @Inject constructor(
 
         if(password.isBlank()){
             SnackbarManager.showMessage(R.string.empty_password_error)
+            return
         }
 
         if(password != uiState.value.repeatPassword){
