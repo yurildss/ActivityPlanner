@@ -18,6 +18,7 @@ import com.example.todo.screen.task.CreateTaskScreen
 import com.example.todo.screen.task.TaskInfo
 import com.example.todo.screen.task.ViewCompletedTasks
 import com.example.todo.screen.task.ViewDelayTasks
+import com.example.todo.screen.user.UserScreen
 
 @Composable
 fun ToDoApp(navController: NavHostController = rememberNavController()){
@@ -66,7 +67,8 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
                 },
                 onCompletedTaskClick = {
                     navController.navigate(Screens.COMPLETED_TASK_SCREEN.name)
-                }
+                },
+                navController = navController,
             )
         }
 
@@ -112,6 +114,12 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
 
         composable(Screens.COMPLETED_TASK_SCREEN.name) {
             ViewCompletedTasks()
+        }
+
+        composable(Screens.USER_PROFILE_SCREEN.name){
+            UserScreen(
+                navController = navController
+            )
         }
     }
 }

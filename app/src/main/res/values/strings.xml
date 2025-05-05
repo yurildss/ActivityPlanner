@@ -6,4 +6,6 @@
     <string name="password_match_error">Passwords do not match.</string>
     <string name="empty_field_task">One or more fields are empty</string>
     <string name="empty_field_goals">It\'s no allow empty fields</string>
+    <string name="password_change_success"> Password changed successfully </string>
+    <string name="name_change_success"> Name changed successfully </string>"
 </resources>

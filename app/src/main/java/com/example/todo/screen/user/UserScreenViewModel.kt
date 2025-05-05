@@ -1,6 +1,8 @@
 package com.example.todo.screen.user
 
 import androidx.compose.runtime.mutableStateOf
+import com.example.todo.R.string
+import com.example.todo.common.SnackbarManager
 import com.example.todo.common.isValidEmail
 import com.example.todo.model.service.AccountService
 import com.example.todo.model.service.StorageService
@@ -8,6 +10,8 @@ import com.example.todo.screen.ToDoAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
+import com.example.todo.R.string as AppText
+
 
 @HiltViewModel
 class UserScreenViewModel @Inject constructor(
@@ -51,26 +55,28 @@ class UserScreenViewModel @Inject constructor(
 
     fun onNewPasswordChange(newValue: String){
         if(password.isBlank()){
+            SnackbarManager.showMessage(AppText.empty_password_error)
             return
         }
         if(password != uiState.value.repeatPassword){
-            return
-        }
-        if(!email.isValidEmail()){
+            SnackbarManager.showMessage(AppText.password_match_error)
             return
         }
         launchCatching {
             accountService.updatePassword(newValue)
+            SnackbarManager.showMessage(AppText.password_change_success)
         }
     }
 
     fun onSaveButtonClick(){
         if(name.isBlank()){
+            SnackbarManager.showMessage(AppText.empty_field_task)
             return
         }
 
         launchCatching {
             accountService.updateName(name)
+            SnackbarManager.showMessage(AppText.name_change_success)
         }
     }
 }

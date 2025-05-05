@@ -73,6 +73,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.todo.Screens
 import com.example.todo.model.Task
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
@@ -93,8 +95,11 @@ fun HomeScreen(
     onNotificationClick: () -> Unit,
     onLateTaskClick: () -> Unit,
     onCompletedTaskClick: () -> Unit,
+    navController: NavController,
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ){
+
+    val currentRoute = navController.currentBackStackEntry?.destination?.route
 
     val uiState by viewModel.uiState
     val tasks = uiState.tasksOfTheDay
@@ -131,7 +136,16 @@ fun HomeScreen(
                 )
                 TasksList(tasks, onTaskClick)
             }
-            BottomMenu()
+            BottomMenu(currentRoute, onNavigationSelected = {
+                if(currentRoute != it){
+                    navController.navigate(it){
+                        popUpTo(Screens.HOME_SCREEN.name){
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
+            })
         }
     }
 }
@@ -192,13 +206,13 @@ fun TasksList(
 }
 
 @Composable
-private fun BottomMenu() {
+fun BottomMenu(currentRoute: String?, onNavigationSelected: (String) -> Unit) {
     NavigationBar(
         containerColor = Color.Unspecified
     ) {
         NavigationBarItem(
-            selected = true,
-            onClick = { /* Navegar */ },
+            selected = currentRoute == Screens.HOME_SCREEN.name,
+            onClick = { onNavigationSelected(Screens.HOME_SCREEN.name)},
             icon = {
                 Icon(
                     Icons.Default.Home,
@@ -225,8 +239,8 @@ private fun BottomMenu() {
             label = { }
         )
         NavigationBarItem(
-            selected = false,
-            onClick = { /* Navegar */ },
+            selected = currentRoute == Screens.USER_PROFILE_SCREEN.name,
+            onClick = { onNavigationSelected(Screens.USER_PROFILE_SCREEN.name) },
             icon = {
                 Icon(
                     Icons.Default.Person,
@@ -769,4 +783,13 @@ fun TaskCardPreview(){
             onTaskClick = {}
         )
     }
+}
+
+@Composable
+@Preview
+fun MenuButtonPreview(){
+    BottomMenu(
+        currentRoute = TODO(),
+        onNavigationSelected = TODO()
+    )
 }
