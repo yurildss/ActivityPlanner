@@ -90,7 +90,7 @@ fun LoginScreen(
                         fontFamily = FontFamily.Monospace) },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor =  Color(0xFF9FD7B0),
-                        unfocusedBorderColor = Color(0xFFA8D5BA),)
+                        unfocusedBorderColor = Color(0xFFA8D5BA))
                     )
                 OutlinedTextField(
                     value = uiState.password,

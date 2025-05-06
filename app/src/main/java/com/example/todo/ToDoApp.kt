@@ -48,6 +48,9 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
             SignUpScreen(
                 navigateToSingIn = {
                     navController.navigate(Screens.SIGN_IN_SCREEN.name)
+                },
+                onLoginClick = {
+                    navController.navigate(Screens.SIGN_IN_SCREEN.name)
                 }
             )
         }

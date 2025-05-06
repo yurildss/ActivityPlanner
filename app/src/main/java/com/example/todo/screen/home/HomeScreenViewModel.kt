@@ -28,7 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val storageService: StorageService,
-    accountService: AccountService,
+    private val accountService: AccountService,
 ) : ToDoAppViewModel() {
 
     var uiState = mutableStateOf(HomeScreenUiState())
@@ -45,6 +45,7 @@ class HomeScreenViewModel @Inject constructor(
                 tasksOfTheDay = storageService.getTaskByDay(uiState.value.actualDay)
             )
             delayTask()
+            getDelayTaskByDay()
         }
     }
 
@@ -81,7 +82,22 @@ class HomeScreenViewModel @Inject constructor(
             uiState.value = uiState.value.copy(actualDay = newValue)
             val tasks = storageService.getTaskByDay(newValue)
             uiState.value = uiState.value.copy(tasksOfTheDay = tasks)
+            var delayTask = 0
+            tasks.forEach {
+                if (!it.completed) delayTask = delayTask + 1
+            }
+            uiState.value = uiState.value.copy(pendingTask = delayTask)
         }
+    }
+
+    suspend fun getDelayTaskByDay(){
+        val tasksOfTheDay = storageService.getTaskByDay(uiState.value.actualDay)
+        var delayTask = 0
+
+        tasksOfTheDay.forEach {
+            if (!it.completed) delayTask = delayTask + 1
+        }
+        uiState.value = uiState.value.copy(pendingTask = delayTask)
     }
 }
 

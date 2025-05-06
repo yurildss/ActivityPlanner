@@ -74,6 +74,9 @@ dependencies {
     // Kotlinx datetime
     implementation(libs.kotlinx.datetime)
 
+    //DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.0")
+
     // Testes unitários
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
@@ -81,7 +84,6 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
     implementation(kotlin("test"))
     testImplementation("org.mockito:mockito-inline:5.2.0")
-
 
     // Testes instrumentados
     androidTestImplementation(libs.androidx.junit) // esse precisa ser 1.1.5 no catálogo, não 1.2.1
