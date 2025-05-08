@@ -1,6 +1,5 @@
 package com.example.todo.screen.task
 
-import android.util.Log
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -120,9 +119,6 @@ class TaskScreenViewModel
     private fun completedGoals(){
 
         var completed = 0
-
-        Log.d("TAG", "completedGoals: ${_taskScreenState.value.goals}")
-
         _taskScreenState.value.goals.forEach {
 
             if(it.completed){
