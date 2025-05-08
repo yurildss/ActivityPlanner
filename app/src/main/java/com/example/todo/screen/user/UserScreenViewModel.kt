@@ -74,6 +74,7 @@ class UserScreenViewModel @Inject constructor(
             Log.d("UserScreenViewModel", "onNewPasswordChange: $email")
             accountService.updatePassword(email, newValue, oldPassword)
             SnackbarManager.showMessage(AppText.password_change_success)
+            uiState.value = uiState.value.copy(password = "", repeatPassword = "", oldPassword = "")
         }
     }
 
