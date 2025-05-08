@@ -107,7 +107,6 @@ fun UserScreen(
                 OutlinedTextField(
                     value = uiState.email,
                     onValueChange = {
-                        viewModel.onEmailChange(it)
                     },
                     label = {
                         Text("Email", color = Color.White)
@@ -117,6 +116,23 @@ fun UserScreen(
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = Color.Black,
                         unfocusedBorderColor = Color.Black,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                    )
+                )
+                OutlinedTextField(
+                    value = uiState.oldPassword,
+                    onValueChange = {
+                        viewModel.onOldPasswordChange(it)
+                    },
+                    label = {
+                        Text("Password", color = Color.White)
+                    },
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.White,
+                        unfocusedBorderColor = Color.White,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
                     )

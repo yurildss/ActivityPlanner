@@ -95,9 +95,11 @@ class AccountServiceImpl @Inject constructor(
             .await()
     }
 
-    override suspend fun updatePassword(password: String) {
-        val user = auth.currentUser
-        user!!.updatePassword(password).await()
+    override suspend fun updatePassword(email: String, password: String, oldPassword: String) {
+        val user = FirebaseAuth.getInstance().currentUser
+        val credential = EmailAuthProvider.getCredential(email, oldPassword)
+        user!!.reauthenticate(credential).await()
+        user.updatePassword(password).await()
     }
 
     override suspend fun updateName(name: String) {

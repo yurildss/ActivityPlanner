@@ -1,5 +1,6 @@
 package com.example.todo.screen.user
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.example.todo.R.string
 import com.example.todo.common.SnackbarManager
@@ -36,13 +37,14 @@ class UserScreenViewModel @Inject constructor(
     private val email get() = uiState.value.email
     private val password get() = uiState.value.password
     private val name get() = uiState.value.name
+    private val oldPassword get() = uiState.value.oldPassword
 
     fun onNameChange(newValue: String){
         uiState.value = uiState.value.copy(name = newValue)
     }
 
-    fun onEmailChange(newValue: String){
-        uiState.value = uiState.value.copy(email = newValue)
+    fun onOldPasswordChange(newValue: String){
+        uiState.value = uiState.value.copy(oldPassword = newValue)
     }
 
     fun onRepeatPasswordChange(newValue: String){
@@ -54,6 +56,12 @@ class UserScreenViewModel @Inject constructor(
     }
 
     fun onNewPasswordChange(newValue: String){
+
+        if(oldPassword.isBlank()){
+            SnackbarManager.showMessage(AppText.empty_password_error)
+            return
+        }
+
         if(password.isBlank()){
             SnackbarManager.showMessage(AppText.empty_password_error)
             return
@@ -63,7 +71,8 @@ class UserScreenViewModel @Inject constructor(
             return
         }
         launchCatching {
-            accountService.updatePassword(newValue)
+            Log.d("UserScreenViewModel", "onNewPasswordChange: $email")
+            accountService.updatePassword(email, newValue, oldPassword)
             SnackbarManager.showMessage(AppText.password_change_success)
         }
     }
@@ -84,6 +93,7 @@ class UserScreenViewModel @Inject constructor(
 data class  UserScreenUiState(
     val name: String = "",
     val email: String = "",
+    val oldPassword: String = "",
     val password: String = "",
     val repeatPassword: String = ""
 )
