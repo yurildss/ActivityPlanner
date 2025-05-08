@@ -393,7 +393,8 @@ fun SettingsPart(
 
         Row(
             Modifier.fillMaxWidth().padding(10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
                 Modifier
@@ -414,10 +415,12 @@ fun SettingsPart(
             }
             Row(
                 Modifier
-                    .size(150.dp, 54.dp)
+                    .size(155.dp, 54.dp)
                     .clip(CircleShape)
                     .background(Color(0xFFB4EF2C))
-                    .padding(16.dp)
+                    .padding(10.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ){
                 Icon(Icons.Default.DateRange,
                     null,
@@ -650,7 +653,8 @@ private fun DatePick(
             Text(
                 text = actualDay,
                 color = Color.White,
-                fontFamily = FontFamily.Monospace
+                fontFamily = FontFamily.Monospace,
+                fontSize = 12.sp
             )
         },
         interactionSource = remember {
