@@ -53,6 +53,7 @@ fun LoginScreen(
     val snackbarMessage by SnackbarManager.snackbarMessages.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+
     val uiState by viewModel.uiState
 
     LaunchedEffect(snackbarMessage) {

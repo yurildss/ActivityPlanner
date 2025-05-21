@@ -32,6 +32,7 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
                 navController.navigate(Screens.SIGN_IN_SCREEN.name)
             })
         }
+
         composable(Screens.SIGN_IN_SCREEN.name){
             LoginScreen(signUp = {navController.navigate(Screens.SIGN_UP_SCREEN.name)},
                 navigateToHome = {

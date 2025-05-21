@@ -15,9 +15,11 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class AccountServiceImpl @Inject constructor(
+class AccountServiceImpl
+@Inject constructor(
     private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore) : AccountService  {
+    private val firestore: FirebaseFirestore
+) : AccountService  {
 
     override val currentUserId: String
         get() = auth.currentUser?.uid.orEmpty()
@@ -61,10 +63,7 @@ class AccountServiceImpl @Inject constructor(
                         .Builder()
                         .setDisplayName(name)
                         .build()
-
-
                     user?.updateProfile(profilesUpdates)
-
                 }else{
                     it.exception?.printStackTrace()
                 }

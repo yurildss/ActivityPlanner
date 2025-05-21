@@ -282,7 +282,7 @@ fun DropDownMenuSample(
             trailingIcon = {
                 Icon(
                     Icons.Default.ArrowDropDown,
-                    contentDescription = "Abrir menu"
+                    contentDescription = "Open menu"
                 )
             }
         )

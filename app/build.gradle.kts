@@ -55,7 +55,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose) // não tá no catálogo, pode adicionar se quiser
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Compose
     implementation(platform(libs.androidx.compose.bom))
