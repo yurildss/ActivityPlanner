@@ -48,7 +48,7 @@ fun NotificationScreen(
 
     val tasks = viewModel.notificationScreenState.value.taskList
 
-    Column(Modifier.fillMaxSize().padding(top = 20.dp).background(Color(0xFF1D1D2A))) {
+    Column(Modifier.fillMaxSize().background(Color(0xFF1D1D2A)).padding(top = 20.dp)) {
         Button(
             onClick = onArrowBackClick,
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -112,7 +112,7 @@ private fun NotificationsList(tasks: List<Task>, onTaskClick: (String) -> Unit, 
                     ){
                         NotificationCardScreen(
                             task = task,
-                            modifier = Modifier.padding(vertical = 5.dp),
+                            modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
                             onTaskClick = onTaskClick,
                         )
                     }
@@ -185,15 +185,5 @@ fun NotificationsListPreview() {
         tasks = listOf(Task(title = "Tesk 1"), Task(title = "Tesk 2"), Task(title = "Tesk 3")),
         onTaskClick = { },
         onSlideToDeletedNotification = { _, _ -> }
-    )
-}
-
-@Composable
-@Preview
-fun NotificationScreenPreview() {
-    NotificationScreen(
-        onTaskClick = TODO(),
-        viewModel = TODO(),
-        onArrowBackClick = TODO()
     )
 }

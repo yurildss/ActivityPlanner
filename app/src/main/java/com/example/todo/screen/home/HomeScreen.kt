@@ -113,14 +113,14 @@ fun HomeScreen(
             DrawerContent(onLateTaskClick, onCompletedTaskClick)
         },
     ){
-
         Box(contentAlignment = Alignment.BottomEnd,
             modifier = modifier
                 .fillMaxSize()
-                .padding(top = 20.dp)
                 .background(
                     Color(0xFF1D1D2A)
-                ).testTag("home_screen")
+                )
+                .padding(top = 20.dp)
+                .testTag("home_screen")
         ){
             Column(modifier = Modifier.fillMaxSize()) {
                 UserHomeScreen(uiState, onNotificationClick)
@@ -167,6 +167,7 @@ fun TasksList(
                     text = "No tasks end in this day",
                     color = Color.White,
                     fontSize = 35.sp,
+                    fontFamily = FontFamily.Monospace,
                 )
             }
         } else {
@@ -206,9 +207,13 @@ fun TasksList(
 }
 
 @Composable
-fun BottomMenu(currentRoute: String?, onNavigationSelected: (String) -> Unit) {
+fun BottomMenu(
+    currentRoute: String?,
+    onNavigationSelected: (String) -> Unit
+) {
     NavigationBar(
-        containerColor = Color.Unspecified
+        containerColor = Color.Unspecified,
+        modifier = Modifier.fillMaxWidth()
     ) {
         NavigationBarItem(
             selected = currentRoute == Screens.HOME_SCREEN.name,
@@ -312,7 +317,8 @@ fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit =
                         .padding(16.dp)
                         .clickable {
                             onNotificationClick()
-                        }.testTag("has_notification")
+                        }
+                        .testTag("has_notification")
                 ){
                     Icon(Icons.Default.Notifications,
                         null,
@@ -328,7 +334,8 @@ fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit =
                         .padding(16.dp)
                         .clickable {
                             onNotificationClick()
-                        }.testTag("notification_button")
+                        }
+                        .testTag("notification_button")
                 ){
                     Icon(Icons.Default.Notifications,
                         null,
@@ -392,7 +399,9 @@ fun SettingsPart(
     val dateState = rememberDatePickerState()
 
         Row(
-            Modifier.fillMaxWidth().padding(10.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -406,7 +415,8 @@ fun SettingsPart(
                         scope.launch {
                             drawerState.open()
                         }
-                    }.testTag("tasks_menu")
+                    }
+                    .testTag("tasks_menu")
             ){
                 Icon(Icons.Default.Menu,
                     null,
@@ -443,7 +453,9 @@ fun SettingsPart(
                     .padding(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Button(modifier = Modifier.fillMaxWidth().testTag("add_task_button"),
+                Button(modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("add_task_button"),
                     onClick = onAddTaskClick,
                     colors = ButtonDefaults.buttonColors(Color.Transparent)
                 ) {
@@ -477,7 +489,8 @@ fun DelayTaskCard(
             .clickable {
                 onTaskClick(task.id)
             }
-            .padding(15.dp).testTag("delay_task_card") // 25% da altura da tela)
+            .padding(15.dp)
+            .testTag("delay_task_card") // 25% da altura da tela)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -541,7 +554,8 @@ fun TaskCard(
             .clickable {
                 onTaskClick(task.id)
             }
-            .padding(15.dp).testTag("task_card") // 25% da altura da tela)
+            .padding(15.dp)
+            .testTag("task_card") // 25% da altura da tela)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -643,64 +657,66 @@ private fun DatePick(
     onDateSelected: (String) -> Unit,
     dateState: DatePickerState
 ) {
-    TextField(
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.Transparent
-        ),
-        value = date,
-        onValueChange = {},
-        label = {
-            Text(
-                text = actualDay,
-                color = Color.White,
-                fontFamily = FontFamily.Monospace,
-                fontSize = 12.sp
-            )
-        },
-        interactionSource = remember {
-            MutableInteractionSource()
-        }.also { interections ->
-            LaunchedEffect(interections) {
-
-                interections.interactions.collectLatest {
-
-                    if (it is PressInteraction.Release) {
-                        onDatePickerChange(true)
-                    }
-
-                }
-            }
-        },
-        readOnly = true
-    )
-
-    AnimatedVisibility(visible = openDatePicker) {
-        DatePickerDialog(
-            onDismissRequest = {
-                onDatePickerChange(false)
+    Box(modifier = Modifier.fillMaxWidth()){
+        TextField(
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.Transparent
+            ),
+            value = date,
+            onValueChange = {},
+            label = {
+                Text(
+                    text = actualDay,
+                    color = Color.White,
+                    fontFamily = FontFamily.Monospace,
+                    fontSize = 12.sp
+                )
             },
-            confirmButton = {
-                Button(
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
-                    onClick = {
+            interactionSource = remember {
+                MutableInteractionSource()
+            }.also { interections ->
+                LaunchedEffect(interections) {
 
-                        dateState.selectedDateMillis?.let { millis ->
-                            val selectedDate = Instant.fromEpochMilliseconds(millis)
-                                .toLocalDateTime(TimeZone.UTC).date.format(LocalDate.Format {
-                                    byUnicodePattern("dd/MM/yyyy")
-                                })
+                    interections.interactions.collectLatest {
 
-                            onDateSelected(selectedDate)
-                            onDatePickerChange(false)
+                        if (it is PressInteraction.Release) {
+                            onDatePickerChange(true)
                         }
 
-                    }) {
-                    Text("Select")
+                    }
                 }
-            }) {
-            DatePicker(state = dateState)
-        }
+            },
+            readOnly = true
+        )
 
+        AnimatedVisibility(visible = openDatePicker) {
+            DatePickerDialog(
+                onDismissRequest = {
+                    onDatePickerChange(false)
+                },
+                confirmButton = {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
+                        onClick = {
+
+                            dateState.selectedDateMillis?.let { millis ->
+                                val selectedDate = Instant.fromEpochMilliseconds(millis)
+                                    .toLocalDateTime(TimeZone.UTC).date.format(LocalDate.Format {
+                                        byUnicodePattern("dd/MM/yyyy")
+                                    })
+
+                                onDateSelected(selectedDate)
+                                onDatePickerChange(false)
+                            }
+
+                        }) {
+                        Text("Select")
+                    }
+                }) {
+                DatePicker(state = dateState)
+            }
+
+        }
     }
 }
 
@@ -793,7 +809,7 @@ fun TaskCardPreview(){
 @Preview
 fun MenuButtonPreview(){
     BottomMenu(
-        currentRoute = TODO(),
-        onNavigationSelected = TODO()
+        currentRoute = "",
+        onNavigationSelected = {}
     )
 }

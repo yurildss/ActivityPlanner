@@ -81,12 +81,11 @@ fun UserScreen(
     ) { @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
         Box(Modifier
             .fillMaxSize()
-            .padding(top = 20.dp)
             .background(Color(0xFF1D1D2A))
+            .padding(top = 60.dp)
         ){
             Column(Modifier
-                .fillMaxSize()
-                .padding(10.dp),
+                .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 OutlinedTextField(
                     value = uiState.name,
@@ -102,7 +101,8 @@ fun UserScreen(
                         unfocusedBorderColor = Color.White,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                    )
+                    ),
+                    modifier = Modifier.padding(top = 5.dp)
                 )
                 OutlinedTextField(
                     value = uiState.email,
@@ -118,7 +118,8 @@ fun UserScreen(
                         unfocusedBorderColor = Color.Black,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                    )
+                    ),
+                    modifier = Modifier.padding(top = 5.dp)
                 )
                 OutlinedTextField(
                     value = uiState.oldPassword,
@@ -135,7 +136,8 @@ fun UserScreen(
                         unfocusedBorderColor = Color.White,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                    )
+                    ),
+                    modifier = Modifier.padding(top = 5.dp)
                 )
                 OutlinedTextField(
                     value = uiState.password,
@@ -152,7 +154,8 @@ fun UserScreen(
                         unfocusedBorderColor = Color.White,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                    )
+                    ),
+                    modifier = Modifier.padding(top = 5.dp)
                 )
                 OutlinedTextField(
                     value = uiState.repeatPassword,
@@ -169,7 +172,8 @@ fun UserScreen(
                         unfocusedBorderColor = Color.White,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                    )
+                    ),
+                    modifier = Modifier.padding(top = 5.dp)
                 )
                 Button(onClick = {
                     viewModel.onNewPasswordChange(uiState.password)

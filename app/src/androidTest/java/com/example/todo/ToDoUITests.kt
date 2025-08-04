@@ -1,6 +1,5 @@
 package com.example.todo
 
-import android.util.Log
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
@@ -15,13 +14,10 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.swipe
-import androidx.compose.ui.test.swipeRight
 
 @HiltAndroidTest
-class TipUITests {
+class ToDoUITests {
 
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
