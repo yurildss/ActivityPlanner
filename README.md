@@ -18,3 +18,15 @@ Este projeto foi desenvolvido com as seguintes tecnologias e padrões:
 * **Injeção de Dependência**: [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) para gerenciar dependências.
 * **Persistência de Dados**: 
 * **Navegação**: [Jetpack Navigation Compose](https://developer.android.com/jetpack/compose/navigation).
+
+## Pré-requisitos
+
+*   Android Studio (versão mais recente recomendada)
+*   Kotlin configurado no Android Studio
+
+## Como Compilar e Executar
+
+1.  Clone o repositório:
+2.  Abra o projeto no Android Studio.
+3.  Aguarde o Gradle sincronizar as dependências.
+4.  Execute o aplicativo em um emulador ou dispositivo Android.
