@@ -11,21 +11,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,21 +45,21 @@ fun LoginScreen(
     signUp: () -> Unit,
     viewModel: LoginScreenViewModel = hiltViewModel()
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessage by SnackbarManager.snackbarMessages.collectAsState()
+    val snackBarHostState = remember { SnackbarHostState() }
+    val snackBarMessage by SnackbarManager.snackbarMessages.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val uiState by viewModel.uiState
 
-    LaunchedEffect(snackbarMessage) {
-        snackbarMessage?.let {
+    LaunchedEffect(snackBarMessage) {
+        snackBarMessage?.let {
             val message = when (it) {
                 is SnackbarMessage.StringSnackbar -> it.message
                 is SnackbarMessage.ResourceSnackbar -> context.getString(it.message)
             }
             coroutineScope.launch {
-                snackbarHostState.showSnackbar(message)
+                snackBarHostState.showSnackbar(message)
                 SnackbarManager.clearSnackbarMessage()
             }
         }
@@ -71,7 +67,7 @@ fun LoginScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize().testTag("login_screen"),
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -90,9 +86,10 @@ fun LoginScreen(
                     label = { Text("Email",
                         color = Color.White,
                         fontFamily = FontFamily.Monospace) },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor =  Color(0xFF9FD7B0),
-                        unfocusedBorderColor = Color(0xFFA8D5BA))
+                    colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF9FD7B0),
+                            unfocusedBorderColor = Color(0xFFA8D5BA),
+                        )
                     )
                 OutlinedTextField(
                     value = uiState.password,
@@ -101,9 +98,10 @@ fun LoginScreen(
                     label = { Text("Password",
                         color = Color.White,
                         fontFamily = FontFamily.Monospace) },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor =  Color(0xFF9FD7B0),
-                        unfocusedBorderColor = Color(0xFFA8D5BA),)
+                    colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF9FD7B0),
+                            unfocusedBorderColor = Color(0xFFA8D5BA),
+                        )
                 )
                 Text(
                     text = "Forgot Password?",
@@ -111,7 +109,8 @@ fun LoginScreen(
                     fontSize = 15.sp,
                     modifier = Modifier
                         .padding(10.dp)
-                        .align(Alignment.Start)
+                        .align(Alignment.Start),
+                    fontFamily = FontFamily.Monospace
                 )
                 Button(
                     onClick = { viewModel.onSignInClick(navigateToHome) },
@@ -120,7 +119,7 @@ fun LoginScreen(
                         .size(350.dp, 50.dp).testTag("login_button"),
                     colors = ButtonDefaults.buttonColors(Color(0xFFB2F02C))
                 ) {
-                    Text("Login", color = Color.Black, fontSize = 20.sp)
+                    Text("Login", color = Color.Black, fontSize = 20.sp, fontFamily = FontFamily.Monospace)
                 }
                 Button(
                     onClick = signUp,
@@ -129,7 +128,7 @@ fun LoginScreen(
                         .size(350.dp, 50.dp),
                     colors = ButtonDefaults.buttonColors(Color(0xFFB2F02C))
                 ) {
-                    Text("Sign Up", color = Color.Black, fontSize = 20.sp)
+                    Text("Sign Up", color = Color.Black, fontSize = 20.sp, fontFamily = FontFamily.Monospace)
                 }
             }
         }

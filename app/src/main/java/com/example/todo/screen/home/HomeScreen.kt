@@ -376,7 +376,9 @@ fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit =
             }
             Text("You have ${uiState.pendingTask} pending tasks today",
                 color = Color.White,
-                modifier = Modifier.padding(start = 5.dp))
+                modifier = Modifier.padding(start = 5.dp),
+                fontFamily = FontFamily.Monospace
+                )
         }
     }
 }
@@ -425,7 +427,7 @@ fun SettingsPart(
             }
             Row(
                 Modifier
-                    .size(155.dp, 54.dp)
+                    .size(170.dp, 54.dp)
                     .clip(CircleShape)
                     .background(Color(0xFFB4EF2C))
                     .padding(10.dp),
@@ -447,7 +449,7 @@ fun SettingsPart(
             }
             Row(
                 Modifier
-                    .size(150.dp, 54.dp)
+                    .size(180.dp, 54.dp)
                     .clip(CircleShape)
                     .background(Color(0x166EA68E))
                     .padding(5.dp),
@@ -465,7 +467,9 @@ fun SettingsPart(
                     )
                     Text("Add Task",
                         modifier = Modifier.padding(start = 10.dp),
-                        color = Color.White)
+                        color = Color.White,
+                        fontFamily = FontFamily.Monospace
+                        )
                 }
             }
         }
@@ -478,7 +482,6 @@ fun DelayTaskCard(
     modifier: Modifier = Modifier
 ){
     val sizeOfGoals = task.goals.size
-    val sizeOfUncompletedGoals = task.goals.count { !it.completed }
     val sizeOfCompletedGoals = task.goals.count { it.completed }
     val progress = sizeOfCompletedGoals.toFloat() / sizeOfGoals.toFloat()
 
@@ -543,7 +546,6 @@ fun TaskCard(
 ){
 
     val sizeOfGoals = task.goals.size
-    val sizeOfUncompletedGoals = task.goals.count { !it.completed }
     val sizeOfCompletedGoals = task.goals.count { it.completed }
     val progress = sizeOfCompletedGoals.toFloat() / sizeOfGoals.toFloat()
 
@@ -659,9 +661,11 @@ private fun DatePick(
 ) {
     Box(modifier = Modifier.fillMaxWidth()){
         TextField(
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.Transparent
-            ),
+            colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                ),
             value = date,
             onValueChange = {},
             label = {
