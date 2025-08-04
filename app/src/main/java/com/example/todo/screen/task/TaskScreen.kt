@@ -384,9 +384,16 @@ fun ViewGoalsCard(
                 )
             }
             Button(onClick =
-                onUpdatePercentGoalsClick
+                onUpdatePercentGoalsClick,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB4EF2C)),
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Save")
+                Text(
+                    "Save",
+                    color = Color(0xFF242636),
+                    fontFamily = FontFamily.Monospace,
+                    fontSize = 15.sp
+                )
             }
         }
     }

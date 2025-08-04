@@ -67,6 +67,7 @@ fun UserScreen(
             }
             coroutineScope.launch {
                 snackBarHostState.showSnackbar(message)
+                SnackbarManager.clearSnackbarMessage()
             }
         }
     }

@@ -94,6 +94,7 @@ fun CreateTaskScreen(
             }
             coroutineScope.launch {
                 snackBarHostState.showSnackbar(message)
+                SnackbarManager.clearSnackbarMessage()
             }
         }
     }
