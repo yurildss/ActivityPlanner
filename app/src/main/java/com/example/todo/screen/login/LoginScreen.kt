@@ -130,7 +130,12 @@ fun LoginScreen(
                         .size(350.dp, 50.dp),
                     colors = ButtonDefaults.buttonColors(Color(0xFFB2F02C))
                 ) {
-                    Text("Sign Up", color = Color.Black, fontSize = 20.sp, fontFamily = FontFamily.Monospace)
+                    Text(
+                        "Sign Up",
+                        color = Color(0xFFB2F02C),
+                        fontSize = 20.sp,
+                        fontFamily = FontFamily.Monospace
+                    )
                 }
             }
         }
