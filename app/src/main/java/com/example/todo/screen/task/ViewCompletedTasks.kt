@@ -18,30 +18,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todo.model.Task
 import com.example.todo.screen.home.DelayTaskCard
 import com.example.todo.screen.home.TaskCard
+import com.example.todo.ui.theme.TodoTheme
 
 @Composable
 fun ViewCompletedTasks(
     modifier: Modifier = Modifier,
-    viewModel: DelayTasksViewModel = hiltViewModel()
+    viewModel: CompletedTasksViewModel = hiltViewModel()
 )
 {
-
     Box(modifier
         .fillMaxSize()
-        .padding(top = 20.dp)
-        .background(Color(0xFF1D1D2A)).testTag("completed_task_screen"),
+        .background(Color(0xFF1D1D2A))
+        .testTag("completed_task_screen"),
         contentAlignment = Alignment.BottomEnd
     )
     {
-        Column(modifier.fillMaxSize()) {
-            CompletedTasksList(viewModel.delayTaskUiState.value.tasks, {})
-        }
+        CompletedTasksList(viewModel.completedTaskUiState.value.tasks, {})
     }
 
 }
@@ -53,16 +52,16 @@ fun CompletedTasksList(
 ) {
     LazyColumn(
         Modifier
-            .padding(10.dp)
+            .padding(top = 60.dp, start = 10.dp, end = 10.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         if (tasks.isEmpty()) {
             item {
                 Text(
-                    text = "Any delay task has been found",
+                    text = "Any completed task has been found",
                     color = Color.White,
-                    fontSize = 35.sp,
+                    fontSize = 30.sp,
                 )
             }
         } else {
@@ -72,7 +71,7 @@ fun CompletedTasksList(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     for (task in rowTasks) {
-                        if(task.isOverdue){
+                        if(task.completed){
                             DelayTaskCard(
                                 task = task,
                                 onTaskClick = onTaskClick,
@@ -98,5 +97,16 @@ fun CompletedTasksList(
                 }
             }
         }
+    }
+}
+
+@Composable
+@Preview
+fun CompletedTasksListPreview(){
+    TodoTheme {
+        CompletedTasksList(
+            listOf(),
+            {}
+        )
     }
 }
