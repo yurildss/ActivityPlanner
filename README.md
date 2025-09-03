@@ -1,6 +1,6 @@
 # Task Scheduler
 > Este é um projeto de aplicativo de lista de tarefas (To-Do) para Android, construído com Kotlin e Jetpack Compose. O aplicativo permite aos usuários criar tarefas, definir metas para cada tarefa e acompanhar o progresso.
-> ## 🚀 Funcionalidades
+## 🚀 Funcionalidades
 
 - [x] Criação e Gerenciamento de Tarefas: Adicione novas tarefas com títulos, descrições e prazos
 - [x] Definição de Metas: Para cada tarefa, os usuários podem definir metas específicas com descrições e acompanhar o percentual de conclusão de cada meta.
