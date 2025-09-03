@@ -1,3 +1,6 @@
+🌍 Escolha o idioma:  
+[🇧🇷 Português](README.pt.md) | [🇺🇸 English](README.en.md) | [🇪🇸 Español](README.es.md)
+
 # Task Scheduler
 > Este es un proyecto de aplicación de lista de tareas (To-Do) para Android, construido con Kotlin y Jetpack Compose. La aplicación permite a los usuarios crear tareas, definir metas para cada tarea y seguir el progreso.
 
