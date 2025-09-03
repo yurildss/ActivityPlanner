@@ -164,9 +164,9 @@ fun TasksList(
         if (tasks.isEmpty()) {
             item {
                 Text(
-                    text = "No tasks end in this day",
+                    text = "0 tasks end this day",
                     color = Color.White,
-                    fontSize = 35.sp,
+                    fontSize = 30.sp,
                     fontFamily = FontFamily.Monospace,
                 )
             }
@@ -183,7 +183,7 @@ fun TasksList(
                                 onTaskClick = onTaskClick,
                                 Modifier
                                     .weight(1f) //Divida o espaço disponível igualmente entre os itens com o mesmo peso
-                                    .fillMaxHeight(0.25f) // Ajuste a altura que quiser)
+                                    .fillMaxHeight(0.25f)
                             )
                         }else{
                             TaskCard(
@@ -191,7 +191,7 @@ fun TasksList(
                                 onTaskClick = onTaskClick,
                                 Modifier
                                     .weight(1f) //Divida o espaço disponível igualmente entre os itens com o mesmo peso
-                                    .fillMaxHeight(0.25f) // Ajuste a altura que quiser
+                                    .fillMaxHeight(0.25f)
                             )
                         }
                     }

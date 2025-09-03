@@ -1,6 +1,7 @@
 package com.example.todo.screen.login
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,7 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     navigateToHome: () -> Unit,
     signUp: () -> Unit,
+    onForgotPasswordClick: () -> Unit,
     viewModel: LoginScreenViewModel = hiltViewModel()
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
@@ -109,7 +111,7 @@ fun LoginScreen(
                     fontSize = 15.sp,
                     modifier = Modifier
                         .padding(10.dp)
-                        .align(Alignment.Start),
+                        .align(Alignment.Start).clickable { onForgotPasswordClick() },
                     fontFamily = FontFamily.Monospace
                 )
                 Button(

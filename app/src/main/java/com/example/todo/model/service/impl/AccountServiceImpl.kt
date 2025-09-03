@@ -107,4 +107,8 @@ class AccountServiceImpl
 
     }
 
+    override suspend fun sendRecoveryEmail(email: String) {
+        auth.sendPasswordResetEmail(email).await()
+    }
+
 }

@@ -14,4 +14,5 @@ interface AccountService {
     suspend fun linkAccount(email: String, password: String)
     suspend fun updatePassword(email: String, password: String, oldPassword: String)
     suspend fun updateName(name: String)
+    suspend fun sendRecoveryEmail(email: String)
 }

@@ -83,7 +83,8 @@ fun UserScreen(
         ){
             Column(Modifier
                 .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally) {
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 OutlinedTextField(
                     value = uiState.name,
                     onValueChange = {

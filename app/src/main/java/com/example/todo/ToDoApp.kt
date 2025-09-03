@@ -13,6 +13,7 @@ import com.example.todo.screen.OpenScreen
 import com.example.todo.screen.home.HomeScreen
 import com.example.todo.screen.login.LoginScreen
 import com.example.todo.screen.notifications.NotificationScreen
+import com.example.todo.screen.recovery.RecoveryPasswordScreen
 import com.example.todo.screen.sign_up.SignUpScreen
 import com.example.todo.screen.task.CreateTaskScreen
 import com.example.todo.screen.task.TaskInfo
@@ -41,6 +42,17 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
                             inclusive = true
                         }
                     }
+                },
+                onForgotPasswordClick = {
+                    navController.navigate(Screens.RECOVERY_SCREEN.name)
+                }
+            )
+        }
+
+        composable(Screens.RECOVERY_SCREEN.name) {
+            RecoveryPasswordScreen(
+                onEmailSend = {
+                    navController.navigate(Screens.SIGN_IN_SCREEN.name)
                 }
             )
         }
