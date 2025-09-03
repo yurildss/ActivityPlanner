@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -31,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,6 +41,7 @@ import com.example.todo.Screens
 import com.example.todo.common.SnackbarManager
 import com.example.todo.common.SnackbarMessage
 import com.example.todo.screen.home.BottomMenu
+import com.example.todo.ui.theme.TodoTheme
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -74,147 +77,193 @@ fun UserScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize().testTag("user_screen"),
-        snackbarHost = {SnackbarHost(hostState = snackBarHostState)}
+        snackbarHost = {SnackbarHost(hostState = snackBarHostState)},
+        bottomBar = {        BottomMenu(
+            currentRoute = currentRoute,
+            onNavigationSelected = {
+                if (currentRoute != it) {
+                    navController.navigate(it) {
+                        popUpTo(Screens.HOME_SCREEN.name) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
+            }
+        )}
     ) { @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
         Box(Modifier
             .fillMaxSize()
             .background(Color(0xFF1D1D2A))
             .padding(top = 60.dp)
         ){
-            Column(Modifier
-                .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                OutlinedTextField(
-                    value = uiState.name,
-                    onValueChange = {
-                        viewModel.onNameChange(it)
-                    },
-                    label = {
-                        Text("Name", color = Color.White)
-                    },
-                    singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color.White,
-                            unfocusedBorderColor = Color.White,
-
-                        ),
-                    modifier = Modifier.padding(top = 5.dp)
-                )
-                OutlinedTextField(
-                    value = uiState.email,
-                    onValueChange = {
-                    },
-                    label = {
-                        Text("Email", color = Color.White)
-                    },
-                    readOnly = true,
-                    singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color.Black,
-                            unfocusedBorderColor = Color.Black,
-                        ),
-                    modifier = Modifier.padding(top = 5.dp)
-                )
-                OutlinedTextField(
-                    value = uiState.oldPassword,
-                    onValueChange = {
-                        viewModel.onOldPasswordChange(it)
-                    },
-                    label = {
-                        Text("Password", color = Color.White)
-                    },
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                    ),
-                    modifier = Modifier.padding(top = 5.dp)
-                )
-                OutlinedTextField(
-                    value = uiState.password,
-                    onValueChange = {
-                        viewModel.onPasswordChange(it)
-                    },
-                    label = {
-                        Text("Password", color = Color.White)
-                    },
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                    ),
-                    modifier = Modifier.padding(top = 5.dp)
-                )
-                OutlinedTextField(
-                    value = uiState.repeatPassword,
-                    onValueChange = {
-                        viewModel.onRepeatPasswordChange(it)
-                    },
-                    label = {
-                        Text("Repeat password", color = Color.White)
-                    },
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black,
-                    ),
-                    modifier = Modifier.padding(top = 5.dp)
-                )
-                Button(
-                    onClick = { viewModel.onNewPasswordChange(uiState.password) },
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .size(300.dp, 50.dp)
-                        .testTag("change_password_profile_button"),
-                    colors = ButtonDefaults.buttonColors(Color(0xFFB2F02C))
-                ) {
-                    Text("Change password",
-                        color = Color.White,
-                        fontSize = 20.sp,
-                        )
-                }
-                Spacer(modifier = Modifier.fillMaxHeight(0.75f))
-                Button(onClick =
-                    viewModel::onSaveButtonClick
-                ,
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .size(350.dp, 50.dp).testTag("edit_profile_button"),
-                    colors = ButtonDefaults.buttonColors(Color(0xFFB2F02C))
-                ) {
-                    Text("Save",
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontFamily = FontFamily.Monospace)
-                }
-                BottomMenu(
-                    currentRoute = currentRoute,
-                    onNavigationSelected = {
-                        if(currentRoute != it){
-                            navController.navigate(it){
-                                popUpTo(Screens.HOME_SCREEN.name){
-                                    inclusive = true
-                                }
-                                launchSingleTop = true
-                            }
-                        }
-                    }
-                )
-            }
+            UserScreenForm(
+                uiState = uiState,
+                onNameChange = viewModel::onNameChange,
+                onOldPasswordChange = viewModel::onOldPasswordChange,
+                onPasswordChange = viewModel::onPasswordChange,
+                onRepeatPasswordChange = viewModel::onRepeatPasswordChange,
+                onSaveButtonClick = viewModel::onSaveButtonClick,
+                currentRoute = currentRoute,
+                navController = navController,
+                onNewPasswordChange = viewModel::onNewPasswordChange
+            )
         }
+    }
+}
+
+@Composable
+fun UserScreenForm(
+    uiState: UserScreenUiState,
+    onNameChange: (String) -> Unit,
+    onOldPasswordChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onRepeatPasswordChange: (String) -> Unit,
+    onNewPasswordChange: (String) -> Unit,
+    onSaveButtonClick:()->Unit,
+    currentRoute: String?,
+    navController: NavController
+    ) {
+    Column(
+        Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        OutlinedTextField(
+            value = uiState.name,
+            onValueChange = {
+                onNameChange(it)
+            },
+            label = {
+                Text("Name", color = Color.White)
+            },
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedBorderColor = Color.White,
+                unfocusedBorderColor = Color.White,
+
+                ),
+            modifier = Modifier.fillMaxWidth(0.75f).padding(top = 5.dp)
+        )
+        OutlinedTextField(
+            value = uiState.email,
+            onValueChange = {
+            },
+            label = {
+                Text("Email", color = Color.White)
+            },
+            readOnly = true,
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black,
+            ),
+            modifier = Modifier.fillMaxWidth(0.75f).padding(top = 5.dp)
+        )
+        OutlinedTextField(
+            value = uiState.oldPassword,
+            onValueChange = {
+                onOldPasswordChange(it)
+            },
+            label = {
+                Text("Password", color = Color.White)
+            },
+            singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black,
+            ),
+            modifier = Modifier.fillMaxWidth(0.75f).padding(top = 5.dp)
+        )
+        OutlinedTextField(
+            value = uiState.password,
+            onValueChange = {
+                onPasswordChange(it)
+            },
+            label = {
+                Text("Password", color = Color.White)
+            },
+            singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black,
+            ),
+            modifier = Modifier.fillMaxWidth(0.75f).padding(top = 5.dp)
+        )
+        OutlinedTextField(
+            value = uiState.repeatPassword,
+            onValueChange = {
+                onRepeatPasswordChange(it)
+            },
+            label = {
+                Text("Repeat password", color = Color.White)
+            },
+            singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black,
+            ),
+            modifier = Modifier.fillMaxWidth(0.75f).padding(top = 5.dp)
+        )
+        Button(
+            onClick = { onNewPasswordChange(uiState.password) },
+            modifier = Modifier
+                .padding(10.dp)
+                .size(300.dp, 50.dp)
+                .testTag("change_password_profile_button"),
+            colors = ButtonDefaults.buttonColors(Color(0xFFB2F02C))
+        ) {
+            Text(
+                "Change password",
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontFamily = FontFamily.Monospace
+            )
+        }
+        Button(
+            onClick = onSaveButtonClick,
+            modifier = Modifier
+                .size(300.dp, 50.dp)
+                .testTag("edit_profile_button"),
+            colors = ButtonDefaults.buttonColors(Color(0xFFB2F02C))
+        ) {
+            Text(
+                "Save",
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontFamily = FontFamily.Monospace
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+fun UserScreenPreview(){
+    TodoTheme {
+        UserScreenForm(
+            uiState = UserScreenUiState(name = "William Henry", email = "william.henry.harrison@example-pet-store.com"),
+            onNameChange = {},
+            onOldPasswordChange = {},
+            onPasswordChange = {},
+            onRepeatPasswordChange = {},
+            onNewPasswordChange = {},
+            onSaveButtonClick = {},
+            currentRoute = null,
+            navController = NavController(LocalContext.current)
+        )
     }
 }
