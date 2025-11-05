@@ -403,7 +403,7 @@ fun SettingsPart(
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .padding(5.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -673,15 +673,15 @@ private fun DatePick(
                     text = actualDay,
                     color = Color.White,
                     fontFamily = FontFamily.Monospace,
-                    fontSize = 12.sp
+                    fontSize = 14.sp
                 )
             },
             interactionSource = remember {
                 MutableInteractionSource()
-            }.also { interections ->
-                LaunchedEffect(interections) {
+            }.also { interactions ->
+                LaunchedEffect(interactions) {
 
-                    interections.interactions.collectLatest {
+                    interactions.interactions.collectLatest {
 
                         if (it is PressInteraction.Release) {
                             onDatePickerChange(true)

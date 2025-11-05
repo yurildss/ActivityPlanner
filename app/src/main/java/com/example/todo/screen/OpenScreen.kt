@@ -21,12 +21,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun OpenScreen(modifier: Modifier = Modifier,
-               onGetStarted: ()->Unit){
-    Box(modifier = modifier.fillMaxSize().background(Color(0xFF6EA68E))
+fun OpenScreen(
+    modifier: Modifier = Modifier,
+               onGetStarted: ()->Unit
+){
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(0xFF6EA68E))
     ){
-        Column(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(text = "Take control",
                 color = Color.White,
                 fontFamily = FontFamily.Monospace,
@@ -45,18 +52,18 @@ fun OpenScreen(modifier: Modifier = Modifier,
                 fontSize = 50.sp,
                 modifier = Modifier.padding(10.dp)
             )
-            Button(
-                onClick = onGetStarted,
-                modifier = Modifier.padding(10.dp,20.dp).size(350.dp, 50.dp).testTag("getStartedButton"),
-                colors = ButtonDefaults.buttonColors(Color(0xFFD5FFA4)),
-            ){
-                Text("Get Started",
-                    color = Color.Black,
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily.Monospace,
-                    fontWeight = FontWeight.Bold)
+        }
+        Button(
+            onClick = onGetStarted,
+            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 40.dp).size(350.dp, 50.dp).testTag("getStartedButton"),
+            colors = ButtonDefaults.buttonColors(Color(0xFFD5FFA4)),
+        ){
+            Text("Get Started",
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.Bold)
 
-            }
         }
     }
 }

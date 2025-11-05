@@ -9,6 +9,7 @@ import com.example.todo.model.service.AccountService
 import com.example.todo.model.service.StorageService
 import com.example.todo.screen.ToDoAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onEmpty
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -42,7 +44,7 @@ class HomeScreenViewModel @Inject constructor(
             userName(user.name)
 
             uiState.value = uiState.value.copy(
-                tasksOfTheDay = storageService.getTaskByDay(uiState.value.actualDay)
+                tasksOfTheDay = withContext(Dispatchers.IO) { storageService.getTaskByDay(uiState.value.actualDay) }
             )
             delayTask()
             getDelayTaskByDay()
@@ -66,7 +68,7 @@ class HomeScreenViewModel @Inject constructor(
         }
 
         private suspend fun delayTask(){
-               val delayedTasks = storageService.getDelayedTasks().size
+               val delayedTasks = withContext(Dispatchers.IO) { storageService.getDelayedTasks().size }
                 uiState.value = uiState.value.copy(
                     notifications = delayedTasks
                 )
@@ -91,7 +93,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     suspend fun getDelayTaskByDay(){
-        val tasksOfTheDay = storageService.getTaskByDay(uiState.value.actualDay)
+        val tasksOfTheDay = withContext(Dispatchers.IO) { storageService.getTaskByDay(uiState.value.actualDay) }
         var delayTask = 0
 
         tasksOfTheDay.forEach {
