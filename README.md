@@ -24,7 +24,6 @@ Este projeto foi desenvolvido com as seguintes tecnologias e padrões:
 
 ## Imagens do projeto
 <img width="162" height="360" alt="Screenshot_20251104_214533" src="https://github.com/user-attachments/assets/c7e69245-ad70-4d2a-96d5-0e1539ab5514" />
-<img width="162" height="360" alt="Screenshot_20250902_213017" src="https://github.com/user-attachments/assets/963e296d-ae3a-439a-acd5-7e4d376ad34b" />
 <img width="162" height="360" alt="Screenshot_20250902_213058" src="https://github.com/user-attachments/assets/7e12524e-e15d-422c-ac19-7fef95499989" />
 <img width="162" height="360" alt="Screenshot_20250902_224111" src="https://github.com/user-attachments/assets/5aef4392-744b-429f-9f89-2f29e9a30af1" />
 <img width="162" height="360" alt="Screenshot_20250902_224134" src="https://github.com/user-attachments/assets/07e7228c-be18-4881-9f88-4bc416ba45e4" />
