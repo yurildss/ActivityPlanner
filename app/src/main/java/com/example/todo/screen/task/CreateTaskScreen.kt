@@ -103,7 +103,7 @@ fun CreateTaskScreen(
     val golsUiState by viewModel.CreateGolsUistate
 
     Scaffold(
-        modifier = modifier.fillMaxSize().padding(top = 20.dp).testTag("add_task_screen"),
+        modifier = modifier.fillMaxSize().testTag("add_task_screen"),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) { paddingValues ->
     Box(
@@ -394,7 +394,7 @@ fun AddGoalsCard(
         ) {
             Button(
                 onClick = onAddGolsClick,
-                colors = ButtonDefaults.buttonColors(Color(0xFF00FF95)),
+                colors = ButtonDefaults.buttonColors(Color(0xFF06D6A0)),
                 modifier = Modifier.testTag("add_goals_button")
             ) {
                 Text("Add Goals")
@@ -430,13 +430,13 @@ fun AddGoalsCard(
             Button(
                 onClick = onSaveTaskClick,
                 modifier = Modifier.fillMaxWidth(0.75f).testTag("save_task_button"),
-                colors = ButtonDefaults.buttonColors(Color(0xFF008CBA))
+                colors = ButtonDefaults.buttonColors(Color(0xFF3A86FF))
             ) {
                 Text("Save")
             }
             Button(
                 onClick = onCancelTaskClick,
-                colors = ButtonDefaults.buttonColors(Color(0xFFFF4C4C)),
+                colors = ButtonDefaults.buttonColors(Color(0xFFFF006E)),
                 modifier = Modifier.fillMaxWidth(0.75f)
             ) {
                 Text("Cancel")
@@ -536,13 +536,13 @@ fun GoalsEntry(
                     onClick = {
                     onCreateGols(index)
                     onGoalsIsSaveChange()
-                }, colors = ButtonDefaults.buttonColors(Color(0xFF00FF95)),
+                }, colors = ButtonDefaults.buttonColors(Color(0xFF06D6A0)),
                     modifier = Modifier.testTag("confirm_goals_button") ) {
                     Text("Add")
                 }
                 Button(
                     onClick = { onRemoveGoalsClick(index) },
-                    colors = ButtonDefaults.buttonColors(Color(0xFFFF4C4C))
+                    colors = ButtonDefaults.buttonColors(Color(0xFFFF006E))
                 ) {
                     Text("Remove")
                 }
@@ -599,7 +599,7 @@ fun GoalsShow(
             Button(
                 modifier = Modifier.align(Alignment.End),
                 onClick = { onDeleteGoalsClick(index) },
-                colors = ButtonDefaults.buttonColors(Color(0xFFFF4C4C))
+                colors = ButtonDefaults.buttonColors(Color(0xFFFF006E))
             ) {
                 Text("Delete")
             }

@@ -18,6 +18,8 @@ import com.example.todo.model.Task
 import com.example.todo.model.service.StorageService
 import com.example.todo.screen.ToDoAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
@@ -208,7 +210,7 @@ class CreateTaskScreenViewModel
     fun onSaveTaskClick(onSaveClick: () -> Unit){
         launchCatching {
             if(isEntryTaskValid()){
-                storageService.save(CreateTaskUistate.value.toTask())
+                withContext(Dispatchers.IO) { storageService.save(CreateTaskUistate.value.toTask())  }
                 onSaveClick()
             }else{
                 SnackbarManager.showMessage(R.string.empty_field_task)

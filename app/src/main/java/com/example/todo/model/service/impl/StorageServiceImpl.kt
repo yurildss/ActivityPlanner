@@ -56,7 +56,7 @@ class StorageServiceImpl @Inject constructor(
 
     override suspend fun updateTaskCompleted(taskId: String, completed: Boolean) {
         val taskRef = firestore.collection(TASK_COLLECTION).document(taskId)
-        taskRef.update("completed", completed).await()
+        taskRef.update(COMPLETED_FIELD, completed).await()
     }
 
     override suspend fun updateTaskNotification(taskId: String, notificationRead: Boolean) {
@@ -67,7 +67,7 @@ class StorageServiceImpl @Inject constructor(
     override suspend fun getCompletedTask(): List<Task> {
         val taskRef = firestore.collection(TASK_COLLECTION)
         val snapshot = taskRef
-            .whereEqualTo("completed", true)
+            .whereEqualTo(COMPLETED_FIELD, true)
             .get()
             .await()
         return snapshot.toObjects(Task::class.java)
