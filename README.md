@@ -27,7 +27,7 @@ Este projeto foi desenvolvido com as seguintes tecnologias e padrões:
 <img width="162" height="360" alt="Screenshot_20250902_213058" src="https://github.com/user-attachments/assets/7e12524e-e15d-422c-ac19-7fef95499989" />
 <img width="162" height="360" alt="Screenshot_20250902_224111" src="https://github.com/user-attachments/assets/5aef4392-744b-429f-9f89-2f29e9a30af1" />
 <img width="162" height="360" alt="Screenshot_20250902_224134" src="https://github.com/user-attachments/assets/07e7228c-be18-4881-9f88-4bc416ba45e4" />
-<img width="162" height="360" alt="Screenshot_20250902_224152" src="https://github.com/user-attachments/assets/f08efa89-ff5b-4a6b-8b54-44169547f24b" />
+<img width="162" height="360" alt="Screenshot_20251104_221809" src="https://github.com/user-attachments/assets/fa3f1ec6-b518-464b-b29a-cde46384210d" />
 <img width="162" height="360" alt="Screenshot_20250903_080536" src="https://github.com/user-attachments/assets/e2a4f2df-3773-4be7-b416-ed59561cabb3" />
 <img width="162" height="360" alt="Screenshot_20250902_224216" src="https://github.com/user-attachments/assets/c1d3d398-4e4f-4e1a-901f-9af73d537c3c" />
 
