@@ -20,7 +20,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class CreateTaskScreenViewModelTest {
+class CreateTaskScreenViewModelUnitTest {
     private val storageService = mock<StorageService>()
     private lateinit var viewModel: CreateTaskScreenViewModel
 

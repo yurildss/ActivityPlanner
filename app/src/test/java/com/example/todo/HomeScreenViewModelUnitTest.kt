@@ -20,9 +20,10 @@ import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import java.util.Date
 
-class HomeScreenViewModelTest {
+@Suppress("IllegalIdentifier")
+class HomeScreenViewModelUnitTest {
+
     private val accountService = mock<AccountService>()
     private val storageService = mock<StorageService>()
     private lateinit var viewModel: HomeScreenViewModel

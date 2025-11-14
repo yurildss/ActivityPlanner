@@ -16,6 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 import androidx.compose.ui.test.performTouchInput
 
+//Integration test
 @HiltAndroidTest
 class ToDoUITests {
 
@@ -82,7 +83,7 @@ class ToDoUITests {
         composeTestRule.onNodeWithTag("priority_dropdown").performClick()
         composeTestRule.onNodeWithText("Priority 1").performClick()
 
-        // Verifica se o item foi selecionado
+        // Check if a item was select
         composeTestRule.onNodeWithText("Priority 1").assertExists()
 
         composeTestRule.onNodeWithTag("select_a_icon").performClick()
@@ -107,6 +108,7 @@ class ToDoUITests {
         }
     }
 
+    //Navigate to a task by click in a task by the notification screen
     @Test
     fun viewTaskByNotification(){
         login()
@@ -133,8 +135,6 @@ class ToDoUITests {
             .config[SemanticsProperties.Text]
             .joinToString("") { it.text }
 
-
-
         composeTestRule.onNodeWithTag("tag_task${taskTitle}")
         composeTestRule.onNodeWithText(taskTitle).assertExists()
     }
@@ -156,8 +156,7 @@ class ToDoUITests {
             .assertExists()
     }
 
-
-
+    //Make a task full complete
     @Test
     fun makeTaskComplete(){
 
@@ -187,6 +186,7 @@ class ToDoUITests {
 
     }
 
+    //Navigate to the completed tasks screen
     @Test
     fun allTasksCompleted(){
         login()
@@ -196,9 +196,7 @@ class ToDoUITests {
         composeTestRule.waitUntil {
             composeTestRule.onAllNodesWithTag("drawer_content", useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
         }
-
         composeTestRule.onNodeWithTag("all_completed_task").performClick()
-
         composeTestRule.onNodeWithTag("completed_task_screen").assertExists()
     }
 
