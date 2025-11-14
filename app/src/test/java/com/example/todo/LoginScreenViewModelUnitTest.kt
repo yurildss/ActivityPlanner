@@ -2,7 +2,6 @@ package com.example.todo
 
 import com.example.todo.model.service.AccountService
 import com.example.todo.screen.login.LoginScreenViewModel
-import com.google.android.play.core.integrity.an
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -51,7 +50,7 @@ class LoginScreenViewModelUnitTest {
     @Test
     fun `should authenticate user`(){
         var navigateToHomeCalled = false
-        viewModel.onEmailChange("test")
+        viewModel.onEmailChange("test@hotmail.com")
         viewModel.onPasswordChange("test")
         viewModel.onSignInClick{
             navigateToHomeCalled = true
