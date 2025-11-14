@@ -20,6 +20,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
+@Suppress("IllegalIdentifier")
 class CreateTaskScreenViewModelUnitTest {
     private val storageService = mock<StorageService>()
     private lateinit var viewModel: CreateTaskScreenViewModel
@@ -57,7 +58,7 @@ class CreateTaskScreenViewModelUnitTest {
     fun `should remove Goals on Goals list`(){
         viewModel.onAddGoalsClick()
         viewModel.onDeleteGoalsClick(0)
-        assert(viewModel.CreateTaskUistate.value.gols.size == 0)
+        assert(viewModel.CreateTaskUistate.value.gols.isEmpty())
     }
 
     @Test
