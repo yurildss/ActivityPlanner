@@ -48,7 +48,12 @@ fun NotificationScreen(
 
     val tasks = viewModel.notificationScreenState.value.taskList
 
-    Column(Modifier.fillMaxSize().background(Color(0xFF1D1D2A)).padding(top = 30.dp, start = 10.dp)) {
+    Column(
+        Modifier
+        .fillMaxSize()
+        .background(Color(0xFF1D1D2A))
+        .padding(top = 30.dp, start = 10.dp)
+    ) {
         Button(
             onClick = onArrowBackClick,
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -66,7 +71,11 @@ fun NotificationScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun NotificationsList(tasks: List<Task>, onTaskClick: (String) -> Unit, onSlideToDeletedNotification: (String, Boolean) -> Unit) {
+fun NotificationsList(
+    tasks: List<Task>,
+    onTaskClick: (String) -> Unit,
+    onSlideToDeletedNotification: (String, Boolean) -> Unit
+) {
     Box(Modifier.fillMaxSize()){
         if (tasks.isEmpty()) {
             Text("Any notifications",
@@ -123,7 +132,11 @@ private fun NotificationsList(tasks: List<Task>, onTaskClick: (String) -> Unit, 
 }
 
 @Composable
-fun NotificationCardScreen(modifier: Modifier = Modifier, task: Task, onTaskClick: (String) -> Unit){
+fun NotificationCardScreen(
+    modifier: Modifier = Modifier,
+    task: Task,
+    onTaskClick: (String) -> Unit
+){
     Box(
         modifier
             .clip(RoundedCornerShape(5.dp))

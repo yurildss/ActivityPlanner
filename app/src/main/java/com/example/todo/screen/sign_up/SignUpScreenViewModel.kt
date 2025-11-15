@@ -55,8 +55,12 @@ class SignUpScreenViewModel @Inject constructor(
         }
 
         launchCatching {
-            accountService.register(email, password, name)
-            navigateToSingIn()
+            try {
+                accountService.register(email, password, name)
+            }catch (e: Exception){
+                SnackbarManager.showMessage(R.string.sign_up_error)
+                navigateToSingIn()
+            }
         }
     }
 }

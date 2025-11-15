@@ -5,6 +5,8 @@ import com.example.todo.model.Task
 import com.example.todo.model.service.StorageService
 import com.example.todo.screen.ToDoAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,16 +19,16 @@ class NotificationScreenViewModel @Inject constructor(
     init {
         launchCatching {
             notificationScreenState.value = NotificationScreenState(
-                taskList = taskRepository.getDelayedTasks()
+                taskList = withContext(Dispatchers.IO) {taskRepository.getDelayedTasks()}
             )
         }
     }
 
     fun updateTaskNotification(taskId: String, notificationRead: Boolean){
         launchCatching {
-            taskRepository.updateTaskNotification(taskId, notificationRead)
+            withContext(Dispatchers.IO){taskRepository.updateTaskNotification(taskId, notificationRead)}
             notificationScreenState.value = NotificationScreenState(
-                taskList = taskRepository.getDelayedTasks()
+                taskList = withContext(Dispatchers.IO) {taskRepository.getDelayedTasks()}
             )
         }
     }

@@ -46,41 +46,46 @@ fun SignUpScreen(
     onLoginClick: () -> Unit
 ){
 
-    val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessage by SnackbarManager.snackbarMessages.collectAsState()
+    val snackBarHostState = remember { SnackbarHostState() }
+    val snackBarMessage by SnackbarManager.snackbarMessages.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val uiState by viewModel.uiState
 
-    LaunchedEffect(snackbarMessage) {
-        snackbarMessage?.let {
+    LaunchedEffect(snackBarMessage) {
+        snackBarMessage?.let {
             val message = when (it) {
                 is SnackbarMessage.StringSnackbar -> it.message
                 is SnackbarMessage.ResourceSnackbar -> context.getString(it.message)
             }
             coroutineScope.launch {
-                snackbarHostState.showSnackbar(message)
+                snackBarHostState.showSnackbar(message)
             }
         }
     }
 
-    Scaffold(modifier = modifier.fillMaxSize().testTag("sign_up_screen"), snackbarHost = { SnackbarHost(hostState = snackbarHostState)}) {
+    Scaffold(
+        modifier =
+            modifier
+            .fillMaxSize()
+            .testTag("sign_up_screen"),
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState)}
+    ) {
         paddingValues ->
 
         Box(modifier = modifier
             .fillMaxSize()
             .background(Color(0xFF6EA68E))
             .padding(paddingValues)
-            .testTag("register_screen")
-        )
+            .testTag("register_screen"))
         {
-            Column(
-                Modifier
+            Column(modifier = Modifier
                     .fillMaxSize()
                     .padding(10.dp),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally) {
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 OutlinedTextField(
                     value = uiState.name,
                     onValueChange = viewModel::onNameChange,
@@ -150,6 +155,7 @@ fun SignUpScreen(
         }
     }
 }
+
 
 @Composable
 @Preview
