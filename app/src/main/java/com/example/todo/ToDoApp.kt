@@ -84,6 +84,9 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
                 onCompletedTaskClick = {
                     navController.navigate(Screens.COMPLETED_TASK_SCREEN.name)
                 },
+                onSearchTaskClick = {
+                    navController.navigate(Screens.SEARCH_SCREEN.name)
+                },
                 navController = navController,
             )
         }

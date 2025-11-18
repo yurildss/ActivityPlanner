@@ -95,6 +95,7 @@ fun HomeScreen(
     onNotificationClick: () -> Unit,
     onLateTaskClick: () -> Unit,
     onCompletedTaskClick: () -> Unit,
+    onSearchTaskClick: () -> Unit,
     navController: NavController,
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ){
@@ -123,7 +124,7 @@ fun HomeScreen(
                 .testTag("home_screen")
         ){
             Column(modifier = Modifier.fillMaxSize()) {
-                UserHomeScreen(uiState, onNotificationClick)
+                UserHomeScreen(uiState, onNotificationClick, onSearchTaskClick)
                 SettingsPart(
                     openDatePicker = uiState.openDatePicker,
                     date = uiState.actualDay,
@@ -260,7 +261,11 @@ fun BottomMenu(
 }
 
 @Composable
-fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit = {}){
+fun UserHomeScreen(
+    uiState: HomeScreenUiState,
+    onNotificationClick: () -> Unit,
+    onSearchTaskClick: () -> Unit
+){
     Column(Modifier
         .fillMaxWidth()
         .padding(10.dp)
@@ -301,7 +306,10 @@ fun UserHomeScreen(uiState: HomeScreenUiState, onNotificationClick: () -> Unit =
                     .size(54.dp)
                     .clip(CircleShape)
                     .background(Color(0x166EA68E))
-                    .padding(16.dp)
+                    .clickable{
+                        onSearchTaskClick()
+                    }
+                    .padding(16.dp).testTag("search_button")
             ){
                 Icon(Icons.Default.Search,
                     null,
@@ -729,7 +737,9 @@ private fun DatePick(
 @Preview
 fun UserHomeScreenPreview(){
     UserHomeScreen(
-        uiState = HomeScreenUiState(name = "Yuri Lima")
+        uiState = HomeScreenUiState(name = "Yuri Lima"),
+        onNotificationClick = {},
+        onSearchTaskClick = {}
     )
 }
 
