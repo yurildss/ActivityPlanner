@@ -91,6 +91,10 @@ fun ToDoApp(navController: NavHostController = rememberNavController()){
             )
         }
 
+        composable(Screens.SEARCH_SCREEN.name){
+
+        }
+
         composable(Screens.TASK_SCREEN.name+"/{taskId}",
             arguments = listOf(navArgument("taskId"){
                 type = NavType.StringType
