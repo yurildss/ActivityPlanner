@@ -199,7 +199,6 @@ class CreateTaskScreenViewModel
     }
 
     private fun isEntryTaskValid(): Boolean {
-
         return CreateTaskUistate.value.title.isNotBlank() &&
                 CreateTaskUistate.value.description.isNotBlank() &&
                 CreateTaskUistate.value.deadLine.isNotBlank() &&
@@ -210,7 +209,11 @@ class CreateTaskScreenViewModel
     fun onSaveTaskClick(onSaveClick: () -> Unit){
         launchCatching {
             if(isEntryTaskValid()){
+                println("VM storageService class = ${storageService.javaClass.name}")
+                println("VM storageService id    = ${System.identityHashCode(storageService)}")
+
                 withContext(Dispatchers.IO) { storageService.save(CreateTaskUistate.value.toTask())  }
+
                 onSaveClick()
             }else{
                 SnackbarManager.showMessage(R.string.empty_field_task)

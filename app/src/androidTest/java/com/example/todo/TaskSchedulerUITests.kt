@@ -18,7 +18,7 @@ import androidx.compose.ui.test.performTouchInput
 
 //Integration test
 @HiltAndroidTest
-class ToDoUITests {
+class TaskSchedulerUITests {
 
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
@@ -118,12 +118,11 @@ class ToDoUITests {
 
         composeTestRule.onNodeWithTag("has_notification").performClick()
 
-// Espera a tela ser exibida
         composeTestRule.waitUntil(timeoutMillis = 5000) {
             composeTestRule.onAllNodesWithTag("notification_screen").fetchSemanticsNodes().isNotEmpty()
         }
 
-// Verifica se a tela apareceu
+
         composeTestRule.onNodeWithTag("notification_screen").assertExists()
 
         composeTestRule.waitUntil(timeoutMillis = 5000){

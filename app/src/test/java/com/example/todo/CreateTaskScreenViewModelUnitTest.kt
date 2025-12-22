@@ -6,7 +6,10 @@ import com.example.todo.model.service.StorageService
 import com.example.todo.screen.task.CreateTaskScreenViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -15,6 +18,9 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyBlocking
 import org.mockito.kotlin.whenever
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -22,18 +28,22 @@ import kotlin.test.assertTrue
 
 @Suppress("IllegalIdentifier")
 class CreateTaskScreenViewModelUnitTest {
+
     private val storageService = mock<StorageService>()
     private lateinit var viewModel: CreateTaskScreenViewModel
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup(){
         Dispatchers.setMain(testDispatcher)
+        println("TEST storageService class = ${storageService.javaClass.name}")
+        println("TEST storageService id    = ${System.identityHashCode(storageService)}")
 
-        runTest {
+
+        runBlocking {
             whenever(storageService.save(any())).thenReturn("#1")
         }
 
@@ -76,21 +86,31 @@ class CreateTaskScreenViewModelUnitTest {
 
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `should create a Task`(){
-        var wasCalled = false
+
         runTest{
             viewModel.onTitleTaskChange("Test Task")
             viewModel.onDescriptionTaskChange("Test Description")
             viewModel.updateTaskDeadLine("01/01/2023")
             viewModel.onPriorityTaskChange("Priority 1")
             viewModel.onSelectedIconChange(Pair(Icons.Default.Check, "Check"))
-            `should create a Goal`()
-            viewModel.onSaveTaskClick {
-                wasCalled = true
+
+            viewModel.onAddGoalsClick()
+            viewModel.onTitleGolsChange("Test Goal")
+            viewModel.onDescriptionGolsChange("Test Description")
+            viewModel.updateGolsDeadLine("01/01/2023")
+            viewModel.onTimeToCompleteGoalsChange("1000")
+            viewModel.onCreateGoals(0)
+
+            viewModel.onSaveTaskClick{}
+
+            advanceUntilIdle()
+            runBlocking {
+                verify(storageService).save(any())
             }
 
-            assertTrue(wasCalled)
         }
     }
 
@@ -108,7 +128,7 @@ class CreateTaskScreenViewModelUnitTest {
                 wasCalled = true
             }
 
-            assertFalse(wasCalled)
+            verify(storageService, times(0)).save(any())
         }
     }
 
