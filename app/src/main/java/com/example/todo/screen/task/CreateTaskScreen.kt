@@ -403,7 +403,7 @@ fun AddGoalsCard(
                 .weight(1f) // 🔑 Faz a lista ocupar apenas o espaço disponível
                 .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                itemsIndexed(taskScreenState.gols) { index, goal ->
+                itemsIndexed(taskScreenState.goals) { index, goal ->
                     if (!goal.isSave) {
                         GoalsEntry(
                             index = index,  // Agora passamos o índice correto

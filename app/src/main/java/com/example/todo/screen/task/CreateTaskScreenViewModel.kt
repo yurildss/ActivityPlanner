@@ -1,6 +1,5 @@
 package com.example.todo.screen.task
 
-import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Email
@@ -137,7 +136,7 @@ class CreateTaskScreenViewModel
      */
     fun onAddGoalsClick() {
         CreateTaskUistate.value = CreateTaskUistate.value.copy(
-            gols = CreateTaskUistate.value.gols.toMutableList().apply {
+            goals = CreateTaskUistate.value.goals.toMutableList().apply {
                 add(Goals())
             }
         )
@@ -150,7 +149,7 @@ class CreateTaskScreenViewModel
 
     fun onRemoveGoalsClick(idGoals: Int){
         CreateTaskUistate.value = CreateTaskUistate.value.copy(
-            gols = CreateTaskUistate.value.gols.toMutableList().apply {
+            goals = CreateTaskUistate.value.goals.toMutableList().apply {
                 removeAt(idGoals)
             }
         )
@@ -168,7 +167,7 @@ class CreateTaskScreenViewModel
                 LocalDate(parts[2].toInt(), parts[1].toInt(), parts[0].toInt())
             }
 
-            CreateTaskUistate.value.gols[idGoals] = Goals(
+            CreateTaskUistate.value.goals[idGoals] = Goals(
                 title = CreateGolsUistate.value.title,
                 description = CreateGolsUistate.value.description,
                 timeToComplete = CreateGolsUistate.value.timeToComplete.toLong(),
@@ -192,7 +191,7 @@ class CreateTaskScreenViewModel
 
     fun onDeleteGoalsClick(idGoals: Int){
         CreateTaskUistate.value = CreateTaskUistate.value.copy(
-            gols = CreateTaskUistate.value.gols.toMutableList().apply {
+            goals = CreateTaskUistate.value.goals.toMutableList().apply {
                 removeAt(idGoals)
             }
         )
@@ -203,14 +202,12 @@ class CreateTaskScreenViewModel
                 CreateTaskUistate.value.description.isNotBlank() &&
                 CreateTaskUistate.value.deadLine.isNotBlank() &&
                 CreateTaskUistate.value.priority.isNotBlank() &&
-                CreateTaskUistate.value.gols.isNotEmpty()
+                CreateTaskUistate.value.goals.isNotEmpty()
     }
 
     fun onSaveTaskClick(onSaveClick: () -> Unit){
         launchCatching {
             if(isEntryTaskValid()){
-                println("VM storageService class = ${storageService.javaClass.name}")
-                println("VM storageService id    = ${System.identityHashCode(storageService)}")
 
                 withContext(Dispatchers.IO) { storageService.save(CreateTaskUistate.value.toTask())  }
 
@@ -230,7 +227,7 @@ fun CreateTaskScreenState.toTask(): Task {
     }
 
     var total = 0
-    gols.forEach {
+    goals.forEach {
         total += it.timeToComplete.toInt()
     }
 
@@ -246,7 +243,7 @@ fun CreateTaskScreenState.toTask(): Task {
         description = description,
         deadLine = parsedDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds(),
         priority = priorityInt,
-        goals = gols,
+        goals = goals,
         tags = tags,
         timeToComplete = total.toLong()
     )
@@ -258,7 +255,7 @@ data class CreateTaskScreenState(
     val description: String = "",
     val deadLine: String = "",
     val priority: String = "",
-    val gols: MutableList<Goals> = mutableListOf(),
+    val goals: MutableList<Goals> = mutableListOf(),
     val tags: MutableList<String> = mutableListOf(),
     val timeToComplete: Long  = 0
 )

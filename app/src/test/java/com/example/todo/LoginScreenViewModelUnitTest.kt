@@ -4,9 +4,9 @@ import com.example.todo.model.service.AccountService
 import com.example.todo.screen.login.LoginScreenViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -21,14 +21,14 @@ class LoginScreenViewModelUnitTest {
     private lateinit var viewModel: LoginScreenViewModel
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup(){
         Dispatchers.setMain(testDispatcher)
 
-        runTest{
+        runBlocking{
             whenever(accountService.authenticate(any(), any())).thenReturn(Unit)
         }
 
@@ -58,6 +58,16 @@ class LoginScreenViewModelUnitTest {
         assert(navigateToHomeCalled)
     }
 
+    @Test
+    fun `shouldn't authenticate use`(){
+        var navigateToHomeCalled = true
+        viewModel.onEmailChange("test@hotmail.com")
+        viewModel.onPasswordChange("")
+        viewModel.onSignInClick{
+            navigateToHomeCalled = false
+        }
+        assert(navigateToHomeCalled)
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @After

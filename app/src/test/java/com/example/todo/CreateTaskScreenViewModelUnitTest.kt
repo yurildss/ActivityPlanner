@@ -8,7 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -20,11 +19,8 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyBlocking
 import org.mockito.kotlin.whenever
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 @Suppress("IllegalIdentifier")
 class CreateTaskScreenViewModelUnitTest {
@@ -39,9 +35,6 @@ class CreateTaskScreenViewModelUnitTest {
     @Before
     fun setup(){
         Dispatchers.setMain(testDispatcher)
-        println("TEST storageService class = ${storageService.javaClass.name}")
-        println("TEST storageService id    = ${System.identityHashCode(storageService)}")
-
 
         runBlocking {
             whenever(storageService.save(any())).thenReturn("#1")
@@ -60,7 +53,7 @@ class CreateTaskScreenViewModelUnitTest {
     fun `should add a Goal on the Goals list`(){
 
         viewModel.onAddGoalsClick()
-        assert(viewModel.CreateTaskUistate.value.gols.size == 1)
+        assert(viewModel.CreateTaskUistate.value.goals.size == 1)
 
     }
 
@@ -68,7 +61,7 @@ class CreateTaskScreenViewModelUnitTest {
     fun `should remove Goals on Goals list`(){
         viewModel.onAddGoalsClick()
         viewModel.onDeleteGoalsClick(0)
-        assert(viewModel.CreateTaskUistate.value.gols.isEmpty())
+        assert(viewModel.CreateTaskUistate.value.goals.isEmpty())
     }
 
     @Test
@@ -79,10 +72,10 @@ class CreateTaskScreenViewModelUnitTest {
         viewModel.updateGolsDeadLine("01/01/2023")
         viewModel.onTimeToCompleteGoalsChange("1000")
         viewModel.onCreateGoals(0)
-        assert(viewModel.CreateTaskUistate.value.gols[0].title == "Test Goal")
-        assert(viewModel.CreateTaskUistate.value.gols[0].description == "Test Description")
-        assert(viewModel.CreateTaskUistate.value.gols[0].deadLine == 1672531200000)
-        assert(viewModel.CreateTaskUistate.value.gols[0].timeToComplete == 1000L)
+        assert(viewModel.CreateTaskUistate.value.goals[0].title == "Test Goal")
+        assert(viewModel.CreateTaskUistate.value.goals[0].description == "Test Description")
+        assert(viewModel.CreateTaskUistate.value.goals[0].deadLine == 1672531200000)
+        assert(viewModel.CreateTaskUistate.value.goals[0].timeToComplete == 1000L)
 
     }
 
@@ -123,9 +116,15 @@ class CreateTaskScreenViewModelUnitTest {
             viewModel.updateTaskDeadLine("01/01/2023")
             viewModel.onPriorityTaskChange("Priority 1")
             viewModel.onSelectedIconChange(Pair(Icons.Default.Check, "Check"))
-            `should create a Goal`()
+
+            viewModel.onAddGoalsClick()
+            viewModel.onTitleGolsChange("Test Goal")
+            viewModel.onDescriptionGolsChange("Test Description")
+            viewModel.updateGolsDeadLine("01/01/2023")
+            viewModel.onTimeToCompleteGoalsChange("1000")
+            viewModel.onCreateGoals(0)
+
             viewModel.onSaveTaskClick {
-                wasCalled = true
             }
 
             verify(storageService, times(0)).save(any())
