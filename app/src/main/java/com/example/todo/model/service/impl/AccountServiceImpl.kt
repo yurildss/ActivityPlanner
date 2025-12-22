@@ -17,8 +17,7 @@ import javax.inject.Inject
 
 class AccountServiceImpl
 @Inject constructor(
-    private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore
+    private val auth: FirebaseAuth
 ) : AccountService  {
 
     override val currentUserId: String

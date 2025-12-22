@@ -16,6 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 import androidx.compose.ui.test.performTouchInput
 
+
 //Integration test
 @HiltAndroidTest
 class TaskSchedulerUITests {
@@ -25,6 +26,7 @@ class TaskSchedulerUITests {
 
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
+
 
     @Before
     fun init() {
@@ -69,7 +71,19 @@ class TaskSchedulerUITests {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun addTaskWithGoals(){
-        login()
+        composeTestRule.onNodeWithTag("getStartedButton").performClick()
+
+        composeTestRule.onNodeWithTag("login_screen").assertExists()
+
+        composeTestRule.onNodeWithText("Email").performTextInput("yurildss@hotmail.com")
+        composeTestRule.onNodeWithText("Password").performTextInput("88295886yY")
+
+        composeTestRule.onNodeWithTag("login_button").performClick()
+
+        composeTestRule.waitUntil(timeoutMillis = 5000) {
+            composeTestRule.onAllNodesWithTag("home_screen").fetchSemanticsNodes().isNotEmpty()
+        }
+        //end login
         composeTestRule.onNodeWithTag("add_task_button").performClick()
         composeTestRule.onNodeWithTag("add_task_screen").assertExists()
 
@@ -111,7 +125,20 @@ class TaskSchedulerUITests {
     //Navigate to a task by click in a task by the notification screen
     @Test
     fun viewTaskByNotification(){
-        login()
+        composeTestRule.onNodeWithTag("getStartedButton").performClick()
+
+        composeTestRule.onNodeWithTag("login_screen").assertExists()
+
+        composeTestRule.onNodeWithText("Email").performTextInput("yurildss@hotmail.com")
+        composeTestRule.onNodeWithText("Password").performTextInput("88295886yY")
+
+        composeTestRule.onNodeWithTag("login_button").performClick()
+
+        composeTestRule.waitUntil(timeoutMillis = 5000) {
+            composeTestRule.onAllNodesWithTag("home_screen").fetchSemanticsNodes().isNotEmpty()
+        }
+
+        //end login
         composeTestRule.waitUntil(timeoutMillis = 5000) {
             composeTestRule.onAllNodesWithTag("has_notification").fetchSemanticsNodes().isNotEmpty()
         }
@@ -188,7 +215,19 @@ class TaskSchedulerUITests {
     //Navigate to the completed tasks screen
     @Test
     fun allTasksCompleted(){
-        login()
+        composeTestRule.onNodeWithTag("getStartedButton").performClick()
+
+        composeTestRule.onNodeWithTag("login_screen").assertExists()
+
+        composeTestRule.onNodeWithText("Email").performTextInput("yurildss@hotmail.com")
+        composeTestRule.onNodeWithText("Password").performTextInput("88295886yY")
+
+        composeTestRule.onNodeWithTag("login_button").performClick()
+
+        composeTestRule.waitUntil(timeoutMillis = 5000) {
+            composeTestRule.onAllNodesWithTag("home_screen").fetchSemanticsNodes().isNotEmpty()
+        }
+        //end login
 
         composeTestRule.onNodeWithTag("tasks_menu").performClick()
 
