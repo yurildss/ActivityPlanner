@@ -8,7 +8,7 @@ class FakeAccountService(
 ) : AccountService {
     override val currentUserId: String
         get() {
-            TODO()
+            return "1"
         }
     override val hasUser: Boolean
         get() {
@@ -24,7 +24,7 @@ class FakeAccountService(
         password: String,
         name: String
     ) {
-        TODO("Not yet implemented")
+        Result.success(Unit)
     }
 
     override suspend fun createAnonymousAccount() {
