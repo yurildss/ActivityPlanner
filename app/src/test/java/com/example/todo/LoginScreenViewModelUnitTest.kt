@@ -2,6 +2,7 @@ package com.example.todo
 
 import com.example.todo.model.service.AccountService
 import com.example.todo.screen.login.LoginScreenViewModel
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -9,13 +10,14 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 
-@Suppress("IllegalIdentifier")
+@HiltAndroidTest
 class LoginScreenViewModelUnitTest {
     private val accountService = mock<AccountService>()
     private lateinit var viewModel: LoginScreenViewModel
@@ -37,14 +39,14 @@ class LoginScreenViewModelUnitTest {
 
     @Test
     fun `should update email field`(){
-        viewModel.onEmailChange("test")
-        assert(viewModel.uiState.value.email == "test")
+        viewModel.onEmailChange("test@hotmail.com")
+        assertEquals("test@hotmail.com", viewModel.uiState.value.email)
     }
 
     @Test
     fun `should update password field`(){
         viewModel.onPasswordChange("test")
-        assert(viewModel.uiState.value.password == "test")
+        assertEquals("test", viewModel.uiState.value.password)
     }
 
     @Test
@@ -52,9 +54,11 @@ class LoginScreenViewModelUnitTest {
         var navigateToHomeCalled = false
         viewModel.onEmailChange("test@hotmail.com")
         viewModel.onPasswordChange("test")
+
         viewModel.onSignInClick{
             navigateToHomeCalled = true
         }
+
         assert(navigateToHomeCalled)
     }
 

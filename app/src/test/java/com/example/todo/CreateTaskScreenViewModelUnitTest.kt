@@ -53,7 +53,7 @@ class CreateTaskScreenViewModelUnitTest {
     fun `should add a Goal on the Goals list`(){
 
         viewModel.onAddGoalsClick()
-        assert(viewModel.CreateTaskUistate.value.goals.size == 1)
+        assertEquals(1, viewModel.CreateTaskUistate.value.goals.size)
 
     }
 
@@ -67,15 +67,18 @@ class CreateTaskScreenViewModelUnitTest {
     @Test
     fun `should create a Goal`(){
         viewModel.onAddGoalsClick()
+
         viewModel.onTitleGolsChange("Test Goal")
         viewModel.onDescriptionGolsChange("Test Description")
         viewModel.updateGolsDeadLine("01/01/2023")
         viewModel.onTimeToCompleteGoalsChange("1000")
+
         viewModel.onCreateGoals(0)
-        assert(viewModel.CreateTaskUistate.value.goals[0].title == "Test Goal")
-        assert(viewModel.CreateTaskUistate.value.goals[0].description == "Test Description")
-        assert(viewModel.CreateTaskUistate.value.goals[0].deadLine == 1672531200000)
-        assert(viewModel.CreateTaskUistate.value.goals[0].timeToComplete == 1000L)
+
+        assertEquals("Test Goal", viewModel.CreateTaskUistate.value.goals[0].title)
+        assertEquals("Test Description", viewModel.CreateTaskUistate.value.goals[0].description)
+        assertEquals(1672531200000, viewModel.CreateTaskUistate.value.goals[0].deadLine)
+        assertEquals(1000L, viewModel.CreateTaskUistate.value.goals[0].timeToComplete)
 
     }
 
@@ -100,6 +103,7 @@ class CreateTaskScreenViewModelUnitTest {
             viewModel.onSaveTaskClick{}
 
             advanceUntilIdle()
+
             runBlocking {
                 verify(storageService).save(any())
             }
@@ -107,9 +111,10 @@ class CreateTaskScreenViewModelUnitTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `should not create a Task if title is empty`(){
-        var wasCalled = false
+
         runTest{
             viewModel.onTitleTaskChange("")
             viewModel.onDescriptionTaskChange("Test Description")
@@ -124,8 +129,9 @@ class CreateTaskScreenViewModelUnitTest {
             viewModel.onTimeToCompleteGoalsChange("1000")
             viewModel.onCreateGoals(0)
 
-            viewModel.onSaveTaskClick {
-            }
+            viewModel.onSaveTaskClick {}
+
+            advanceUntilIdle()
 
             verify(storageService, times(0)).save(any())
         }
@@ -134,8 +140,10 @@ class CreateTaskScreenViewModelUnitTest {
     @Test
     fun `should select icon`(){
         viewModel.onSelectedIconChange(Pair(Icons.Default.Check, "Check"))
+
         assertEquals(viewModel.selectedIcon.value, Pair(Icons.Default.Check, "Check"))
         assertEquals(viewModel.CreateTaskUistate.value.tags[0], "Check")
+
     }
 
     @Test

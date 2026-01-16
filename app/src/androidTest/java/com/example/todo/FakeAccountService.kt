@@ -3,21 +3,31 @@ package com.example.todo
 import com.example.todo.model.User
 import com.example.todo.model.service.AccountService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.callbackFlow
 
 class FakeAccountService(
 ) : AccountService {
+
+    private val _currentUser = MutableStateFlow(
+        User(
+            id = "1",
+            name = "Regina Phalangee",
+            email = "test@android.com"
+        )
+    )
+
     override val currentUserId: String
         get() {
             return "1"
         }
     override val hasUser: Boolean
         get() {
-            TODO()
+            return true
         }
     override val currentUser: Flow<User>
-        get() {
-            TODO()
-        }
+        get() = _currentUser
+
 
     override suspend fun register(
         email: String,
@@ -44,14 +54,16 @@ class FakeAccountService(
         password: String,
         oldPassword: String
     ) {
-        TODO("Not yet implemented")
+        Result.success(Unit)
     }
 
     override suspend fun updateName(name: String) {
-        TODO("Not yet implemented")
+        currentUser.collect {
+            it.copy(name = name)
+        }
     }
 
     override suspend fun sendRecoveryEmail(email: String) {
-        TODO("Not yet implemented")
+        Result.success(Unit)
     }
 }

@@ -6,30 +6,42 @@ import com.example.todo.model.User
 import com.example.todo.model.service.AccountService
 import com.example.todo.model.service.StorageService
 import com.example.todo.screen.home.HomeScreenViewModel
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import javax.inject.Inject
 
-@Suppress("IllegalIdentifier")
+@HiltAndroidTest
 class HomeScreenViewModelUnitTest {
 
-    private val accountService = mock<AccountService>()
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    lateinit var accountService: AccountService
+
     private val storageService = mock<StorageService>()
     private lateinit var viewModel: HomeScreenViewModel
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
 
     val tasks = listOf(
         Task(
@@ -121,14 +133,14 @@ class HomeScreenViewModelUnitTest {
     @Before
     fun setup(){
         Dispatchers.setMain(testDispatcher)
+        hiltRule.inject()
 
-        runTest {
-            whenever(accountService.currentUser).thenReturn(flowOf(User("1", "Test Home Screen")))
+        runBlocking {
             whenever(storageService.getTaskByDay(any())).thenReturn(tasks)
             whenever(storageService.getDelayedTasks()).thenReturn(tasks)
         }
 
-        viewModel = HomeScreenViewModel(storageService, accountService)
+            viewModel = HomeScreenViewModel(storageService, accountService)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -161,9 +173,10 @@ class HomeScreenViewModelUnitTest {
         assertEquals(tasks, viewModel.uiState.value.tasksOfTheDay)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `init should setUp the user name and delay tasks`() = runTest {
-        assertEquals( "Test Home Screen",viewModel.uiState.value.name)
+        assertEquals( "Regina Phalangee", viewModel.uiState.value.name)
         assertEquals(tasks, viewModel.uiState.value.tasksOfTheDay)
     }
 
