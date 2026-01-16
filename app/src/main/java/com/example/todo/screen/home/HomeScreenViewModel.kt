@@ -3,6 +3,7 @@ package com.example.todo.screen.home
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.example.todo.common.AppDispatchers
 import com.example.todo.model.Task
 import com.example.todo.model.User
 import com.example.todo.model.service.AccountService
@@ -31,6 +32,7 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     private val storageService: StorageService,
     private val accountService: AccountService,
+    private val appDispatchers: AppDispatchers
 ) : ToDoAppViewModel() {
 
     var uiState = mutableStateOf(HomeScreenUiState())
@@ -44,7 +46,7 @@ class HomeScreenViewModel @Inject constructor(
             userName(user.name)
 
             uiState.value = uiState.value.copy(
-                tasksOfTheDay = withContext(Dispatchers.IO) { storageService.getTaskByDay(uiState.value.actualDay) }
+                tasksOfTheDay = withContext(appDispatchers.io) { storageService.getTaskByDay(uiState.value.actualDay) }
             )
             delayTask()
             getDelayTaskByDay()
@@ -68,7 +70,7 @@ class HomeScreenViewModel @Inject constructor(
         }
 
         private suspend fun delayTask(){
-               val delayedTasks = withContext(Dispatchers.IO) { storageService.getDelayedTasks().size }
+               val delayedTasks = withContext(appDispatchers.io) { storageService.getDelayedTasks().size }
                 uiState.value = uiState.value.copy(
                     notifications = delayedTasks
                 )
@@ -93,7 +95,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     suspend fun getDelayTaskByDay(){
-        val tasksOfTheDay = withContext(Dispatchers.IO) { storageService.getTaskByDay(uiState.value.actualDay) }
+        val tasksOfTheDay = withContext(appDispatchers.io) { storageService.getTaskByDay(uiState.value.actualDay) }
         var delayTask = 0
 
         tasksOfTheDay.forEach {

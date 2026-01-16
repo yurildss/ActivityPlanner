@@ -92,6 +92,13 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(platform(libs.androidx.compose.bom))  // Add this for test too
     kaptAndroidTest(libs.hilt.android.compiler)
+    // Unit tests (SEM Hilt)
+    testImplementation("junit:junit:4.13.2")
+
+// Android instrumented tests (COM Hilt)
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:2.51.1")
+
 
     // Debug/Test tooling
     debugImplementation(libs.androidx.ui.tooling)

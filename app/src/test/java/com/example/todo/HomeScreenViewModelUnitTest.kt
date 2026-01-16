@@ -1,15 +1,16 @@
 package com.example.todo
 
+import com.example.todo.common.AppDispatchers
 import com.example.todo.model.Goals
 import com.example.todo.model.Task
 import com.example.todo.model.User
 import com.example.todo.model.service.AccountService
 import com.example.todo.model.service.StorageService
 import com.example.todo.screen.home.HomeScreenViewModel
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -21,22 +22,15 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import javax.inject.Inject
 
-@HiltAndroidTest
+@Suppress("IllegalIdentifier")
 class HomeScreenViewModelUnitTest {
 
-    @get:Rule
-    val hiltRule = HiltAndroidRule(this)
-
-    @Inject
-    lateinit var accountService: AccountService
-
+    private val accountService = mock<AccountService>()
     private val storageService = mock<StorageService>()
     private lateinit var viewModel: HomeScreenViewModel
 
@@ -133,14 +127,26 @@ class HomeScreenViewModelUnitTest {
     @Before
     fun setup(){
         Dispatchers.setMain(testDispatcher)
-        hiltRule.inject()
 
         runBlocking {
             whenever(storageService.getTaskByDay(any())).thenReturn(tasks)
             whenever(storageService.getDelayedTasks()).thenReturn(tasks)
+            whenever(accountService.currentUser).thenReturn(
+                flowOf(
+                    User(
+                        id = "1",
+                        name = "Regina Phalangee",
+                        email = "android@test.com"
+                    )
+                )
+            )
+
         }
 
-            viewModel = HomeScreenViewModel(storageService, accountService)
+            viewModel = HomeScreenViewModel(storageService, accountService, AppDispatchers(
+                main = testDispatcher,
+                io = testDispatcher
+            ))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -149,15 +155,19 @@ class HomeScreenViewModelUnitTest {
         Dispatchers.resetMain()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `should update user name after init`() = runTest {
-        assertEquals("Test Home Screen", viewModel.uiState.value.name)
+        advanceUntilIdle()
+        assertEquals("Regina Phalangee", viewModel.uiState.value.name)
     }
 
     @Test
     fun `should update serach text`(){
+
         viewModel.onSearchTextChange("test")
         assertEquals("test", viewModel.uiState.value.searchText)
+
     }
 
     @Test
@@ -176,12 +186,14 @@ class HomeScreenViewModelUnitTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `init should setUp the user name and delay tasks`() = runTest {
+        advanceUntilIdle()
         assertEquals( "Regina Phalangee", viewModel.uiState.value.name)
         assertEquals(tasks, viewModel.uiState.value.tasksOfTheDay)
     }
 
     @Test
-    fun `should get delay task`(){
+    fun `should get delay task`() = runTest{
+        advanceUntilIdle()
         assertEquals(3, viewModel.uiState.value.notifications)
     }
 

@@ -2,7 +2,6 @@ package com.example.todo
 
 import com.example.todo.model.service.AccountService
 import com.example.todo.screen.login.LoginScreenViewModel
-import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -17,7 +16,6 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 
-@HiltAndroidTest
 class LoginScreenViewModelUnitTest {
     private val accountService = mock<AccountService>()
     private lateinit var viewModel: LoginScreenViewModel
